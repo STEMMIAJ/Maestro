@@ -61,13 +61,29 @@
 
 ---
 
-## Traceability (preenchido pelo roadmapper)
+## Traceability
 
-| REQ-ID | Fase | Status |
+| REQ-ID | Phase | Status |
 |---|---|---|
-| REQ-BANCO-01 a 05 | _pending_ | _pending_ |
-| REQ-COLA-01 a 07 | _pending_ | _pending_ |
-| REQ-VERIF-01 a 05 | _pending_ | _pending_ |
+| REQ-BANCO-01 | Phase 1 | Pending |
+| REQ-BANCO-02 | Phase 1 | Pending |
+| REQ-BANCO-03 | Phase 1 | Pending |
+| REQ-BANCO-04 | Phase 1 | Pending |
+| REQ-BANCO-05 | Phase 1 | Pending |
+| REQ-COLA-01 | Phase 2 | Pending |
+| REQ-COLA-02 | Phase 2 | Pending |
+| REQ-COLA-03 | Phase 2 | Pending |
+| REQ-COLA-04 | Phase 2 | Pending |
+| REQ-COLA-05 | Phase 2 | Pending |
+| REQ-COLA-06 | Phase 2 | Pending |
+| REQ-COLA-07 | Phase 2 | Pending |
+| REQ-VERIF-01 | Phase 3 | Pending |
+| REQ-VERIF-02 | Phase 3 | Pending |
+| REQ-VERIF-03 | Phase 3 | Pending |
+| REQ-VERIF-04 | Phase 3 | Pending |
+| REQ-VERIF-05 | Phase 3 | Pending |
+
+**Cobertura:** 17/17 (100%), zero órfãos, zero duplicados.
 
 ---
 
