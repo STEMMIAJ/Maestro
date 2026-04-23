@@ -1,0 +1,29 @@
+# Artefatos gerados
+*.DS_Store
+*.swp
+*.tmp
+*~
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Inbox bruto - não versionar conteúdo sensível
+16_inbox/raw_conversations/*
+!16_inbox/raw_conversations/.gitkeep
+16_inbox/transcripts/*
+!16_inbox/transcripts/.gitkeep
+
+# Memória operacional efêmera (ainda — revisitar)
+15_memory/daily/*
+!15_memory/daily/.gitkeep
+
+# Segredos
+.env
+*.key
+*.pem
+*.p12
