@@ -90,7 +90,8 @@ Prioridade prática: Google Data Analytics > AWS Cloud Practitioner > AWS ML/AI 
 | Nome | Emissor | Nível | Relevância | Esforço |
 |---|---|---|---|---|
 | HL7 FHIR Fundamentals | HL7 International | Iniciante | Alta (padrão de interoperabilidade saúde) | 40-80h |
-| CAHIMS / CPHIMS | HIMSS | Iniciante/Sênior | Alta (informática em saúde, EUA) | [TODO/RESEARCH: disponibilidade BR e valor] |
+| CAHIMS / CPHIMS | HIMSS | Iniciante/Sênior | Alta (informática em saúde, EUA) | **Dado (2026-04-23):** sem centro oficial BR; prova via Pearson VUE EUA (remoto ou presencial). Equivalente nacional: cpTICS da SBIS — fonte: https://sbis.org.br/certificacoes/ |
+| cpTICS (SBIS) | SBIS | Iniciante | Alta (profissional TIC em saúde BR) | **Dado (2026-04-23):** certificação nacional, exame periódico, foco LGPD/interoperabilidade/PEP — fonte: https://sbis.org.br/certificacoes/certificacao-profissional/ |
 
 ## Sinalização por nível de carreira
 
@@ -100,16 +101,21 @@ Prioridade prática: Google Data Analytics > AWS Cloud Practitioner > AWS ML/AI 
 | Pleno | Fechar lacuna específica ou virar referência em nicho — Associate tracks, DP-203, FHIR |
 | Sênior | Normalmente não precisa; exceção: consultoria, mudança de país, linguagem formal (CISSP, PMP) |
 
-## Estimativas de custo
+## Estimativas de custo (2026-04-23)
 
-| Tipo | Valor aproximado |
-|---|---|
-| AWS Associate | [TODO/RESEARCH: preço atual em BRL com conversão USD] |
-| Microsoft Fundamentals | [TODO/RESEARCH] |
-| Google Coursera specializations | ~R$ 200-250/mês Coursera Plus |
-| CompTIA Security+ | [TODO/RESEARCH] |
-| CISSP | [TODO/RESEARCH] |
-| HL7 FHIR | [TODO/RESEARCH] |
+| Certificação | Preço oficial 2026 | Fonte |
+|---|---|---|
+| AWS Cloud Practitioner (CLF-C02) | **USD 100** (~R$ 510) | https://aws.amazon.com/certification/certified-cloud-practitioner/ |
+| AWS Solutions Architect Associate (SAA-C03) | **USD 150** (~R$ 765). Após 1a AWS, 50% off nas próximas | https://aws.amazon.com/certification/certified-solutions-architect-associate/ |
+| Azure AI Fundamentals (AI-900) | **USD 99** (~R$ 505). Atenção: AI-900 retira em 30-jun-2026, substituída por AI-901 | https://learn.microsoft.com/en-us/credentials/certifications/exams/ai-900/ |
+| Azure Fundamentals (AZ-900) | **USD 99** (~R$ 505) | https://learn.microsoft.com/en-us/credentials/certifications/azure-fundamentals/ |
+| Google Data Analytics Professional (Coursera) | **USD 49/mês** ou Coursera Plus ~USD 59/mês; total 3–6 meses = USD 150–294 | https://www.coursera.org/professional-certificates/google-data-analytics |
+| DataCamp Premium (inclui Data Analyst track) | **USD 13/mês** anual (~USD 156/ano) ou USD 19/mês mensal | https://www.datacamp.com/pricing |
+| CompTIA Security+ (SY0-701) | **USD 425** voucher; com material USD 700–1000 total | https://www.comptia.org/certifications/security |
+| CISSP | **USD 749** (Americas); +USD 199 Peace of Mind opcional | https://www.isc2.org/register-for-exam/isc2-exam-pricing |
+| HL7 FHIR Foundational | **USD ~500–800** exame; +curso USD 500–2000 opcional | https://www.hl7.org/certification/fhir.cfm |
+| Linux Foundation LFS101 (Intro Linux) | **Gratuito** no edX (curso); certificado verificado USD 99 | https://training.linuxfoundation.org/training/introduction-to-linux/ — [BUSCA FEITA EM 2026-04-23 — valor confirmado na página do curso] |
+| cpTICS (SBIS) | **Dado (2026-04-23):** [BUSCA FEITA EM 2026-04-23 — valor exato não público; inscrição via site SBIS por edital]. Edições anteriores: ~R$ 400–700 | https://sbis.org.br/certificacoes/ |
 
 ## Armadilhas
 

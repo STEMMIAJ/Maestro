@@ -20,7 +20,7 @@ Este documento lista 7 trilhas, cada uma com: descrição, pré-requisitos, merc
 
 - **Descrição:** disciplina formal que estuda uso de informação/tecnologia em saúde. Inclui prontuário eletrônico, interoperabilidade (HL7/FHIR), ontologias (SNOMED, CID), terminologia, UX clínico.
 - **Pré-requisitos:** formação médica (já tem), noção de banco de dados, inglês técnico.
-- **Mercado BR:** nichado mas crescente; SBIS (Sociedade Brasileira de Informática em Saúde) organiza a área. [TODO/RESEARCH: títulos e cursos 2026]
+- **Mercado BR:** nichado mas crescente; SBIS organiza certificação **cpTICS** (Certificação Profissional em TIC em Saúde) e **proTICS**. **Dado (2026-04-23):** SBIS realiza exames periódicos cpTICS; eventos: CBIS (Congresso Brasileiro de Informática em Saúde) e Hospitalar. Títulos acadêmicos: especialização em Informática em Saúde (UNIFESP, USP, Einstein Ensino, Sírio Libanês Ensino, HC-FMUSP). — fontes: https://sbis.org.br/certificacoes/certificacao-profissional/ ; https://sbis.org.br/
 - **Empregadores típicos:** hospitais grandes (Einstein, Sírio, Moinhos), operadoras, govtech de saúde, fornecedores de prontuário (MV, Tasy/Philips, Soul MV).
 - **Como começar:** ler livro base (Shortliffe — Biomedical Informatics), estudar FHIR, participar SBIS, conectar Dexter a API FHIR pública de teste.
 
@@ -46,7 +46,7 @@ Este documento lista 7 trilhas, cada uma com: descrição, pré-requisitos, merc
 - **Pré-requisitos:** epidemiologia, estatística (causal inference), SQL/Python, domínio de fonte de dado (DATASUS, SUS, prontuário).
 - **Mercado BR:** farma (MSD, Pfizer, Roche, Novartis), CRO (IQVIA, Parexel), academia aplicada.
 - **Empregadores:** farma global, CRO, consultoria health-economics, agências regulatórias.
-- **Como começar:** curso de farmacoepi (FIOCRUZ EAD tem opções [TODO/RESEARCH]), replicar paper de RWE em base pública, publicar código.
+- **Como começar:** **Dado (2026-04-23):** Campus Virtual Fiocruz oferece 90+ cursos EAD gratuitos com certificado; catálogo varia por edital (epidemiologia, farmacologia, saúde pública). Farmacoepi específico não aparece fixo — verificar em https://campusvirtual.fiocruz.br/portal/?q=inscricao-selecao. Alternativa: ENSP/Fiocruz lato sensu em Epidemiologia (presencial/semipresencial). Replicar paper de RWE em base DATASUS pública, publicar código no GitHub.
 
 ## 5. Auditoria de laudos / perícia automatizada
 

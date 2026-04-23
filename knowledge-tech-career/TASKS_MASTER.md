@@ -193,3 +193,16 @@ Convenção de ID: `KTC-NNN`. Não reciclar ids. Tarefa concluída muda status, 
 | KTC-172 | `AGENTS/indexador.md` — agente de indexação para OpenClaw | — | .md | KTC-142 | PLANEJADO | 0 |
 | KTC-173 | `AGENTS/curador_fontes.md` — validador de `12_sources/` | — | .md | KTC-120 | PLANEJADO | 0 |
 | KTC-174 | `AGENTS/auditor_status.md` — verifica status coerentes | — | .md | — | PLANEJADO | 1 |
+
+## PYTHON-BASE integration (peso: 3%)
+
+Integração da PYTHON-BASE (179 MB, 90 falhas catalogadas, 11 sistemas) via symlink em `02_programming/python/python-base/`. Arquivos-índice criados: `python_base_index.md`, `python_base_falhas_top_20.md`, `python_base_sistemas_completos.md`, `python_base_templates.md`, `como_consultar_python_base.md`.
+
+| ID | Descrição | Entradas | Saídas | Depende | Status | % |
+|---|---|---|---|---|---|---|
+| KTC-180 | Integrar `03-FALHAS-SOLUCOES/db/falhas.json` ao pipeline de revisão de código: hook que verifica automaticamente se script novo cita IDs de falhas relevantes antes do commit | falhas.json, 14_automation/scripts/ | hook em AGENTS/, doc de uso | KTC-141, KTC-180-R | PLANEJADO | 1 |
+| KTC-181 | Consolidar `03-FALHAS-SOLUCOES/casos-reais/REGISTRO.md` em relatório trimestral com métricas (falhas novas / destiladas / por tecnologia / por sistema afetado) | REGISTRO.md, falhas.json | 13_reports/quarterly_reviews/python_falhas_YYYYQn.md | KTC-131 | PLANEJADO | 1 |
+| KTC-182 | Usar templates de `06-TEMPLATES/` como base obrigatória para specs de `14_automation/scripts/`: cada spec referencia qual template está adaptando | 06-TEMPLATES/, python_base_templates.md | specs em 14_automation/scripts/, índice de reuso | KTC-141 | PLANEJADO | 1 |
+| KTC-183 | Exportar diffs de `falhas.json` entre commits para `13_reports/quarterly_reviews/`: quantas entradas novas, quais categorias mais crescem, severidades | falhas.json (git log), histórico | 13_reports/quarterly_reviews/falhas_delta_YYYYQn.md | KTC-131, KTC-181 | PLANEJADO | 0 |
+| KTC-184 | Documentar `08-SISTEMAS-COMPLETOS/taiobeiras-status/` (README ausente, função pouco clara) — marcar dívida técnica ou remover | taiobeiras_status.py | README.md ou decisão de remoção | — | PLANEJADO | 0 |
+| KTC-185 | Criar template Playwright persistent context em `06-TEMPLATES/` (lacuna identificada) usando `guia-tjmg-scraper/scraper.py` como base | scraper.py, PW-004, PW-012 | 06-TEMPLATES/playwright-persistent.py | KTC-182 | PLANEJADO | 1 |

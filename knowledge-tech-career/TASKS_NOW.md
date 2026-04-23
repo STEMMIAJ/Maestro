@@ -1,31 +1,33 @@
-# TASKS_NOW.md — Próxima rodada
+# TASKS_NOW.md — Próxima rodada (pós-rodada 3)
 
-Arquivo volátil. Sobrescrito a cada rodada. Contém apenas o que deve ser feito AGORA. Histórico vive em `CHANGELOG.md` e `TASKS_MASTER.md`.
+Arquivo volátil. Sobrescrito a cada rodada. Contém apenas o que deve ser feito AGORA.
 
 Data de corte: 2026-04-23.
-Contexto: rodada 1 concluiu criação de árvore (112 diretórios) e docs mestres. Próxima rodada foca em governança e primeiros blocos técnicos para destravar dependências.
+Contexto: rodada 2 concluiu densificação de 6 blocos (190 MDs totais). Rodada 3 em execução paralela fechando 03, 04, 05, 10, 16 + integração PYTHON-BASE + pesquisa TODO/RESEARCH. Tarefas abaixo valem para a rodada 4.
 
 ## Prioridade alta (fazer na próxima rodada)
 
-1. **KTC-001** — Redigir `00_governance/conventions.md`. Saída ≥ 40 linhas. Status alvo: `EXECUTADO`.
-2. **KTC-002** — Redigir `00_governance/scope.md`. Saída ≥ 30 linhas. Status alvo: `EXECUTADO`.
-3. **KTC-004** — Redigir `00_governance/promotion_rules.md`. Destrava KTC-145 e KTC-160. Status alvo: `EXECUTADO`.
-4. **KTC-170** — Criar `AGENTS/README.md` catalogando os 5 agentes previstos. Status alvo: `EXECUTADO`.
-5. **KTC-174** — Criar `AGENTS/auditor_status.md` (primeiro agente funcional, verifica coerência de status). Status alvo: `EXECUTADO`.
+1. **IDX-001** — Rodar `openclaw memory index --path /Users/jesus/Desktop/STEMMIA\ Dexter/knowledge-tech-career/` e validar saída. Se comando falhar, documentar erro exato e marcar `TODO/RESEARCH` em `14_automation/openclaw_jobs/`.
+2. **Validação symlink** — `ls -la 02_programming/python/python-base` deve retornar link vivo. Ler 1 falha de `python-base/03-FALHAS-SOLUCOES/db/falhas.json` como teste.
+3. **KTC-142** — Criar 1 script Python real a partir de uma spec em `14_automation/scripts/`. Prova de conceito. Rodar e capturar output.
+4. **Completar blocos esqueleto remanescentes** — Se rodada 3 não terminou 03/04/05/10, despachar agentes complementares.
+5. **Promoção de rascunhos** — Revisar manualmente 5 artefatos densos dos blocos 01/02/06/07/08/11 e promover para `status: vigente` no frontmatter.
 
-## Prioridade média (fazer se sobrar tempo)
+## Prioridade média
 
-6. **KTC-110** — Primeira versão de `11_personal_skill_mapping/current_state/snapshot.md` — inventário honesto do estado atual em 6 eixos (dev, dados, IA, infra, segurança, saúde+TI).
-7. **KTC-100** — Iniciar `10_career_map/professions_taxonomy/` com lista bruta de 20 cargos TI relevantes. Fonte: roadmap.sh (marcar `TODO/RESEARCH` onde faltar).
-8. **KTC-120** — Iniciar `12_sources/official_docs/index.md` com 10 entradas mínimas (MDN, docs.python.org, PostgreSQL, FHIR, etc).
+6. **Git local** — Inicializar repositório dentro de `knowledge-tech-career/` OU adicionar como parte do git do Dexter (decisão humana). Primeiro commit com tag `v0.2.0`.
+7. **GitHub privado** — Criar repositório `knowledge-tech-career` privado e push inicial. Proteger branch main.
+8. **Piloto 16_inbox** — Importar 1 conversa ChatGPT ou Claude para `16_inbox/raw_conversations/` usando formato definido em `00_governance/promotion_rules.md` (se existir; caso contrário, criar regra primeiro).
 
-## Prioridade baixa (só se rodada for longa)
+## Prioridade baixa
 
-9. **KTC-150** — Template `15_memory/daily/`.
-10. **KTC-152** — Template `15_memory/decisions/` (ADR-lite).
+9. **Resolver TODO/RESEARCH acumulados** — Preços de certificação (AWS, CompTIA, HL7), dados de mercado TI-BR, comandos exatos OpenClaw na versão instalada.
+10. **Snapshot rodada 4** — Ao final, gravar `13_reports/snapshots/progress_snapshot_round3.md` ou `_round4.md` conforme sequência.
 
 ## Regras desta rodada
 
-- Nenhum arquivo `notes.md` dos blocos técnicos (01–09) deve ser preenchido ainda. Destravar governança primeiro.
-- Toda tarefa concluída: mudar status em `TASKS_MASTER.md` para `EXECUTADO` e somar ao `CHANGELOG.md`.
+- **Antes de qualquer coisa:** rodar contagem `find ... -name "*.md" | wc -l` para confirmar término da rodada 3.
+- Não promover rascunho sem frontmatter revisado e fonte citada em `12_sources/`.
+- Toda tarefa concluída: mudar status em `TASKS_MASTER.md` para `EXECUTADO` e somar ao `CHANGELOG.md` em novo bloco `[0.3.0]`.
+- Fila oficial de trabalho: `~/Desktop/_MESA/40-CLAUDE/fila-opus/dexter-maestro/fila.md`.
 - Ao final: reescrever este arquivo com as 5–10 próximas.

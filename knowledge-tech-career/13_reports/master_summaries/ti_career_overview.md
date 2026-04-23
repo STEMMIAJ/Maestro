@@ -71,6 +71,20 @@ Trilhas de baixa aderência (custo alto, retorno baixo para este perfil):
 - Sysadmin clássico.
 - Redes baixo nível.
 
+## Bandas salariais BR 2026 (por família)
+
+Valores mensais em BRL, CLT ou PJ equivalente, grandes centros (SP/RJ/remoto). Remoto internacional não incluído. Coletado 2026-04-23.
+
+| Família | Júnior | Pleno | Sênior | Fonte |
+|---|---|---|---|---|
+| Desenvolvimento (full-stack, back-end) | R$ 2.300–3.900 | R$ 4.000–8.000 (mediana Glassdoor ~R$ 6.671) | R$ 10.000–18.000+ (piso real ~R$ 13.000) | https://www.glassdoor.com.br/Sal%C3%A1rios/desenvolvedor-junior-sal%C3%A1rio-SRCH_KO0,20.htm ; https://huntit.com.br/salario-de-desenvolvedor-senior-em-2026/ |
+| Dados (analista) | R$ 3.500–5.500 | R$ 5.500–9.000 | R$ 9.000–15.000+ | https://blog.somostera.com/data-science/salario-de-analista-de-dados |
+| Dados (cientista) | R$ 6.000–8.000 | R$ 11.000–17.000 (Glassdoor mediana ~R$ 11.085) | R$ 17.000–24.000+ (grande porte); remoto internacional muito acima | https://sigmoidal.ai/quanto-ganha-um-cientista-de-dados/ ; https://www.glassdoor.com.br/Sal%C3%A1rios/cientista-de-dados-sal%C3%A1rio-SRCH_KO0,18.htm |
+| Cloud / DevOps / SRE | R$ 5.000–7.000 | R$ 8.000–12.000 (Glassdoor mediana DevOps Pleno ~R$ 8.050) | R$ 12.000–20.000+ (mediana sênior ~R$ 12.049) | https://www.glassdoor.com.br/Sal%C3%A1rios/engenheiro-devops-pleno-sal%C3%A1rio-SRCH_KO0,23.htm |
+| Segurança (analista SI) | R$ 4.000–7.000 (SOC Jr ~R$ 4–7k) | R$ 8.500–14.000 (piso R$ 8.542 / teto R$ 14.148) | R$ 15.000–25.000+ (pentester sênior R$ 15–25k; CISO R$ 24–30k+) | https://www.salario.com.br/profissao/analista-em-seguranca-da-informacao-cbo-212320/ ; https://itforum.com.br/noticias/salarios-ciberseguranca-brasil-2026/ |
+
+Ressalvas: Glassdoor/salário.com.br agregam autodeclaração e tendem a subestimar sênior real em empresas top-tier. Remoto internacional (USD/EUR) escapa desses rangers para cima em 2–5×. Vagas PJ geralmente 20–40% acima do CLT nominal.
+
 ## Erros comuns de transição
 
 - Querer "aprender TI" sem escolher família → estudo disperso, nada rende.
