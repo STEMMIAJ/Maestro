@@ -1,0 +1,14 @@
+rank,comarca,codigo_tjmg,entrancia,km,min,telefone,email_admin,email_cejusc,email_setor_filtrado,todos_emails,forum,cep,tipo_match,origem_match
+1,Governador Valadares,0105,Especial,2.11,4.4,(33) 3279-5800,gvsadm@tjmg.jus.br,cejuscgv.gabinete@tjmg.jus.br,,gvsadm@tjmg.jus.br;gvsarquivo@tjmg.jus.br;cejuscgv.gabinete@tjmg.jus.br;chssecretaria@tjmg.jus.br;gvscont@tjmg.jus.br;gvsjespadm@tjmg.jus.br;gvsjespciv@tjmg.jus.br;gvsjesp2uj.civel@tjmg.jus.br,Doutor Joaquim de Assis Martins Costa,35010142,sede,Governador Valadares
+2,Conselheiro Pena,0184,Segunda,26.96,32.7,(33) 3261-8400,csnadm@tjmg.jus.br,,,csnadm@tjmg.jus.br;csncontadoria@tjmg.jus.br,Desembargador Sebastião Helvécio Rosenburg,35240000,distrito,São Geraldo de Tumiritinga
+3,Tarumirim,0684,Primeira,36.87,47.4,(33) 3233-7800,,,,trmcontadoria@tjmg.jus.br;trm1secretaria@tjmg.jus.br,João de Andrade,35140000,distrito,São José do Acácio
+4,Itanhomi,0332,Primeira,41.31,48.6,(33) 3231-3200,inhadm@tjmg.jus.br,,,inhadm@tjmg.jus.br;inhcontadoria@tjmg.jus.br;inh1secretaria@tjmg.jus.br,Laudelino Brás,35120000,municipio,Capitão Andrade
+5,Peçanha,0486,Segunda,55.09,47.5,(33) 3411-2650,pnhadm@tjmg.jus.br,,,pnhadm@tjmg.jus.br;pnhcontadoria@tjmg.jus.br,Desembargador Forjaz de Lacerda,39700000,distrito,Conceição de Tronqueiras
+6,Itambacuri,0327,Segunda,57.93,56.3,(33) 3511-4600,itcadm@tjmg.jus.br,,,itcadm@tjmg.jus.br;itccontadoria@tjmg.jus.br;itc1civel@tjmg.jus.br,Doutor Alair Alves da Costa,39830000,municipio,Jampruca
+7,Galiléia,0273,Primeira,58.78,65.9,(33) 3244-2700,glladm@tjmg.jus.br,,,glladm@tjmg.jus.br;gllcontadoria@tjmg.jus.br;gllsecretaria@tjmg.jus.br,Alcebíades Freitas Pinto,35250000,distrito,Central de Santa Helena
+8,São João Nepomuceno,0629,Segunda,61.55,65.1,(32) 3261-8200,sjnadm@tjmg.jus.br,,,sjnadm@tjmg.jus.br;sjncontadoria@tjmg.jus.br,Desembargador Ananias Varella de Azevedo,36680000,distrito,Taruaçu
+9,Açucena,0005,Primeira,65.32,105.7,(33) 3322-9650,acnadm@tjmg.jus.br,,,acnadm@tjmg.jus.br;acncontadoria@tjmg.jus.br;acn1secretaria@tjmg.jus.br,Doutor Amaury Costa,35147000,distrito,Felicina
+10,Virginópolis,0718,Primeira,65.35,50.8,(33) 3416-2800,vgpadm@tjmg.jus.br,,,vgpadm@tjmg.jus.br;vgpcontadoria@tjmg.jus.br;vgp1secretaria@tjmg.jus.br,Doutor José Rabello Campos,39730000,municipio,Sardoá
+11,Inhapim,0309,Segunda,70.75,72.0,(33) 3315-3551,inpadm@tjmg.jus.br,,,inpadm@tjmg.jus.br;inpcontadoria@tjmg.jus.br,Anástácio Chaves,35330000,municipio,Dom Cavati
+12,Mantena,0396,Segunda,78.44,77.5,(33) 3799-2700,mnnadm@tjmg.jus.br,,,mnnadm@tjmg.jus.br;mnncontadoria@tjmg.jus.br;mnnsocial@tjmg.jus.br;mnnjesp@tjmg.jus.br,José Alves Pereira,35290045,municipio,Mendes Pimentel
+13,Santa Maria do Suaçuí,0582,Primeira,97.22,123.5,(33) 3431-2600,suicontadoria@tjmg.jus.br,,,suicontadoria@tjmg.jus.br;sui1secretaria@tjmg.jus.br,da Comarca,39780000,distrito,Poaia
