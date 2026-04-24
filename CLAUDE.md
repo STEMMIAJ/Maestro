@@ -3,6 +3,15 @@
 > Este arquivo é lido pelo Claude Code ao entrar em `~/Desktop/STEMMIA Dexter/Maestro/`.
 > Obedecer literalmente.
 
+## 💰 HONORÁRIOS — DISTINÇÃO CRÍTICA (nunca misturar)
+
+Dois mundos. Proibido tratar como mesma coisa:
+
+- **TABELA** = justiça gratuita (AJG). Governo paga. Valor fixo por portaria (TJMG 6180/2023, 6607/2024; TRT3; TRF6). NÃO EXISTE PROPOSTA. Majoração até 5x com justificativa. Ex: Taiobeiras R$ 612 n=6 = AJG.
+- **PROPOSTA** = parte custeia (autor/réu paga). Valor livre, fundamentado em complexidade + mercado + histórico. Sujeito a impugnação/arbitramento.
+
+Regra: antes de qualquer ação sobre honorários, checar em FICHA.json / petição inicial se há AJG deferida. AJG → TABELA. Custeado → PROPOSTA. NUNCA usar base AJG como referência de proposta custeada.
+
 ## Repo oficial
 https://github.com/STEMMIAJ/Maestro (privado)
 
