@@ -62,3 +62,6 @@ PROCESSOS-PENDENTES/
 # PDFs gerados
 SCRIPTS/*.pdf
 legado/recuperacao-forense/agentes/09-sessao-mentions.md
+
+# Permitir JSONs do tjmg-emails (dados públicos, não pacientes)
+!tjmg-emails/**/*.json
