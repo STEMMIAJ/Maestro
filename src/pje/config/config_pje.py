@@ -54,10 +54,13 @@ DJEN_API = "https://comunicaapi.pje.jus.br/api/v1/comunicacao"
 if platform.system() == "Windows":
     import os
     HOME = Path(os.environ.get("USERPROFILE", "C:\\Users\\jesus"))
+    # Parallels: Mac share em \\Mac\Home — preferir se existir
+    _mac_desktop = Path(r"\\Mac\Home\Desktop")
+    DESKTOP = _mac_desktop if _mac_desktop.exists() else HOME / "Desktop"
 else:
     HOME = Path.home()
+    DESKTOP = HOME / "Desktop"
 
-DESKTOP = HOME / "Desktop"
 DEXTER_ROOT = DESKTOP / "STEMMIA Dexter"
 MAESTRO_ROOT = DEXTER_ROOT / "Maestro"
 PJE_ROOT = MAESTRO_ROOT / "src" / "pje"
