@@ -2,6 +2,85 @@
 
 Repositório central do sistema pericial do Dr. Jesus Eduardo Noleto de Souza, perito médico judicial em Governador Valadares/MG.
 
+---
+
+## 🔒 REGRAS MAESTRO — LER ANTES DE QUALQUER AÇÃO EM Maestro/
+
+> Obrigatório ler ANTES de criar, mover, renomear ou deletar qualquer arquivo dentro de `~/Desktop/STEMMIA Dexter/Maestro/`.
+> Repo oficial: https://github.com/STEMMIAJ/Maestro
+
+### R0 — Ler primeiro
+Rodar `cd ~/Desktop/STEMMIA\ Dexter/Maestro && cat CHARTER.md RULES.md WORKFLOW.md DEFINITION_OF_DONE.md` antes de tocar em qualquer coisa.
+
+### R1 — Uma issue por sessão
+`gh issue list --repo STEMMIAJ/Maestro --state open` → escolher 1. Sem issue = sem trabalho.
+
+### R2 — Nada fora do Maestro
+Todo código/doc criado nesta sessão vai DENTRO de `~/Desktop/STEMMIA Dexter/Maestro/`. Proibido criar em `~/Desktop/`, raiz do Dexter, `_MESA/`.
+
+### R3 — Commit a cada etapa
+Cada arquivo novo/alterado vira commit imediato. Mensagem: `tipo(escopo): frase curta`.
+
+### R4 — Definition of Done é binário
+Tarefa só é "DONE" com os 5 itens: código commitado + teste passou (output colado) + CHANGELOG atualizado + issue fechada com `Closes #N` + push verde. Sem os 5 → não dizer "feito".
+
+### R5 — Trava 2× = vira issue blocker
+Falhou 2 vezes seguidas → criar issue com label `blocker`, parar, não contornar.
+
+### R6 — Sem limpeza sem autorização
+Proibido `rm`, `rm -rf`, `mv para /tmp`, renomear em massa. Exceção: usuário escreve `LIMPAR-LIBERADO` na mensagem.
+
+### R7 — Fim de sessão sempre escreve handoff
+`bash scripts/finalize.sh` cria `HANDOFFS/HANDOFF-YYYY-MM-DD-HHhMM.md` com: issue trabalhada, commits, estado (DONE/BLOCKED/PAUSED), próximo passo.
+
+### R8 — ADR antes de decisão grande
+Framework novo, schema, deletar módulo → criar `DECISIONS/ADR-NNNN-titulo.md` ANTES de implementar.
+
+### R9 — Claude decide ou para
+Faltou contexto → PARAR e fazer 1 pergunta objetiva. Proibido: "vou assumir", "deve ser", "tentar".
+
+### R10 — Usuário tem TEA+TDAH
+Resposta máx 3 linhas entre ações. Zero bajulação. Termo técnico → 1 frase + exemplo.
+
+**Regras 100% declaradas em:** `Maestro/RULES.md`, `Maestro/WORKFLOW.md`, `Maestro/DEFINITION_OF_DONE.md`, `Maestro/CLAUDE.md`, `Maestro/docs/politica/POLITICA-SALVAMENTO.md`.
+
+### Comandos prontos para colar em QUALQUER sessão
+
+**Abrir sessão Maestro:**
+```bash
+cd "/Users/jesus/Desktop/STEMMIA Dexter/Maestro" && bash scripts/status.sh
+```
+
+**Salvar trabalho no GitHub agora:**
+```bash
+cd "/Users/jesus/Desktop/STEMMIA Dexter/Maestro"
+git status
+git add -A
+git commit -m "tipo(escopo): descrição"
+git push
+```
+
+**Encerrar sessão (sempre):**
+```bash
+cd "/Users/jesus/Desktop/STEMMIA Dexter/Maestro"
+bash scripts/finalize.sh
+# preencher o handoff criado, depois:
+git add -A && git commit -m "chore(handoff): sessão $(date +%Y-%m-%d)" && git push
+```
+
+**Ver plano e documentação pro leigo:**
+- `Maestro/docs/github/01-EXPLICACAO-LEIGA.md` — git explicado sem jargão
+- `Maestro/docs/github/02-COMO-SALVAR.md` — quando/como salvar
+- `Maestro/docs/github/03-FLUXO-VISUAL.md` — diagrama do fluxo
+- `Maestro/docs/github/04-GLOSSARIO.md` — cola de palavras
+- `Maestro/docs/politica/POLITICA-SALVAMENTO.md` — regras de commit/push
+
+### Site público (stemmia.com.br)
+
+Pasta `stemmia.com.br/maestro/` hospeda os mesmos 4 guias leigos (cópia espelhada). Útil para o Dr. Jesus consultar pelo celular/iPad sem abrir o Mac. Atualização via FTP deploy quando os guias mudam.
+
+---
+
 ## Regras
 1. SEMPRE ler memoria/MEMORIA.md no início da sessão
 2. EXECUTAR DIRETO — não perguntar "posso executar?"
@@ -44,6 +123,7 @@ Repositório central do sistema pericial do Dr. Jesus Eduardo Noleto de Souza, p
 - memoria/MEMORIA.md
 - memoria/DECISOES.md
 - 00-CONTROLE/AGORA.md
+- 00-CONTROLE/PROTOCOLO-CLAUDE-CONSISTENTE.md quando a tarefa envolver Claude, contexto, produtividade, recusa, lentidão ou comportamento inconsistente
 
 Se algum arquivo não existir, criar.
 
@@ -80,6 +160,23 @@ Cada conteúdo útil deve virar nota Markdown com: título, link original, resum
 ## Após cada sessão importante
 Atualizar memoria/MEMORIA.md com estado atual e pendências.
 Se houve decisão arquitetural, registrar em memoria/DECISOES.md.
+
+## ENFORCEMENT DE PLANOS (obrigatório, sem exceção)
+
+Todo plano novo criado em `~/.claude/plans/` **OU** em `STEMMIA Dexter/00-CONTROLE/` deve seguir **exatamente** o formato de `STEMMIA Dexter/00-CONTROLE/TEMPLATE-PLANO.md`.
+
+Regras:
+1. Plano sem os 11 blocos do template → **rejeitado** antes de executar.
+2. Tarefa sem "Output esperado" verificável (regex, contagem, diff, texto literal) → **proibida**.
+3. Fase sem tarefa `CKPT<N>` (checkpoint explícito) → **proibida**. Claude NÃO inicia próxima fase sem aprovação explícita do Dr. Jesus ("ok fase N+1").
+4. Plano sem bloco "Princípios não-negociáveis" literal → **rejeitado**.
+5. Plano sem tabela de Riscos (mínimo 3 com mitigação) e sem "Rollback por fase" → **rejeitado**.
+6. Plano que ultrapassa 2h numa fase sem subdividir → **rejeitado**.
+7. Afirmação no plano sobre existência de arquivos/scripts sem grep/ls recente como evidência → **rejeitada**.
+
+Se o Dr. Jesus identificar um plano fora do padrão: reescrever no template — NÃO executar o plano fora do padrão.
+
+Documento completo: `STEMMIA Dexter/00-CONTROLE/TEMPLATE-PLANO.md`.
 
 <!-- GSD:project-start source:PROJECT.md -->
 ## Project
