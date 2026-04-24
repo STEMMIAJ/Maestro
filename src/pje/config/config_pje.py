@@ -59,7 +59,8 @@ else:
 
 DESKTOP = HOME / "Desktop"
 DEXTER_ROOT = DESKTOP / "STEMMIA Dexter"
-PJE_ROOT = DEXTER_ROOT / "src" / "pje"
+MAESTRO_ROOT = DEXTER_ROOT / "Maestro"
+PJE_ROOT = MAESTRO_ROOT / "src" / "pje"
 
 # Subpastas canônicas
 DESCOBERTA_DIR = PJE_ROOT / "descoberta"
@@ -72,6 +73,10 @@ SESSOES_DIR = PJE_ROOT / "_sessoes"
 PROCESSOS_DIR = DESKTOP / "ANALISADOR FINAL" / "processos"
 PDFS_PJE_WINDOWS = DESKTOP / "processos-pje-windows"
 FALHAS_JSON = DESKTOP / "_MESA" / "01-ATIVO" / "PYTHON-BASE" / "03-FALHAS-SOLUCOES" / "db" / "falhas.json"
+
+# Banco de dados central de processos
+# ÚNICO local autorizado para persistir processos descobertos.
+MAESTRO_DB = MAESTRO_ROOT / "banco-local" / "maestro.db"
 
 # Download padrão do baixar_push_pje (Windows/Parallels)
 DEFAULT_DOWNLOAD_DIR = DESKTOP / "processos-novos"

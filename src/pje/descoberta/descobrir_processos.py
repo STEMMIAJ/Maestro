@@ -79,6 +79,7 @@ from config_pje import (
     DATAJUD_KEY,
     DATAJUD_ENDPOINTS,
     RE_CNJ,
+    MAESTRO_DB,
 )
 
 # Polimento 2026-04-19 (adendo plano binary-gliding-pine): tqdm, rich, tenacity.
@@ -666,7 +667,7 @@ def fonte_aj_ajg(porta=9223):
 # ============================================================
 
 DJEN_BASE = "https://comunicaapi.pje.jus.br/api/v1/comunicacao"
-DJEN_TRIBUNAIS = ["TJMG", "TRF6"]
+DJEN_TRIBUNAIS = ["TJMG", "TRF6", "TRT3"]
 DJEN_FILTRO_TEXTO = re.compile(r'PERIT|NOMEADO|LAUDO|EXPERT', re.IGNORECASE)
 
 
@@ -1080,6 +1081,48 @@ def atualizar_pendentes(novos_cnjs):
 
 
 # ============================================================
+# PERSISTÊNCIA — maestro.db
+# ============================================================
+
+def _salvar_no_maestro_db(cnjs, datajud_dados):
+    """INSERT OR IGNORE de CNJs descobertos no maestro.db.
+    Atualiza comarca quando DataJud tem os dados e o campo está vazio.
+    Falha silenciosa — não bloqueia pipeline principal.
+    """
+    import sqlite3
+    if not MAESTRO_DB.exists():
+        log(f"maestro.db não encontrado em {MAESTRO_DB} — pulando save", "AVISO")
+        return
+    try:
+        conn = sqlite3.connect(str(MAESTRO_DB))
+        cur = conn.cursor()
+        salvos = 0
+        atualizados = 0
+        for cnj in cnjs:
+            dj = datajud_dados.get(cnj, {})
+            comarca = dj.get("orgaoJulgador", "") or ""
+            cur.execute(
+                "INSERT OR IGNORE INTO processos (cnj, comarca, status) VALUES (?, ?, ?)",
+                (cnj, comarca, "descoberto"),
+            )
+            if cur.rowcount:
+                salvos += 1
+            elif comarca:
+                cur.execute(
+                    "UPDATE processos SET comarca = ?, updated_at = CURRENT_TIMESTAMP "
+                    "WHERE cnj = ? AND (comarca IS NULL OR comarca = '')",
+                    (comarca, cnj),
+                )
+                if cur.rowcount:
+                    atualizados += 1
+        conn.commit()
+        conn.close()
+        log(f"maestro.db: {salvos} inseridos, {atualizados} comarca atualizada", "OK")
+    except Exception as e:
+        log(f"Erro ao salvar no maestro.db: {e}", "ERRO")
+
+
+# ============================================================
 # MAIN
 # ============================================================
 
@@ -1357,6 +1400,10 @@ def main():
         }
     except Exception as e:
         log(f"Erro na classificação perito/parte: {e}", "ERRO")
+
+    # Persistir CNJs (PERITO + INDETERMINADO) no banco central
+    _cnjs_banco = cnjs_para_pipeline if 'cnjs_para_pipeline' in dir() else todos_cnjs
+    _salvar_no_maestro_db(_cnjs_banco, datajud_dados)
 
     # Criar pastas e atualizar pendentes para novos confirmados
     if novos:
