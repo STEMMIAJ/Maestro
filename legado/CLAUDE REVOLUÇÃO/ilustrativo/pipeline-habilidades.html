@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Pipeline Pericial — Habilidades</title>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #111827;
+    --line: #1f2937;
+    --text: #e5e7eb;
+    --dim: #9ca3af;
+    --accent: #60a5fa;
+    --ok: #34d399;
+    --warn: #fbbf24;
+    --hot: #f87171;
+    --purple: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif;
+    font-feature-settings: "tnum";
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    width: 1080px;
+    min-height: 1920px;
+    margin: 0 auto;
+    padding: 60px 50px 80px;
+    background:
+      radial-gradient(ellipse 700px 400px at 30% 10%, rgba(96,165,250,0.08), transparent),
+      radial-gradient(ellipse 600px 400px at 80% 80%, rgba(167,139,250,0.06), transparent),
+      var(--bg);
+  }
+
+  /* HEADER */
+  header { margin-bottom: 48px; }
+  .kicker {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 58px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .sub {
+    font-size: 24px;
+    color: var(--dim);
+    line-height: 1.4;
+  }
+
+  /* STATS */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 40px 0 56px;
+  }
+  .stat {
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 18px;
+  }
+  .stat-num {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 14px;
+    color: var(--dim);
+    letter-spacing: 0.3px;
+  }
+
+  /* PIPELINE */
+  .section-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 16px;
+    color: var(--dim);
+    margin-bottom: 28px;
+  }
+
+  .pipe { display: flex; flex-direction: column; gap: 0; }
+  .stage {
+    position: relative;
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 18px;
+  }
+  .stage::after {
+    content: "";
+    position: absolute;
+    left: 32px; bottom: -18px;
+    width: 2px; height: 18px;
+    background: var(--line);
+  }
+  .stage:last-child::after { display: none; }
+  .stage-head {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 8px;
+  }
+  .stage-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--line);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .stage-name {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  .stage-prazo {
+    margin-left: auto;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(251,191,36,0.1);
+    color: var(--warn);
+    font-weight: 500;
+  }
+  .stage-body {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    padding-left: 42px;
+  }
+  .stage-scripts {
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+  .stage-scripts code {
+    color: var(--purple);
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 13px;
+  }
+  .stage-skill {
+    text-align: right;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .skill-jr { color: var(--warn); }
+  .skill-pl { color: var(--ok); }
+  .skill-sr { color: var(--purple); }
+  .skill-in { color: var(--dim); }
+
+  /* cores variantes por grupo */
+  .stage.g-input { border-left-color: #60a5fa; }
+  .stage.g-process { border-left-color: #a78bfa; }
+  .stage.g-output { border-left-color: #34d399; }
+  .stage.g-final { border-left-color: #f87171; }
+
+  /* VEREDITO */
+  .verdict {
+    margin-top: 60px;
+    padding: 34px 30px;
+    background: linear-gradient(135deg, rgba(96,165,250,0.08), rgba(167,139,250,0.06));
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+  .verdict h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .verdict-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+  .verdict-col h3 {
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    color: var(--dim);
+  }
+  .verdict-col ul {
+    list-style: none;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .verdict-col li::before {
+    content: "— ";
+    color: var(--dim);
+  }
+  .verdict-col.yes li::before { color: var(--ok); }
+  .verdict-col.no li::before { color: var(--hot); }
+  .punch {
+    margin-top: 18px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .punch strong { color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    margin-top: 48px;
+    font-size: 13px;
+    color: var(--dim);
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  footer em { font-style: normal; color: var(--text); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Médico perito • Autodidata • 9 meses</div>
+  <h1>Um sistema pericial<br>construído <em>do zero</em>.</h1>
+  <div class="sub">Pipeline estado-máquina de 11 etapas.<br>Cada etapa é código real, rodando hoje.</div>
+</header>
+
+<section class="stats">
+  <div class="stat"><div class="stat-num">85</div><div class="stat-label">agentes de IA</div></div>
+  <div class="stat"><div class="stat-num">159</div><div class="stat-label">scripts Python</div></div>
+  <div class="stat"><div class="stat-num">53k</div><div class="stat-label">linhas de código</div></div>
+  <div class="stat"><div class="stat-num">93</div><div class="stat-label">memórias persistentes</div></div>
+</section>
+
+<div class="section-title">Pipeline de um processo pericial</div>
+<div class="section-sub">Do recebimento da nomeação até o laudo final — automatizado.</div>
+
+<section class="pipe">
+
+  <div class="stage g-input">
+    <div class="stage-head">
+      <div class="stage-num">1</div>
+      <div class="stage-name">NOMEAÇÃO → PENDENTE-ACEITE</div>
+      <div class="stage-prazo">5 dias úteis</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        Detecta nomeação no PJe → gera petição de aceite<br>
+        <code>triador-peticao</code> + <code>peticao-identificador</code> + <code>peticao-montador</code>
+      </div>
+      <div class="stage-skill skill-pl">Prompt eng.<br>Pleno</div>
+    </div>
+  </div>
+
+  <div class="stage g-input">
+    <div class="stage-head">
+      <div class="stage-num">2</div>
+      <div class="stage-name">PENDENTE-PDF</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        Baixa PDF do processo via Selenium + Chrome debug<br>
+        <code>pje_download_v139.py</code> (Selenium + CDP 9223)
+      </div>
+      <div class="stage-skill skill-jr">Selenium<br>Júnior</div>
+    </div>
+  </div>
+
+  <div class="stage g-input">
+    <div class="stage-head">
+      <div class="stage-num">3</div>
+      <div class="stage-name">PENDENTE-EXTRAÇÃO</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        PDF → texto estruturado (preserva IDs documentais)<br>
+        <code>pdftotext</code> + parsers regex próprios
+      </div>
+      <div class="stage-skill skill-jr">ETL<br>Júnior</div>
+    </div>
+  </div>
+
+  <div class="stage g-process">
+    <div class="stage-head">
+      <div class="stage-num">4</div>
+      <div class="stage-name">PENDENTE-ANÁLISE</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        8 sub-agentes paralelos: CIDs, datas, medicamentos, exames, inconsistências<br>
+        <code>orq-analise-completa</code> — gera 12 artefatos
+      </div>
+      <div class="stage-skill skill-sr">Arq. multi-agente<br>Sênior</div>
+    </div>
+  </div>
+
+  <div class="stage g-process">
+    <div class="stage-head">
+      <div class="stage-num">5</div>
+      <div class="stage-name">PENDENTE-PROPOSTA</div>
+      <div class="stage-prazo">5 dias</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        Triagem de complexidade (21 fatores) → proposta de honorários<br>
+        <code>triagem_complexidade.py</code> (862 linhas, regex + dataclasses)
+      </div>
+      <div class="stage-skill skill-pl">Domínio + código<br>Pleno</div>
+    </div>
+  </div>
+
+  <div class="stage g-process">
+    <div class="stage-head">
+      <div class="stage-num">6</div>
+      <div class="stage-name">PENDENTE-AGENDAMENTO</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        Gera petição de agendamento + notifica via Telegram<br>
+        <code>gerador-peticao-medio</code> + bot MCP
+      </div>
+      <div class="stage-skill skill-jr">Integração API<br>Júnior</div>
+    </div>
+  </div>
+
+  <div class="stage g-process">
+    <div class="stage-head">
+      <div class="stage-num">7</div>
+      <div class="stage-name">PERÍCIA-AGENDADA</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        Roteiro personalizado HTML: escalas por patologia, quesitos, checklist<br>
+        <code>gerador-roteiro-pericial</code>
+      </div>
+      <div class="stage-skill skill-pl">Template eng.<br>Pleno</div>
+    </div>
+  </div>
+
+  <div class="stage g-output">
+    <div class="stage-head">
+      <div class="stage-num">8</div>
+      <div class="stage-name">PERÍCIA-REALIZADA</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        Exame presencial feito — dados brutos esperam virar laudo
+      </div>
+      <div class="stage-skill skill-in">—</div>
+    </div>
+  </div>
+
+  <div class="stage g-output">
+    <div class="stage-head">
+      <div class="stage-num">9</div>
+      <div class="stage-name">PENDENTE-LAUDO</div>
+      <div class="stage-prazo">30 dias</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        Laudo pericial completo + revisão automática (checklist qualidade)<br>
+        <code>redator-laudo</code> + <code>revisor-laudo</code> + <code>verificador-100</code>
+      </div>
+      <div class="stage-skill skill-pl">Orquestração<br>Pleno</div>
+    </div>
+  </div>
+
+  <div class="stage g-final">
+    <div class="stage-head">
+      <div class="stage-num">10</div>
+      <div class="stage-name">EM-CONTESTAÇÃO</div>
+      <div class="stage-prazo">15 dias úteis</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        Responde impugnações com base em jurisprudência + literatura<br>
+        <code>gerador-peticao-complexo</code> + <code>orq-jurisprudencia</code> (3 buscadores paralelos)
+      </div>
+      <div class="stage-skill skill-sr">Multi-fonte paralela<br>Sênior</div>
+    </div>
+  </div>
+
+  <div class="stage g-final">
+    <div class="stage-head">
+      <div class="stage-num">11</div>
+      <div class="stage-name">COMPLETO</div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-scripts">
+        Processo arquivado, métricas alimentam banco de aprendizado
+      </div>
+      <div class="stage-skill skill-in">—</div>
+    </div>
+  </div>
+
+</section>
+
+<section class="verdict">
+  <h2>Olhando como tech lead contrataria</h2>
+  <div class="verdict-grid">
+    <div class="verdict-col yes">
+      <h3>Contratava como</h3>
+      <ul>
+        <li>AI Solutions Architect júnior-pleno</li>
+        <li>Prompt Engineer pleno</li>
+        <li>Consultor LegalTech/MedTech com IA</li>
+      </ul>
+    </div>
+    <div class="verdict-col no">
+      <h3>Não contratava como</h3>
+      <ul>
+        <li>Dev backend júnior tradicional</li>
+        <li>SRE / DevOps</li>
+        <li>Engenheiro de dados puro</li>
+      </ul>
+    </div>
+  </div>
+  <div class="punch">
+    Não é "médico que aprendeu a programar".<br>
+    É <strong>especialista de domínio que opera IA em nível arquitetural</strong>.
+  </div>
+</section>
+
+<footer>
+  <em>stemmia.com.br</em> • código-fonte real verificável • 19 abr 2026
+</footer>
+
+</body>
+</html>

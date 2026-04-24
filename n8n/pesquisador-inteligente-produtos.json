@@ -1,0 +1,233 @@
+{
+  "name": "Pesquisador Inteligente de Produtos",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pesquisar-produto",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "name": "Webhook - Receber Pedido",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 300],
+      "webhookId": "pesquisar-produto"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==================================================\n// NÓ 2: CLASSIFICAR CATEGORIA E SELECIONAR LOJAS\n// ==================================================\n\nconst input = $input.first().json;\nconst produto = (input.body?.produto || input.produto || '').toLowerCase();\nconst lojasInput = (input.body?.lojas || input.lojas || 'auto').toString().toLowerCase();\n\n// Tabela de categorias → lojas\nconst categorias = {\n  eletro_grande: {\n    palavras: ['ar-condicionado', 'ar condicionado', 'geladeira', 'refrigerador', 'fogão', 'fogao', 'máquina de lavar', 'maquina de lavar', 'lava e seca', 'freezer', 'microondas', 'forno'],\n    lojas: ['google_shopping', 'mercadolivre', 'amazon', 'magalu', 'casas_bahia', 'ponto']\n  },\n  eletro_pequeno: {\n    palavras: ['liquidificador', 'airfryer', 'air fryer', 'ferro de passar', 'cafeteira', 'batedeira', 'mixer', 'torradeira', 'aspirador', 'ventilador'],\n    lojas: ['google_shopping', 'mercadolivre', 'amazon', 'shopee', 'magalu', 'casas_bahia']\n  },\n  eletronicos: {\n    palavras: ['celular', 'smartphone', 'notebook', 'laptop', 'tablet', 'tv', 'televisão', 'televisao', 'monitor', 'fone', 'headset', 'caixa de som', 'mouse', 'teclado'],\n    lojas: ['google_shopping', 'mercadolivre', 'amazon', 'magalu', 'casas_bahia', 'ponto']\n  },\n  casa_cozinha: {\n    palavras: ['toalha', 'lençol', 'lencol', 'travesseiro', 'panela', 'frigideira', 'jogo de cama', 'cortina', 'tapete', 'cobertor', 'edredom', 'prato', 'talher', 'copo'],\n    lojas: ['mercadolivre', 'shopee', 'amazon']\n  },\n  moveis: {\n    palavras: ['sofá', 'sofa', 'mesa', 'cadeira', 'estante', 'rack', 'guarda-roupa', 'guarda roupa', 'cama', 'colchão', 'colchao', 'escrivaninha'],\n    lojas: ['google_shopping', 'mercadolivre', 'amazon', 'magalu', 'casas_bahia']\n  },\n  alimentos: {\n    palavras: ['arroz', 'feijão', 'feijao', 'óleo', 'oleo', 'açúcar', 'acucar', 'farinha', 'leite', 'café', 'cafe', 'carne', 'alimento'],\n    lojas: ['carrefour', 'extra', 'amazon']\n  },\n  escritorio: {\n    palavras: ['papel', 'caneta', 'impressora', 'toner', 'cartucho', 'envelope', 'pasta', 'grampeador', 'caderno'],\n    lojas: ['mercadolivre', 'shopee', 'amazon']\n  },\n  equipamento_medico: {\n    palavras: ['otoscópio', 'otoscopio', 'esfigmomanômetro', 'esfigmomanometro', 'estetoscópio', 'estetoscopio', 'oxímetro', 'oximetro', 'EPI', 'luva', 'jaleco', 'bisturi', 'termômetro', 'termometro'],\n    lojas: ['google_shopping', 'mercadolivre', 'amazon']\n  }\n};\n\n// Detectar categoria\nlet categoriaDetectada = 'geral';\nlet lojasAtivas = ['google_shopping', 'mercadolivre', 'amazon'];\n\nfor (const [cat, config] of Object.entries(categorias)) {\n  for (const palavra of config.palavras) {\n    if (produto.includes(palavra)) {\n      categoriaDetectada = cat;\n      lojasAtivas = config.lojas;\n      break;\n    }\n  }\n  if (categoriaDetectada !== 'geral') break;\n}\n\n// Se usuario pediu \"todas\"\nif (lojasInput === 'todas' || lojasInput === 'all') {\n  lojasAtivas = ['google_shopping', 'mercadolivre', 'amazon', 'shopee', 'magalu', 'casas_bahia', 'americanas', 'ponto', 'carrefour', 'extra'];\n}\n\n// Se usuario especificou numeros\nconst mapaNumeros = {\n  '1': 'mercadolivre', '2': 'amazon', '3': 'shopee',\n  '4': 'magalu', '5': 'casas_bahia', '6': 'americanas',\n  '7': 'ponto', '8': 'carrefour', '9': 'extra', '10': 'google_shopping'\n};\n\nif (/^[\\d,\\s]+$/.test(lojasInput)) {\n  const nums = lojasInput.split(',').map(n => n.trim());\n  lojasAtivas = nums.map(n => mapaNumeros[n]).filter(Boolean);\n}\n\nreturn [{\n  json: {\n    produto: input.body?.produto || input.produto || '',\n    produto_busca: encodeURIComponent(input.body?.produto || input.produto || ''),\n    categoria: categoriaDetectada,\n    lojas: lojasAtivas,\n    buscar_google_shopping: lojasAtivas.includes('google_shopping'),\n    buscar_mercadolivre: lojasAtivas.includes('mercadolivre'),\n    cep: '35065118',\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000002",
+      "name": "Classificar Categoria",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://serpapi.com/search.json?engine=google_shopping&q={{ $json.produto_busca }}&location=Brazil&hl=pt&gl=br&num=40&api_key={{ $credentials.serpApiKey }}",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000003",
+      "name": "SerpAPI - Google Shopping",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [500, 200],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.mercadolibre.com/sites/MLB/search?q={{ $json.produto_busca }}&limit=50&offset=0",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000004",
+      "name": "API Mercado Livre",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [500, 450],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "multiplex"
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000005",
+      "name": "Merge Resultados",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [750, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==================================================\n// NÓ 6: PADRONIZAR + ESTATÍSTICA + AMOSTRAGEM\n// ==================================================\n\nconst items = $input.all();\nconst todosResultados = [];\n\n// --- EXTRAIR RESULTADOS DO GOOGLE SHOPPING ---\nfor (const item of items) {\n  const data = item.json;\n  \n  // SerpAPI Google Shopping\n  if (data.body?.shopping_results) {\n    for (const r of data.body.shopping_results) {\n      todosResultados.push({\n        nome: r.title || 'Sem nome',\n        preco: r.extracted_price || 0,\n        preco_texto: r.price || 'N/I',\n        loja: r.source || 'Google Shopping',\n        link: r.link || r.product_link || '#',\n        imagem: r.thumbnail || '',\n        avaliacao: r.rating || null,\n        num_avaliacoes: r.reviews || 0,\n        frete_texto: r.delivery || 'Ver na loja',\n        frete_valor: 0,\n        prazo: r.delivery || 'Ver na loja',\n        disponivel: true,\n        fonte: 'google_shopping',\n        parcelamento: r.installments?.text || 'N/I'\n      });\n    }\n  }\n  \n  // Mercado Livre API\n  if (data.body?.results) {\n    for (const r of data.body.results) {\n      const freteGratis = r.shipping?.free_shipping || false;\n      todosResultados.push({\n        nome: r.title || 'Sem nome',\n        preco: r.price || 0,\n        preco_texto: `R$ ${(r.price || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`,\n        loja: `Mercado Livre - ${r.seller?.nickname || 'Vendedor'}`,\n        link: r.permalink || '#',\n        imagem: r.thumbnail || '',\n        avaliacao: r.reviews?.rating_average || null,\n        num_avaliacoes: r.reviews?.total || 0,\n        frete_texto: freteGratis ? 'Frete Grátis' : 'Ver na loja',\n        frete_valor: freteGratis ? 0 : -1,\n        prazo: r.shipping?.estimated_delivery_time?.text || 'Ver na loja',\n        disponivel: r.available_quantity > 0,\n        fonte: 'mercadolivre',\n        parcelamento: r.installments ? `${r.installments.quantity}x R$ ${r.installments.amount?.toFixed(2)}` : 'N/I',\n        condicao: r.condition === 'new' ? 'Novo' : 'Usado'\n      });\n    }\n  }\n}\n\n// --- FILTRAR PREÇO VÁLIDO ---\nconst comPreco = todosResultados.filter(r => r.preco > 0);\n\nif (comPreco.length === 0) {\n  return [{ json: { erro: true, mensagem: 'Nenhum resultado encontrado', resultados: [], stats: {} } }];\n}\n\n// --- ESTATÍSTICAS ---\nconst precos = comPreco.map(r => r.preco).sort((a, b) => a - b);\nconst n = precos.length;\n\nconst soma = precos.reduce((a, b) => a + b, 0);\nconst media = soma / n;\nconst mediana = n % 2 === 0 ? (precos[n/2 - 1] + precos[n/2]) / 2 : precos[Math.floor(n/2)];\n\n// Moda\nconst freq = {};\nprecos.forEach(p => {\n  const rounded = Math.round(p / 10) * 10;\n  freq[rounded] = (freq[rounded] || 0) + 1;\n});\nconst moda = Number(Object.entries(freq).sort((a, b) => b[1] - a[1])[0][0]);\n\n// Desvio padrão\nconst variancia = precos.reduce((acc, p) => acc + Math.pow(p - media, 2), 0) / n;\nconst desvioPadrao = Math.sqrt(variancia);\n\n// --- AMOSTRAGEM INTELIGENTE ---\nconst LIMITE_TOTAL = 15;\n\nlet resultadosFinal;\n\nif (n <= 20) {\n  // Poucos resultados: traz todos\n  resultadosFinal = comPreco;\n} else {\n  // Regra de Sturges para número de faixas\n  const numFaixas = Math.round(1 + 3.322 * Math.log10(n));\n  const precoMin = precos[0];\n  const precoMax = precos[n - 1];\n  const larguraFaixa = (precoMax - precoMin) / numFaixas;\n  \n  // Criar faixas\n  const faixas = [];\n  for (let i = 0; i < numFaixas; i++) {\n    const inicio = precoMin + (i * larguraFaixa);\n    const fim = i === numFaixas - 1 ? precoMax + 1 : precoMin + ((i + 1) * larguraFaixa);\n    const produtosFaixa = comPreco.filter(r => r.preco >= inicio && r.preco < fim);\n    faixas.push({\n      inicio: Math.round(inicio * 100) / 100,\n      fim: Math.round(fim * 100) / 100,\n      produtos: produtosFaixa,\n      quantidade: produtosFaixa.length,\n      proporcao: produtosFaixa.length / n\n    });\n  }\n  \n  // Amostra proporcional\n  resultadosFinal = [];\n  for (const faixa of faixas) {\n    if (faixa.produtos.length === 0) continue;\n    \n    let qtdAmostra = Math.max(1, Math.round(faixa.proporcao * LIMITE_TOTAL));\n    \n    // Ordenar por: melhor avaliação, depois menor preço\n    const ordenados = faixa.produtos.sort((a, b) => {\n      if (b.avaliacao !== a.avaliacao) return (b.avaliacao || 0) - (a.avaliacao || 0);\n      return a.preco - b.preco;\n    });\n    \n    // Pegar amostra: mais barato + melhor avaliação + frete mais barato\n    const selecionados = new Set();\n    \n    // Mais barato da faixa\n    const maisBarato = [...faixa.produtos].sort((a, b) => a.preco - b.preco)[0];\n    selecionados.add(JSON.stringify(maisBarato));\n    \n    // Melhor avaliado\n    const melhorAvaliado = [...faixa.produtos].sort((a, b) => (b.avaliacao || 0) - (a.avaliacao || 0))[0];\n    selecionados.add(JSON.stringify(melhorAvaliado));\n    \n    // Completar com os próximos\n    for (const p of ordenados) {\n      if (selecionados.size >= qtdAmostra) break;\n      selecionados.add(JSON.stringify(p));\n    }\n    \n    for (const s of selecionados) {\n      resultadosFinal.push(JSON.parse(s));\n    }\n  }\n}\n\n// --- CALCULAR VALOR TOTAL ---\nfor (const r of resultadosFinal) {\n  if (r.frete_valor >= 0) {\n    r.valor_total = r.preco + r.frete_valor;\n    r.valor_total_texto = `R$ ${r.valor_total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;\n  } else {\n    r.valor_total = r.preco;\n    r.valor_total_texto = `R$ ${r.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})} + frete`;\n  }\n}\n\n// Ordenar por valor total\nresultadosFinal.sort((a, b) => a.valor_total - b.valor_total);\n\nreturn [{\n  json: {\n    erro: false,\n    produto_pesquisado: items[0]?.json?.produto || 'N/I',\n    total_encontrado: n,\n    total_exibido: resultadosFinal.length,\n    stats: {\n      media: Math.round(media * 100) / 100,\n      mediana: Math.round(mediana * 100) / 100,\n      moda: moda,\n      desvio_padrao: Math.round(desvioPadrao * 100) / 100,\n      menor_preco: precos[0],\n      maior_preco: precos[n - 1]\n    },\n    resultados: resultadosFinal,\n    cep: '35065118',\n    data_pesquisa: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000006",
+      "name": "Estatistica e Amostragem",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==================================================\n// NÓ 7: GERAR RELATÓRIO HTML VISUAL\n// ==================================================\n\nconst data = $input.first().json;\n\nif (data.erro) {\n  return [{ json: { html: `<html><body><h1>Nenhum resultado encontrado</h1><p>${data.mensagem}</p></body></html>` } }];\n}\n\nconst { produto_pesquisado, total_encontrado, total_exibido, stats, resultados, data_pesquisa } = data;\n\n// Gerar cards de produtos\nlet cardsHTML = '';\nfor (let i = 0; i < resultados.length; i++) {\n  const r = resultados[i];\n  const badge = i === 0 ? '<span style=\"background:#16a34a;color:#fff;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;\">MELHOR PREÇO</span>' : '';\n  const estrelas = r.avaliacao ? '⭐'.repeat(Math.round(r.avaliacao)) + ` ${r.avaliacao}/5 (${r.num_avaliacoes})` : 'Sem avaliação';\n  \n  cardsHTML += `\n    <div style=\"background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:16px;display:flex;gap:16px;align-items:flex-start;box-shadow:0 1px 3px rgba(0,0,0,0.06);\">\n      <div style=\"flex-shrink:0;width:120px;height:120px;background:#f8fafc;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;\">\n        ${r.imagem ? `<img src=\"${r.imagem}\" style=\"max-width:110px;max-height:110px;object-fit:contain;\" alt=\"${r.nome}\">` : '<span style=\"color:#94a3b8;font-size:14px;\">Sem foto</span>'}\n      </div>\n      <div style=\"flex:1;min-width:0;\">\n        <div style=\"display:flex;align-items:center;gap:8px;margin-bottom:6px;\">\n          ${badge}\n          <span style=\"background:#f1f5f9;padding:2px 8px;border-radius:8px;font-size:11px;color:#64748b;\">${r.fonte === 'google_shopping' ? 'Google Shopping' : 'Mercado Livre'}</span>\n        </div>\n        <h3 style=\"margin:0 0 8px 0;font-size:15px;color:#1e293b;line-height:1.3;\">${r.nome}</h3>\n        <div style=\"display:flex;flex-wrap:wrap;gap:16px;align-items:baseline;margin-bottom:8px;\">\n          <span style=\"font-size:24px;font-weight:700;color:#0f172a;\">${r.preco_texto}</span>\n          <span style=\"font-size:13px;color:#64748b;\">${r.parcelamento}</span>\n        </div>\n        <div style=\"display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:#475569;margin-bottom:8px;\">\n          <span>🏪 ${r.loja}</span>\n          <span>📦 ${r.frete_texto}</span>\n          <span>🕐 ${r.prazo}</span>\n          <span>💰 Total: <strong>${r.valor_total_texto}</strong></span>\n        </div>\n        <div style=\"display:flex;gap:12px;align-items:center;\">\n          <span style=\"font-size:12px;color:#94a3b8;\">${estrelas}</span>\n          <a href=\"${r.link}\" target=\"_blank\" style=\"background:#2563eb;color:#fff;padding:6px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:500;\">Ver na loja →</a>\n        </div>\n      </div>\n    </div>`;\n}\n\nconst html = `<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Pesquisa: ${produto_pesquisado}</title>\n  <style>\n    * { box-sizing: border-box; margin: 0; padding: 0; }\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 24px; max-width: 900px; margin: 0 auto; }\n  </style>\n</head>\n<body>\n  <div style=\"background:linear-gradient(135deg,#1e293b,#334155);color:#fff;padding:24px;border-radius:16px;margin-bottom:24px;\">\n    <h1 style=\"font-size:22px;margin-bottom:8px;\">🔍 ${produto_pesquisado}</h1>\n    <p style=\"font-size:14px;opacity:0.8;\">CEP: 35065-118 | ${new Date(data_pesquisa).toLocaleString('pt-BR')} | ${total_exibido} de ${total_encontrado} resultados</p>\n  </div>\n\n  <div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px;\">\n    <div style=\"background:#fff;padding:16px;border-radius:12px;text-align:center;border:1px solid #e2e8f0;\">\n      <div style=\"font-size:11px;color:#64748b;text-transform:uppercase;margin-bottom:4px;\">Menor</div>\n      <div style=\"font-size:18px;font-weight:700;color:#16a34a;\">R$ ${stats.menor_preco?.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>\n    </div>\n    <div style=\"background:#fff;padding:16px;border-radius:12px;text-align:center;border:1px solid #e2e8f0;\">\n      <div style=\"font-size:11px;color:#64748b;text-transform:uppercase;margin-bottom:4px;\">Média</div>\n      <div style=\"font-size:18px;font-weight:700;\">R$ ${stats.media?.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>\n    </div>\n    <div style=\"background:#fff;padding:16px;border-radius:12px;text-align:center;border:1px solid #e2e8f0;\">\n      <div style=\"font-size:11px;color:#64748b;text-transform:uppercase;margin-bottom:4px;\">Mediana</div>\n      <div style=\"font-size:18px;font-weight:700;\">R$ ${stats.mediana?.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>\n    </div>\n    <div style=\"background:#fff;padding:16px;border-radius:12px;text-align:center;border:1px solid #e2e8f0;\">\n      <div style=\"font-size:11px;color:#64748b;text-transform:uppercase;margin-bottom:4px;\">Maior</div>\n      <div style=\"font-size:18px;font-weight:700;color:#dc2626;\">R$ ${stats.maior_preco?.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>\n    </div>\n  </div>\n\n  <h2 style=\"font-size:16px;margin-bottom:16px;color:#334155;\">Resultados ordenados por menor valor total</h2>\n  \n  ${cardsHTML}\n\n  <div style=\"text-align:center;padding:24px;color:#94a3b8;font-size:12px;\">\n    Pesquisador Inteligente de Produtos — Stemmia Soluções em IA\n  </div>\n</body>\n</html>`;\n\nreturn [{ json: { html, dados: data } }];"
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000007",
+      "name": "Gerar Relatorio HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1250, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==================================================\n// NÓ 8: GERAR CSV PARA EXCEL\n// ==================================================\n\nconst data = $input.first().json.dados;\nif (data.erro) return [{ json: { csv: 'Nenhum resultado' } }];\n\nconst header = 'Nome;Preço;Parcelamento;Frete;Valor Total;Prazo;Loja;Avaliação;Link';\nconst linhas = data.resultados.map(r => {\n  return [\n    `\"${r.nome.replace(/\"/g, '\"\"')}\"`,\n    r.preco_texto,\n    r.parcelamento,\n    r.frete_texto,\n    r.valor_total_texto,\n    r.prazo,\n    `\"${r.loja.replace(/\"/g, '\"\"')}\"`,\n    r.avaliacao ? `${r.avaliacao}/5` : 'N/I',\n    r.link\n  ].join(';');\n});\n\nconst csv = [header, ...linhas].join('\\n');\n\nreturn [{ json: { csv, dados: data } }];"
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000008",
+      "name": "Gerar CSV Excel",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1250, 450]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $('Gerar Relatorio HTML').item.json.html }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000009",
+      "name": "Responder Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1500, 300]
+    }
+  ],
+  "connections": {
+    "Webhook - Receber Pedido": {
+      "main": [
+        [
+          {
+            "node": "Classificar Categoria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classificar Categoria": {
+      "main": [
+        [
+          {
+            "node": "SerpAPI - Google Shopping",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "API Mercado Livre",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI - Google Shopping": {
+      "main": [
+        [
+          {
+            "node": "Merge Resultados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Mercado Livre": {
+      "main": [
+        [
+          {
+            "node": "Merge Resultados",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Resultados": {
+      "main": [
+        [
+          {
+            "node": "Estatistica e Amostragem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Estatistica e Amostragem": {
+      "main": [
+        [
+          {
+            "node": "Gerar Relatorio HTML",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Gerar CSV Excel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Relatorio HTML": {
+      "main": [
+        [
+          {
+            "node": "Responder Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "",
+  "tags": [
+    {
+      "name": "pesquisa-produtos"
+    }
+  ]
+}

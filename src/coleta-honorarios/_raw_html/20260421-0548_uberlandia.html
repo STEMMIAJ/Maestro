@@ -1,0 +1,546 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=9">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Expires" content="0">    
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <link href="css/sistema_antigo.css" rel="stylesheet" type="text/css">
+        <title>TJMG - Pesquisa por Jurisprudência</title>
+        <script language="JavaScript" src="/js/tjmg_ui.js"></script>
+        <script language="JavaScript" src="/js/tjmg.js"></script>
+        <script language="JavaScript" src="js/valida_dv_nu.js"></script>
+        <script type="text/javascript" src="/jurisprudencia/js/ea_util.js"></script>
+                
+        <link title="geral" rel="stylesheet" type="text/css" href="/portaltjmg/css/screen.css" media="screen">        
+        <link title="alternativo" rel="stylesheet" type="text/css" href="/portaltjmg/css/alternativo.css" media="screen">   
+        
+    <style type="text/css" media="screen">
+            a:link.linkListaEspelhoAcordaos {color: #990000;}
+            a:visited.linkListaEspelhoAcordaos {color: #2F2F0F;}
+
+            .cabecalho
+            {
+                width: 99%;                   
+                border: solid #CCCCCC 1px;
+                background-color:#DFDFDF;                
+                color: #880000;
+                height: 18px;                    
+                font-family: Verdana, Arial, Helvetica, sans-serif;
+                font-size: 9pt;
+                font-weight: bold;
+                font-style: normal;                
+            }
+
+            .caixa_processo
+            {
+                    width: 99%;                   
+                    margin-top: 20px;
+                    -webkit-border-radius: 5px;
+                    -moz-border-radius: 5px;
+                    border-radius: 5px;
+                    border: solid #CCCCCC 1px;
+                    background-color:#DFDFDF;
+                    text-indent: 5px;
+                    padding: 5px;
+            }
+
+            .corpo 
+            {
+                color: #333333;
+            }           
+            
+        </style><style type="text/css" media="print">        
+        td.leftRight
+        {
+            margin: 0;                
+        }
+
+        span#tabelaEspelho
+        {
+            width: 100%;    
+            margin-right: 0;
+        }
+
+        body
+        {
+            margin: 0;
+        }
+
+        img#logoTJ
+        {
+            visibility: visible;
+        }
+
+        img#imgBotao1
+        {
+            visibility: visible;
+        }
+
+        table#tabelaInformacoesAcordaos
+        {
+            margin-left: 0;
+        }
+
+        td.rightTop
+        {
+            visibility: hidden;
+        }
+
+        img#AWMEL3_4
+        {
+            visibility: hidden;
+        }
+
+        div#menutop
+        {
+            visibility: hidden;
+        }
+
+        img
+        {
+            visibility: hidden;
+        }
+
+        div.tabbar
+        {
+            visibility: hidden;
+        }
+
+        div#caminho
+        {
+            visibility: hidden;
+        }            
+
+        div#botaoImprimirInteiroTeor
+        {
+            visibility: hidden;
+        } 
+
+        div#panel2
+        {
+            visibility: hidden;
+        }   
+
+        div#botoesEspelho
+        {
+            visibility: hidden;
+        }        
+
+        div#cabecalhoMenu
+        {
+            visibility: hidden;
+            display: none;
+        }
+
+        td#curvaBotton
+        {
+            visibility: hidden;
+        }
+
+        div.menuPortal
+        {
+            visibility: hidden;                    
+        }        
+    </style><script>
+    if (navigator.userAgent.toLowerCase().indexOf("msie 7") != -1)
+    {
+        //Comentado, pois alguns navegadores IE 8 estão emulando o IE 7
+        //alert("ATENÇÃO: A versão do seu navegador é Internet Explorer 7.\nA Consulta à Jurisprudência está homologada para Internet Explorer 8 ou versão superior. Favor atualizar a versão do seu navegador.");
+    }
+    </script></head>
+    
+                
+    
+    
+        
+    
+        
+        <body onload="if (document.getElementById('panel2').style.display == 'none' &amp;&amp; (document.getElementById('siglaLegislativa').value != '' || document.getElementById('observacoes').value != '')) mostrarOcultarPanel(2);" onkeydown="if (capturaCtrlP(event)) { return false;}" onkeyup="if (capturaCtrlP(event)) {imprimirEspelho(); return false;}">        
+        	
+            <div id="cabecalhoMenu"><style type="text/css">
+    header .wrapper-header
+    {
+        background: #7e1819;
+        color: white;
+        padding: 0px 0 0px 0;
+    }
+</style>
+
+<header role="banner">             
+    <div class="wrapper-header">
+        <a target="_blank" title="Link para Portal TJMG" aria-label="Logo do Tribunal de Justiça do Estado de Minas Gerais" class="brand-logo logo-tjmg" href="http://www.tjmg.jus.br">
+        <img src="imagens/logo_tjmg.png">
+        </a>
+    </div>
+</header>  </div>
+            
+            <br>
+            
+            <div id="sistema">
+                <div class="containerSis" style="width: 1200px">
+    
+                
+                <table align="center" width="90%" border="0" cellspacing="0" cellpadding="0">                       
+                      
+                <tbody><tr>
+                    <td colspan="4" align="left" valign="top" class="leftRight" bgcolor="#FFFFFF">
+
+                        
+                        <h1>
+                            Resultado da busca
+                        </h1>
+
+                        <div class="textoUmaColuna">
+                            <div class="tabbar" align="left">
+  <a href="formEspelhoAcordao.do" class="tabact">Acórdãos</a>
+  <a href="decisao.do">Decisões Monocráticas</a>
+  <a href="decisaoVice.do">Decisões da 1ª e 3ª Vice-Presidência</a>   
+  <a href="sumulas.do">Súmulas</a>
+  <a href="decisaoTurmaRecursal.do">Decisões de Turma Recursal</a>
+    <a href="decisaoTurmaRecursalPJe.do">Decisões de Turma Recursal - PJe</a>
+  <a href="sentenca.do">Sentenças</a>
+  <a href="ajuda.do">Ajuda</a>
+</div>
+
+<div class="tabbar" align="left">
+  <a href="" class="tabact">Lista de Resultados</a>
+</div>
+
+                        </div>
+                        <br>
+                        <div align="left"><div class="textoUmaColuna">
+
+
+
+
+
+
+
+
+  <p class="info">
+	
+		Foram encontrados 3 Espelhos de Acórdãos com os critérios utilizados
+		<br>
+	
+		Palavras: honorarios E periciais E medico E Uberlandia
+		<br>
+	
+		Utiliza termos relacionados: NÃO
+		<br>
+	
+  </p>
+
+
+
+
+
+
+
+
+<!-- Mensagem de erro geral do Struts (Validate por Ex) -->
+
+
+<!-- Mensagem geral do Struts  -->
+
+
+</div></div>
+
+                        
+
+
+
+
+
+ 
+	
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="dwr/engine.js"></script>
+<script type="text/javascript" src="dwr/util.js"></script>
+<script type="text/javascript" src="dwr/interface/ValidacaoCaptchaAction.js"></script>
+
+
+<table align="center">
+    <tbody><tr><td>
+            <div class="textoUmaColuna">
+
+                
+
+                
+
+                    <div align="center">
+                        <strong>Para acessar mais informações clique no número do acórdão.</strong>
+                    </div>
+
+                    
+
+                    <br>
+                    <div align="right"><input type="button" value="Nova pesquisa" name="novaPesquisa" onclick="document.location.href='formEspelhoAcordao.do'" class="botao_vinho"></div>
+
+
+                    
+                        
+                            
+                        
+                        
+                    
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=1&amp;totalLinhas=3&amp;paginaNumero=1&amp;linhasPorPagina=1&amp;palavras=honorarios periciais medico Uberlandia&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                1 - Processo: Apelação Cível <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.23.248641-5/003
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    5002440-87.2023.8.13.0696 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=23&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=248641&amp;procSequencial=3&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Richardson Xavier Brant (JD 2G)</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            10/07/2025
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            10/07/2025
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: DIREITO CIVIL E DO CONSUMIDOR. APELAÇÃO CÍVEL. PLANO DE SAÚDE. TRATAMENTO MULTIDISCIPLINAR PARA CRIANÇA COM TRANSTORNO DO ESPECTRO AUTISTA (TEA). MÉTODO ABA. NEGATIVA DE COBERTURA FORA DA ÁREA DE ABRANGÊNCIA DO PLANO. CLÁUSULA CONTRATUAL VÁLIDA. RECURSO DESPROVIDO.
+<br>I. CASO EM EXAME
+<br>Ação de obrigação de fazer cumulada com indenização por danos materiais e morais ajuizada com o objetivo de compelir operadora de plano de saúde a custear tratamento multidisciplinar contínuo prescrito a menor com diagnóstico de Transtorno do Espectro Autista (TEA), com ênfase no método ABA, sem limitação de sessões, em clínica próxima ao domicílio do autor, além de ressarcimento de despesas já realizadas e indenização por danos morais. A sentença julgou improcedentes os pedidos, extinguindo o feito com resolução do mérito, nos termos do art. 487, I, do CPC, e condenou a autora ao pagamento de custas e <font color="#FF0000"><b>honorários</b></font> advocatícios, com exigibilidade suspensa em razão da gratuidade de justiça. A parte autora interpôs recurso de apelação.
+<br>II. QUESTÃO EM DISCUSSÃO
+<br>Há duas questões em discussão: (i) definir se houve cerceamento de defesa por indeferimento implícito de prova <font color="#FF0000"><b>pericial</b></font> médica requerida pela parte autora; (ii) estabelecer se é válida a cláusula contratual que limita a cobertura do plano de saúde à área geográfica municipal, excluindo atendimento em clínica situada fora da abrangência do contrato.
+<br>III. RAZÕES DE DECIDIR
+<br>A rejeição da alegação de cerceamento de defesa se justifica diante da desnecessidade da prova <font color="#FF0000"><b>pericial</b></font> para a resolução do mérito, por se tratar de matéria de direito, conforme interpretação do art. 6º, § 4º, da RN 465/21 da ANS, com redação dada pela RN 539/22.
+<br>A prescrição médica do método ABA, embora reconhecida como adequada ao tratamento do TEA, não vincula a operadora ao custeio em local não coberto pela área de abrangência do plano, conforme previsto contratualmente.
+<br>A cláusula contratual que delimita a cobertura geográfica ao município de <font color="#FF0000"><b>Uberlândia</b></font>/MG é válida, conforme o art. 16, X, da Lei 9.656/1998, não sendo considerada abusiva.
+<br>O fato de o tratamento estar localizado fora da área de cobertura do plano e não se enquadrar nas hipóteses legais de urgência ou emergência (art. 35-C da Lei 9.656/98) afasta o dever de custeio pela operadora.
+<br>A operadora do plano de saúde não negou a cobertura em razão da ausência do método no rol da ANS, mas sim pela limitação geográfica contratualmente pactuada.
+<br>IV. DISPOSITIVO E TESE
+<br>Recurso desprovido.
+<br>Tese de julgamento:
+<br>Não há cerceamento de defesa quando a produção de prova <font color="#FF0000"><b>pericial</b></font> é desnecessária à solução da causa, por versar sobre matéria de direito.
+<br>É válida a cláusula contratual que limita a área de cobertura geográfica do plano de saúde à localidade contratada, nos termos do art. 16, X, da Lei 9.656/1998.
+<br>Tratamento multidisciplinar para TEA prescrito pelo <font color="#FF0000"><b>médico</b></font> assistente não se enquadra como urgência ou emergência, afastando o dever de cobertura fora da área contratual.
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=2&amp;totalLinhas=3&amp;paginaNumero=2&amp;linhasPorPagina=1&amp;palavras=honorarios periciais medico Uberlandia&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                2 - Processo: Apelação Cível <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.23.059260-2/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    5004992-17.2017.8.13.0702 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=23&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=59260&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Raimundo Messias Júnior</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            29/04/2025
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            05/05/2025
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: DIREITO ADMINISTRATIVO E CONSTITUCIONAL. RESPONSABILIDADE CIVIL DO ESTADO. ERRO <font color="#FF0000"><b>MÉDICO</b></font> EM UNIDADE PÚBLICA DE SAÚDE. MORTE FETAL. OMISSÃO NA REALIZAÇÃO DE EXAMES COMPLEMENTARES. NEXO DE CAUSALIDADE CONFIGURADO. DANO MORAL. INDENIZAÇÃO. RECURSO PROVIDO.
+<br>I. CASO EM EXAME
+<br>Apelação contra sentença que julgou improcedente pedido de indenização por dano moral formulado por gestante contra o Município de <font color="#FF0000"><b>Uberlândia</b></font>, sob alegação de erro <font color="#FF0000"><b>médico</b></font> em unidade pública de saúde, resultando na morte de seu filho ainda no útero. A sentença entendeu não configurada a responsabilidade civil do ente público e condenou a autora ao pagamento de <font color="#FF0000"><b>honorários</b></font> advocatícios e custas, com exigibilidade suspensa devido à gratuidade de justiça.
+<br>II. QUESTÃO EM DISCUSSÃO
+<br>A questão em discussão consiste em determinar se há responsabilidade civil do Município de <font color="#FF0000"><b>Uberlândia</b></font> pela morte fetal em razão da falha na prestação do serviço público de saúde, com consequente obrigação de indenizar a autora pelos danos morais sofridos.
+<br>III. RAZÕES DE DECIDIR
+<br>A responsabilidade civil do Estado por danos causados por seus agentes, no exercício da função pública, é objetiva, conforme o art. 37, § 6º, da Constituição Federal, bastando a demonstração do dano e do nexo de causalidade com a conduta omissiva ou comissiva do ente público.
+<br>O laudo <font color="#FF0000"><b>pericial</b></font> destaca que a gestação da autora era de baixo risco e que, apesar de queixas de ausência de movimentos fetais, o atendimento <font color="#FF0000"><b>médico</b></font> se limitou a ultrassonografia, sem adoção de medidas complementares essenciais, como repetição da cardiotocografia e outras intervenções indicadas para avaliar a vitalidade fetal.
+<br>Constatada a pouca mobilidade do feto, o exame de ultrassonografia não deve ser utilizado isoladamente para avaliação do caso, sendo recomendada a associação com outros exames, o que não foi realizado no caso, caracterizando falha no atendimento <font color="#FF0000"><b>médico</b></font> prestado.
+<br>A ausência de providências adequadas,mesmo diante da suspeita de sofrimento fetal, configurou negligência médica, evidenciando o nexo causal entre a omissão do serviço público de saúde e o falecimento do feto.
+<br>O dano moral decorre in re ipsa da perda gestacional, sendo desnecessária a prova do sofrimento da autora, conforme entendimento consolidado do STJ.
+<br>O valor da indenização deve observar os princípios da razoabilidade e proporcionalidade, bem ainda a gravidade do dano e a dor suportada pela autora.
+<br>IV. DISPOSITIVO E TESE
+<br>Recurso provido.
+<br>Tese de julgamento:
+<br>A responsabilidade civil do Estado por erro <font color="#FF0000"><b>médico</b></font> em unidade pública de saúde é objetiva, bastando a demonstração do dano e do nexo causal entre a conduta omissiva ou comissiva e o evento danoso.
+<br>A negligência médica caracteriza falha na prestação do serviço público de saúde e impõe a responsabilização do ente público quando evidenciado que a omissão de exames ou procedimentos adequados contribuiu para o resultado lesivo.
+<br>O dano moral decorrente da perda fetal, em razão de falha médica, é presumido, dispensando prova específica do sofrimento da genitora.
+<br>Dispositivos relevantes citados: CF/1988, art. 37, § 6º; CC, arts. 186 e 927.
+<br>Jurisprudência relevante citada: STF, Tema 940 da repercussão geral; STJ, AgInt no REsp 1.165.102/RJ; TJMG, Apelação Cível 1.0451.13.000725-0/001; TJMG, Apelação Cível 1.0000.21.252625-5/001.
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=3&amp;totalLinhas=3&amp;paginaNumero=3&amp;linhasPorPagina=1&amp;palavras=honorarios periciais medico Uberlandia&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                3 - Processo: Apelação Cível <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0702.02.013340-2/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    0133402-09.2002.8.13.0702 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=2&amp;procCodigo=1&amp;procCodigoOrigem=702&amp;procNumero=13340&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Maurício Barros</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            25/01/2006
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            07/04/2006
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+APELAÇÃO CÍVEL Nº 1.0702.02.013340-2/001   -  25.01.2006
+<br>
+<br>                                     <font color="#FF0000"><b>UBERLÂNDIA</b></font>
+<br>
+<br>EMENTA: PREVIDENCIÁRIO - BENEFÍCIO - RESTABELECIMENTO -  AUXÍLIO-DOENÇA - PERÍCIA - COMPROVAÇÃO DE LESÃO E INCAPACITAÇÃO - INCAPACIDADE PARA PROFISSÃO HABITUAL - PERMANENTE E TOTAL - APOSENTADORIA POR INVALIDEZ - CONCESSÃO - VOTO VENCIDO.
+<br>
+<br>1- É a prova técnica, no caso de doença/invalidez, reconhecidamente relevante, devendo, entretanto, ser analisado em conjunto com as demais provas dos autos.
+<br>
+<br>2- Faz jus à aposentadoria por invalidez o obreiro acidentado, acometido de mal que o incapacite para realizar sua função laborativa habitual, havendo relação entre a lesão sofrida e a atividade exercida, apta a configurar o nexo causal.
+<br>
+<br>3- O termo inicial para a concessão do benefício de aposentadoria por invalidez é o da apresentação do laudo <font color="#FF0000"><b>médico</b></font>-<font color="#FF0000"><b>pericial</b></font> em juízo, quando não reconhecida a incapacidade administrativamente.
+<br>
+<br>4- Os juros de mora, devidos a partir da citação,  devem ser de 0,5% (meio por cento) ao mês até 10/1/2003, quando então passarão a ser de 1% (um por cento) ao mês.
+<br>
+<br>5- A fixação dos <font color="#FF0000"><b>honorários</b></font> advocatícios encontra-se adstrita a critérios de valoração estabelecidos na lei processual, devendo levar em conta o grau de zelo profissional, o lugar da prestação do serviço, a natureza e a importância da causa, o trabalho realizado pelo advogado e o tempo que lhe foi exigido.
+<br>
+<br>V.v.:  Havendo sentença proferida contra autarquia, faz-se necessário seu reexame necessário pelo Tribunal, por força do inciso I do artigo 475 do CPC.
+<br>Desincumbiu-se o autor a contento do ônus que se lhe impunha o art. 333, I, do CPC, posto que provada, pela perícia realizada, sua incapacidade parcial e temporária para o trabalho, bem como o nexo causal entre a lesão e a atividade por ele exercida, sendo-lhe devido, portanto, o benefício do auxílio-doença requerido.
+<br>
+<br>A correção monetária é devida a partir do ajuizamento da ação, tendo em vista o teor da Súmula 148 do STJ: "Os débitos relativos a benefício previdenciário, vencidos e cobrados em juízo após a vigência da Lei n. 6.899/81, devem ser corrigidos monetariamente na forma prevista nesse diploma legal".
+<br>
+<br>De acordo com a Súmula 111 do STJ, "Os <font color="#FF0000"><b>honorários</b></font> advocatícios, nas ações previdenciárias, não incidem sobre as prestações vincendas", devendo ser observada esta orientação.
+<br>
+<br>Às autarquias, federais ou estaduais, aplica-se o § 4º, do art. 20 do CPC, e não o § 3º.
+                        </div>                        
+                                         
+
+                    
+
+                    
+                        
+                    
+
+                    <!-- PAGINADOR -->
+                    <br><br>
+                    
+                    
+
+                    
+                    <!-- FIM  PAGINADOR -->
+
+                
+                <br><br>
+                <div align="right"><input type="button" value="Nova pesquisa" name="novaPesquisa" onclick="document.location.href='formEspelhoAcordao.do'" class="botao_vinho"></div>
+            </div>
+        </td></tr>
+</tbody></table>
+
+
+
+                        
+
+                    </td>
+                </tr>
+
+            </tbody></table>
+            <br><br>
+            </div>
+            </div>
+                        
+            
+
+             
+
+
+
+
+
+        
+        
+
+        
+        
+        
+
+
+<div id="hintbox"></div></body></html>

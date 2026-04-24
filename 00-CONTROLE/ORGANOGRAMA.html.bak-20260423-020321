@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organograma &mdash; Sistema Pericial Stemmia</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #0a0a0f;
+    color: #e5e7eb;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    overflow: hidden;
+  }
+  header.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 64px;
+    background: linear-gradient(180deg, #0f0f18 0%, #0a0a0f 100%);
+    border-bottom: 1px solid #1f2937;
+    display: flex; align-items: center; padding: 0 20px;
+    z-index: 100;
+  }
+  header.topbar h1 {
+    margin: 0; font-size: 17px; font-weight: 600; letter-spacing: 0.2px;
+    color: #f3f4f6;
+  }
+  header.topbar .sub {
+    margin-left: 16px; font-size: 12px; color: #9ca3af;
+  }
+  aside.sidebar {
+    position: fixed; top: 64px; left: 0; bottom: 32px; width: 280px;
+    background: #0d0d14;
+    border-right: 1px solid #1f2937;
+    padding: 16px; overflow-y: auto;
+    z-index: 50;
+  }
+  aside.sidebar h2 {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.8px; color: #6b7280;
+    margin: 18px 0 8px 0;
+  }
+  aside.sidebar h2:first-child { margin-top: 0; }
+  .search-box {
+    width: 100%; padding: 9px 12px;
+    background: #111827; border: 1px solid #1f2937; border-radius: 6px;
+    color: #e5e7eb; font-size: 13px; outline: none;
+    transition: border-color .15s;
+  }
+  .search-box:focus { border-color: #3b82f6; }
+  .filter-group { display: flex; flex-direction: column; gap: 6px; }
+  .filter-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: #d1d5db; cursor: pointer;
+    padding: 4px 6px; border-radius: 4px;
+    transition: background .15s;
+  }
+  .filter-item:hover { background: #111827; }
+  .filter-item input[type="checkbox"] {
+    accent-color: #3b82f6; width: 14px; height: 14px; cursor: pointer;
+  }
+  .filter-swatch {
+    display: inline-block; width: 11px; height: 11px; border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .filter-count {
+    margin-left: auto; font-size: 10px; color: #6b7280;
+    background: #111827; padding: 2px 6px; border-radius: 10px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; color: #9ca3af; padding: 3px 0;
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 2px solid transparent; flex-shrink: 0;
+  }
+  #graph-container {
+    position: fixed; top: 64px; left: 280px; right: 0; bottom: 32px;
+    overflow: hidden;
+  }
+  svg.graph {
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at center, #0d0d14 0%, #060609 100%);
+    display: block;
+  }
+  .link { stroke: #374151; stroke-width: 1; stroke-opacity: 0.55; fill: none; }
+  .link.highlighted { stroke: #f3f4f6; stroke-width: 2.2; stroke-opacity: 1; }
+  .node-circle {
+    cursor: pointer;
+    transition: r 0.12s;
+  }
+  .node-label {
+    fill: #9ca3af; font-size: 10px; pointer-events: none;
+    text-shadow: 0 0 3px #0a0a0f, 0 0 6px #0a0a0f;
+  }
+  .node.highlighted .node-circle { stroke: #ffffff !important; stroke-width: 3 !important; }
+  .node.highlighted .node-label { fill: #f9fafb; font-weight: 600; }
+  .node.dim { opacity: 0.18; }
+  .link.dim { stroke-opacity: 0.08; }
+  aside.detail {
+    position: fixed; top: 64px; right: 0; bottom: 32px; width: 300px;
+    background: #0d0d14;
+    border-left: 1px solid #1f2937;
+    padding: 20px; overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.2s ease-out;
+    z-index: 60;
+  }
+  aside.detail.open { transform: translateX(0); }
+  aside.detail .close {
+    position: absolute; top: 12px; right: 14px;
+    background: none; border: none; color: #6b7280;
+    font-size: 22px; cursor: pointer; line-height: 1;
+    padding: 4px 8px; border-radius: 4px;
+  }
+  aside.detail .close:hover { background: #1f2937; color: #f3f4f6; }
+  aside.detail h2 {
+    margin: 0 0 10px 0; font-size: 16px; color: #f3f4f6;
+    padding-right: 30px; word-wrap: break-word;
+  }
+  .badge {
+    display: inline-block; font-size: 10px; padding: 3px 9px;
+    border-radius: 10px; font-weight: 600; letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .badge-ATIVO    { background: rgba(16,185,129,0.15); color: #10b981; }
+  .badge-PARADO   { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .badge-QUEBRADO { background: rgba(239,68,68,0.15);  color: #ef4444; }
+  .meta-row {
+    font-size: 11px; color: #9ca3af; margin: 10px 0;
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+  .meta-label {
+    font-size: 10px; text-transform: uppercase; color: #6b7280;
+    letter-spacing: 0.5px; margin-top: 14px; margin-bottom: 4px;
+  }
+  .detail-text {
+    font-size: 12.5px; color: #d1d5db; line-height: 1.5;
+  }
+  .detail-files {
+    list-style: none; padding: 0; margin: 0;
+    font-size: 11px; color: #9ca3af;
+  }
+  .detail-files li {
+    padding: 4px 8px; background: #111827; border-radius: 4px;
+    margin-bottom: 4px; word-break: break-all;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .tag {
+    display: inline-block; font-size: 10px; padding: 2px 8px;
+    border-radius: 10px; background: #1f2937; color: #9ca3af;
+    margin-right: 4px; margin-bottom: 4px;
+  }
+  .btn {
+    display: inline-block; padding: 7px 12px; font-size: 11px;
+    background: #1e3a8a; color: #f3f4f6; border: none; border-radius: 5px;
+    text-decoration: none; cursor: pointer; margin-top: 12px;
+    transition: background .15s;
+  }
+  .btn:hover { background: #2563eb; }
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 32px;
+    background: #0d0d14; border-top: 1px solid #1f2937;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: #6b7280;
+    z-index: 100;
+  }
+  .zoom-hint {
+    position: fixed; bottom: 40px; right: 12px;
+    font-size: 10px; color: #4b5563; z-index: 20;
+    pointer-events: none;
+  }
+  .no-match { opacity: 0.12 !important; }
+  .status-indicators {
+    display: flex; gap: 8px; font-size: 10px; color: #9ca3af;
+    margin-top: 6px;
+  }
+  .status-indicators span {
+    padding: 2px 8px; border-radius: 10px; background: #111827;
+  }
+</style>
+</head>
+<body>
+<header class="topbar" role="banner">
+  <h1>Organograma &mdash; Sistema Pericial Stemmia</h1>
+  <div class="sub" id="subcounts">117 nos &middot; 75 ligacoes &middot; 11 fluxos &middot; 5 camadas</div>
+</header>
+
+<aside class="sidebar" role="navigation" aria-label="Filtros e busca">
+  <h2>Busca</h2>
+  <input type="search" id="search" class="search-box" placeholder="Buscar por nome ou descricao..." autocomplete="off" aria-label="Buscar nos">
+
+  <h2>Camadas</h2>
+  <div class="filter-group" id="camadas-filter"></div>
+
+  <h2>Status</h2>
+  <div class="filter-group" id="status-filter">
+    <label class="filter-item"><input type="checkbox" data-status="ATIVO" checked><span style="color:#10b981">ATIVO</span><span class="filter-count" id="count-ATIVO">0</span></label>
+    <label class="filter-item"><input type="checkbox" data-status="PARADO" checked><span style="color:#f59e0b">PARADO</span><span class="filter-count" id="count-PARADO">0</span></label>
+    <label class="filter-item"><input type="checkbox" data-status="QUEBRADO" checked><span style="color:#ef4444">QUEBRADO</span><span class="filter-count" id="count-QUEBRADO">0</span></label>
+  </div>
+
+  <h2>Legenda status</h2>
+  <div class="legend-item"><span class="legend-dot" style="border-color:#10b981"></span>ATIVO &mdash; funcionando</div>
+  <div class="legend-item"><span class="legend-dot" style="border-color:#f59e0b"></span>PARADO &mdash; gap</div>
+  <div class="legend-item"><span class="legend-dot" style="border-color:#ef4444"></span>QUEBRADO &mdash; erro conhecido</div>
+
+  <h2>Dicas</h2>
+  <div style="font-size:11px; color:#6b7280; line-height:1.6;">
+    &middot; Clique em no: detalhes<br>
+    &middot; Arraste para mover<br>
+    &middot; Scroll: zoom<br>
+    &middot; Ctrl/Cmd+F: busca<br>
+    &middot; Esc: limpa
+  </div>
+</aside>
+
+<section id="graph-container">
+  <svg class="graph" role="application" aria-label="Grafo do sistema pericial Stemmia"></svg>
+</section>
+
+<aside class="detail" id="detail" role="complementary" aria-label="Detalhes do no selecionado">
+  <button class="close" id="close-detail" aria-label="Fechar painel">&times;</button>
+  <div id="detail-content"></div>
+</aside>
+
+<div class="zoom-hint">scroll para zoom &middot; arraste para pan</div>
+
+<footer role="contentinfo">
+  Gerado em 2026-04-20 &middot; Fonte: ORGANOGRAMA-dados.json &middot; Plano: enumerated-noodling-sutherland
+</footer>
+
+<script src="assets/d3.v7.min.js"></script>
+<script>
+const DADOS = {"camadas": [{"id": "controle", "label": "Controle & Docs", "cor": "#1e3a8a"}, {"id": "fluxos", "label": "Fluxos operacionais", "cor": "#065f46"}, {"id": "agentes", "label": "Agentes & Skills", "cor": "#7c2d12"}, {"id": "dados", "label": "Dados & Memoria", "cor": "#4c1d95"}, {"id": "externos", "label": "Symlinks/Externos", "cor": "#991b1b"}], "nos": [{"id": "ctrl-readme", "camada": "controle", "label": "README", "descricao": "Porta de entrada do hub STEMMIA Dexter", "arquivos": ["STEMMIA Dexter/README.md"], "status": "ATIVO", "tags": ["doc"]}, {"id": "ctrl-claudemd", "camada": "controle", "label": "CLAUDE.md (hub)", "descricao": "Instrucoes globais, perfil e regras absolutas", "arquivos": [".claude/CLAUDE.md"], "status": "ATIVO", "tags": ["hub"]}, {"id": "ctrl-codex", "camada": "controle", "label": "CODEX-PESQUISA-VALIDADA", "descricao": "Base de conhecimento validada para buscas", "arquivos": ["00-CONTROLE/CODEX-PESQUISA-VALIDADA.md"], "status": "ATIVO"}, {"id": "ctrl-mapa", "camada": "controle", "label": "MAPA-FERRAMENTAS", "descricao": "Mapa global de ferramentas/MCPs/agentes", "arquivos": ["00-CONTROLE/MAPA-PROCESSOS.html"], "status": "ATIVO"}, {"id": "ctrl-decisoes", "camada": "controle", "label": "DECISOES", "descricao": "Registro de decisoes tecnicas", "arquivos": ["00-CONTROLE/PENDENCIAS.md"], "status": "ATIVO"}, {"id": "ctrl-rotina", "camada": "controle", "label": "ROTINA", "descricao": "Rotina diaria do perito", "arquivos": ["00-CONTROLE/AGORA.md"], "status": "ATIVO"}, {"id": "ctrl-inventario", "camada": "controle", "label": "INVENTARIO", "descricao": "Inventario de processos baixados", "arquivos": ["00-CONTROLE/PROCESSOS-BAIXADOS-2026-04-14.md"], "status": "ATIVO"}, {"id": "ctrl-agora", "camada": "controle", "label": "AGORA", "descricao": "O que esta em execucao hoje", "arquivos": ["00-CONTROLE/AGORA.md"], "status": "ATIVO"}, {"id": "ctrl-plano-org", "camada": "controle", "label": "PLANO-ORGANIZACAO-SISTEMA", "descricao": "Plano vigente de organizacao", "arquivos": ["00-CONTROLE/PLANO-ORGANIZACAO-SISTEMA.md"], "status": "ATIVO"}, {"id": "ctrl-template-plano", "camada": "controle", "label": "TEMPLATE-PLANO", "descricao": "Template padrao para novos planos", "arquivos": ["00-CONTROLE/TEMPLATE-PLANO.md"], "status": "ATIVO"}, {"id": "ctrl-auditoria", "camada": "controle", "label": "AUDITORIA-2026-04-19", "descricao": "Auditoria mais recente do sistema", "arquivos": ["00-CONTROLE/AUDITORIA-2026-04-19.md"], "status": "ATIVO"}, {"id": "ctrl-protocolo", "camada": "controle", "label": "PROTOCOLO-CLAUDE-CONSISTENTE", "descricao": "Protocolo de uso consistente do Claude", "arquivos": ["00-CONTROLE/PROTOCOLO-CLAUDE-CONSISTENTE.md"], "status": "ATIVO"}, {"id": "fluxo-pje", "camada": "fluxos", "label": "B.1 Download PJe", "descricao": "Baixa processos via Playwright/Selenium", "arquivos": ["src/pje/baixar_push_pje_playwright.py"], "status": "ATIVO", "tags": ["B.1"]}, {"id": "fluxo-analise-rapida", "camada": "fluxos", "label": "B.2 Analise rapida", "descricao": "Analise expressa pos-download", "arquivos": ["agents/orq-analise-rapida.md"], "status": "QUEBRADO", "tags": ["B.2", "nomenclatura"]}, {"id": "fluxo-analise-completa", "camada": "fluxos", "label": "B.3 Analise completa", "descricao": "Analise profunda com 8 subagentes", "arquivos": ["agents/orq-analise-completa.md"], "status": "QUEBRADO", "tags": ["B.3", "nomenclatura"]}, {"id": "fluxo-peticao", "camada": "fluxos", "label": "B.4 Peticao", "descricao": "Geracao de peticao triada por complexidade", "arquivos": ["agents/triador-peticao.md"], "status": "ATIVO", "tags": ["B.4"]}, {"id": "fluxo-laudo", "camada": "fluxos", "label": "B.5 Laudo", "descricao": "Redacao e revisao de laudo pericial", "arquivos": ["agents/redator-laudo.md"], "status": "QUEBRADO", "tags": ["B.5", "nomenclatura"]}, {"id": "fluxo-mutirao", "camada": "fluxos", "label": "B.6 Mutirao", "descricao": "Mutirao de processos em lote", "arquivos": ["MUTIRAO/"], "status": "PARADO", "tags": ["B.6", "gap"]}, {"id": "fluxo-monitor", "camada": "fluxos", "label": "B.7 Monitor movimentacoes", "descricao": "Monitor de novas movimentacoes PJe/DataJud", "arquivos": ["stemmia-forense/src/pje/monitor.py"], "status": "ATIVO", "tags": ["B.7"]}, {"id": "fluxo-erros-materiais", "camada": "fluxos", "label": "B.8 Erros materiais", "descricao": "Verificacao paralela de erros em peticoes/laudos", "arquivos": ["agents/orq-erros-materiais.md"], "status": "ATIVO", "tags": ["B.8"]}, {"id": "fluxo-jurisprudencia", "camada": "fluxos", "label": "B.9 Jurisprudencia", "descricao": "3 buscadores paralelos de jurisprudencia BR", "arquivos": ["agents/orq-jurisprudencia.md"], "status": "ATIVO", "tags": ["B.9"]}, {"id": "fluxo-aceite", "camada": "fluxos", "label": "B.10 Aceite/Proposta", "descricao": "3 geradores de proposta + calculo de honorarios", "arquivos": ["calcular_honorarios.py"], "status": "ATIVO", "tags": ["B.10"]}, {"id": "fluxo-autoaprendizagem", "camada": "fluxos", "label": "B.11 Autoaprendizagem", "descricao": "Stop hook detecta habilidades novas e erros", "arquivos": ["stemmia-forense/automacoes/detectar_habilidade_nova.py"], "status": "ATIVO", "tags": ["B.11"]}, {"id": "ag-orq-analise-rapida", "camada": "agentes", "label": "orq-analise-rapida", "descricao": "Orquestrador de analise rapida", "arquivos": [".claude/agents/orq-analise-rapida.md"], "status": "ATIVO", "tags": ["orquestrador"]}, {"id": "ag-orq-analise-completa", "camada": "agentes", "label": "orq-analise-completa", "descricao": "Orquestrador de analise completa (8 subagentes)", "arquivos": [".claude/agents/orq-analise-completa.md"], "status": "ATIVO", "tags": ["orquestrador"]}, {"id": "ag-orq-analise-documento", "camada": "agentes", "label": "orq-analise-documento", "descricao": "Orquestrador de analise de documento isolado", "arquivos": [".claude/agents/orq-analise-documento.md"], "status": "ATIVO", "tags": ["orquestrador"]}, {"id": "ag-orq-erros-materiais", "camada": "agentes", "label": "orq-erros-materiais", "descricao": "Orquestra 5 verificadores em paralelo", "arquivos": [".claude/agents/orq-erros-materiais.md"], "status": "ATIVO", "tags": ["orquestrador"]}, {"id": "ag-orq-jurisprudencia", "camada": "agentes", "label": "orq-jurisprudencia", "descricao": "Orquestra 3 buscadores juridicos", "arquivos": [".claude/agents/orq-jurisprudencia.md"], "status": "ATIVO", "tags": ["orquestrador"]}, {"id": "ag-orq-proposta-verif", "camada": "agentes", "label": "orquestrador-verificacao-proposta", "descricao": "Verifica proposta/aceite antes de envio", "arquivos": [".claude/agents/orquestrador-verificacao-proposta.md"], "status": "ATIVO", "tags": ["orquestrador"]}, {"id": "ag-triador-peticao", "camada": "agentes", "label": "triador-peticao", "descricao": "Classifica peticao por complexidade", "arquivos": [".claude/agents/triador-peticao.md"], "status": "ATIVO", "tags": ["orquestrador"]}, {"id": "ag-verificador-cids", "camada": "agentes", "label": "verificador-cids", "descricao": "Valida CIDs citados", "arquivos": [".claude/agents/verificador-cids.md"], "status": "ATIVO", "tags": ["verificador"]}, {"id": "ag-verificador-datas", "camada": "agentes", "label": "verificador-datas", "descricao": "Cruza datas no texto", "arquivos": [".claude/agents/verificador-datas.md"], "status": "ATIVO", "tags": ["verificador"]}, {"id": "ag-verificador-nomes-numeros", "camada": "agentes", "label": "verificador-nomes-numeros", "descricao": "Verifica nomes, CPFs, numeros processuais", "arquivos": [".claude/agents/verificador-nomes-numeros.md"], "status": "ATIVO", "tags": ["verificador"]}, {"id": "ag-verificador-medicamentos", "camada": "agentes", "label": "verificador-medicamentos", "descricao": "Valida medicamentos/posologia", "arquivos": [".claude/agents/verificador-medicamentos.md"], "status": "ATIVO", "tags": ["verificador"]}, {"id": "ag-verificador-exames", "camada": "agentes", "label": "verificador-exames", "descricao": "Valida exames citados", "arquivos": [".claude/agents/verificador-exames.md"], "status": "ATIVO", "tags": ["verificador"]}, {"id": "ag-peticao-verificador", "camada": "agentes", "label": "peticao-verificador", "descricao": "Verifica peticao gerada", "arquivos": [".claude/agents/peticao-verificador.md"], "status": "ATIVO", "tags": ["verificador"]}, {"id": "ag-verificador-100", "camada": "agentes", "label": "verificador-100", "descricao": "Checklist de 100 pontos do laudo", "arquivos": [".claude/agents/verificador-100.md"], "status": "ATIVO", "tags": ["verificador"]}, {"id": "ag-peticao-conferidor", "camada": "agentes", "label": "peticao-conferidor", "descricao": "Confere peticao contra criterios", "arquivos": [".claude/agents/peticao-conferidor.md"], "status": "ATIVO", "tags": ["verificador"]}, {"id": "ag-verificador-fontes", "camada": "agentes", "label": "verificador-de-fontes", "descricao": "Checa links e fontes citadas", "arquivos": [".claude/agents/verificador-de-fontes.md"], "status": "ATIVO", "tags": ["verificador"]}, {"id": "ag-verificador-cruzado", "camada": "agentes", "label": "verificador-cruzado", "descricao": "Cruzamento entre documentos", "arquivos": [".claude/agents/verificador-cruzado.md"], "status": "ATIVO", "tags": ["verificador"]}, {"id": "ag-buscador-base-local", "camada": "agentes", "label": "buscador-base-local", "descricao": "Busca PRIMEIRO na base local", "arquivos": [".claude/agents/buscador-base-local.md"], "status": "ATIVO", "tags": ["buscador"]}, {"id": "ag-buscador-tribunais", "camada": "agentes", "label": "buscador-tribunais", "descricao": "Busca em tribunais BR", "arquivos": [".claude/agents/buscador-tribunais.md"], "status": "ATIVO", "tags": ["buscador"]}, {"id": "ag-buscador-academico", "camada": "agentes", "label": "buscador-academico", "descricao": "Busca em PubMed e bases academicas", "arquivos": [".claude/agents/buscador-academico.md"], "status": "ATIVO", "tags": ["buscador"]}, {"id": "ag-pesquisador-produtos", "camada": "agentes", "label": "pesquisador-produtos", "descricao": "Pesquisa produtos/multi-loja", "arquivos": [".claude/agents/pesquisador-produtos.md"], "status": "ATIVO", "tags": ["buscador"]}, {"id": "ag-gerador-peticao-simples", "camada": "agentes", "label": "gerador-peticao-simples", "descricao": "Gera peticao simples", "arquivos": [".claude/agents/gerador-peticao-simples.md"], "status": "ATIVO", "tags": ["peticao"]}, {"id": "ag-gerador-peticao-medio", "camada": "agentes", "label": "gerador-peticao-medio", "descricao": "Gera peticao media", "arquivos": [".claude/agents/gerador-peticao-medio.md"], "status": "ATIVO", "tags": ["peticao"]}, {"id": "ag-gerador-peticao-complexo", "camada": "agentes", "label": "gerador-peticao-complexo", "descricao": "Gera peticao complexa", "arquivos": [".claude/agents/gerador-peticao-complexo.md"], "status": "ATIVO", "tags": ["peticao"]}, {"id": "ag-peticao-identificador", "camada": "agentes", "label": "peticao-identificador", "descricao": "Identifica tipo/parte autora", "arquivos": [".claude/agents/peticao-identificador.md"], "status": "ATIVO", "tags": ["peticao"]}, {"id": "ag-peticao-extrator", "camada": "agentes", "label": "peticao-extrator", "descricao": "Extrai dados-chave da peticao", "arquivos": [".claude/agents/peticao-extrator.md"], "status": "ATIVO", "tags": ["peticao"]}, {"id": "ag-peticao-montador", "camada": "agentes", "label": "peticao-montador", "descricao": "Monta peticao final", "arquivos": [".claude/agents/peticao-montador.md"], "status": "ATIVO", "tags": ["peticao"]}, {"id": "ag-peticao-gerador-pdf", "camada": "agentes", "label": "peticao-gerador-pdf", "descricao": "Gera PDF final da peticao", "arquivos": [".claude/agents/peticao-gerador-pdf.md"], "status": "ATIVO", "tags": ["peticao"]}, {"id": "ag-nomeador-peticao", "camada": "agentes", "label": "nomeador-peticao", "descricao": "Nomeia arquivo de peticao", "arquivos": [".claude/agents/nomeador-peticao.md"], "status": "ATIVO", "tags": ["peticao"]}, {"id": "ag-redator-laudo", "camada": "agentes", "label": "redator-laudo", "descricao": "Redige laudo pericial", "arquivos": [".claude/agents/redator-laudo.md"], "status": "ATIVO", "tags": ["laudo"]}, {"id": "ag-revisor-laudo", "camada": "agentes", "label": "revisor-laudo", "descricao": "Revisa laudo antes da entrega", "arquivos": [".claude/agents/revisor-laudo.md"], "status": "ATIVO", "tags": ["laudo"]}, {"id": "ag-gerador-roteiro", "camada": "agentes", "label": "gerador-roteiro-pericial", "descricao": "Monta roteiro pre-pericia", "arquivos": [".claude/agents/gerador-roteiro-pericial.md"], "status": "ATIVO", "tags": ["laudo"]}, {"id": "ag-extrator-partes", "camada": "agentes", "label": "extrator-partes", "descricao": "Extrai partes do processo", "arquivos": [".claude/agents/extrator-partes.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-resumidor-fatos", "camada": "agentes", "label": "resumidor-fatos", "descricao": "Resume fatos relevantes", "arquivos": [".claude/agents/resumidor-fatos.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-classificador-tipo-acao", "camada": "agentes", "label": "classificador-tipo-acao", "descricao": "Classifica tipo de acao", "arquivos": [".claude/agents/classificador-tipo-acao.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-classificador-documento", "camada": "agentes", "label": "classificador-documento", "descricao": "Classifica documento recebido", "arquivos": [".claude/agents/classificador-documento.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-classificador-intencoes", "camada": "agentes", "label": "classificador-intencoes", "descricao": "Classifica intencao do usuario", "arquivos": [".claude/agents/classificador-intencoes.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-classificador-recursos", "camada": "agentes", "label": "classificador-recursos", "descricao": "Classifica recursos do sistema", "arquivos": [".claude/agents/classificador-recursos.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-detector-urgencia", "camada": "agentes", "label": "detector-urgencia", "descricao": "Detecta urgencia em documentos", "arquivos": [".claude/agents/detector-urgencia.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-detetive-inconsistencias", "camada": "agentes", "label": "detetive-inconsistencias", "descricao": "Procura inconsistencias", "arquivos": [".claude/agents/detetive-inconsistencias.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-mapeador-provas", "camada": "agentes", "label": "mapeador-provas", "descricao": "Mapeia provas do processo", "arquivos": [".claude/agents/mapeador-provas.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-analisador-quesitos", "camada": "agentes", "label": "analisador-quesitos-auto", "descricao": "Analisa quesitos automaticamente", "arquivos": [".claude/agents/analisador-quesitos-auto.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-extrator-info-doc", "camada": "agentes", "label": "extrator-informacoes-doc", "descricao": "Extrai metadados do documento", "arquivos": [".claude/agents/extrator-informacoes-doc.md"], "status": "ATIVO", "tags": ["analise"]}, {"id": "ag-coach-cognitivo", "camada": "agentes", "label": "coach-cognitivo", "descricao": "Coach cognitivo TEA/TDAH", "arquivos": [".claude/agents/coach-cognitivo.md"], "status": "ATIVO", "tags": ["cognitivo"]}, {"id": "ag-analista-neuro", "camada": "agentes", "label": "analista-neurocomportamental", "descricao": "Analise neurocomportamental", "arquivos": [".claude/agents/analista-neurocomportamental.md"], "status": "ATIVO", "tags": ["cognitivo"]}, {"id": "ag-mapeador-habilidades", "camada": "agentes", "label": "mapeador-habilidades", "descricao": "Mapeia habilidades por sessao", "arquivos": [".claude/agents/mapeador-habilidades.md"], "status": "ATIVO", "tags": ["cognitivo"]}, {"id": "ag-designer-juridico", "camada": "agentes", "label": "designer-juridico", "descricao": "Design de documentos juridicos", "arquivos": [".claude/agents/designer-juridico.md"], "status": "ATIVO", "tags": ["design"]}, {"id": "ag-designer-musical", "camada": "agentes", "label": "designer-musical", "descricao": "Design musical", "arquivos": [".claude/agents/designer-musical.md"], "status": "ATIVO", "tags": ["design"]}, {"id": "ag-designer-nicho", "camada": "agentes", "label": "designer-nicho", "descricao": "Design para nichos especificos", "arquivos": [".claude/agents/designer-nicho.md"], "status": "ATIVO", "tags": ["design"]}, {"id": "ag-designer-brief", "camada": "agentes", "label": "designer-brief", "descricao": "Brief de design", "arquivos": [".claude/agents/designer-brief.md"], "status": "ATIVO", "tags": ["design"]}, {"id": "ag-capturador-ideias", "camada": "agentes", "label": "capturador-ideias", "descricao": "Captura ideias soltas", "arquivos": [".claude/agents/capturador-ideias.md"], "status": "ATIVO", "tags": ["utilitario"]}, {"id": "ag-tradutor-tecnico", "camada": "agentes", "label": "tradutor-tecnico", "descricao": "Traducao tecnica", "arquivos": [".claude/agents/tradutor-tecnico.md"], "status": "ATIVO", "tags": ["utilitario"]}, {"id": "ag-revisor-ditado", "camada": "agentes", "label": "revisor-texto-ditado", "descricao": "Revisa texto vindo de ditado", "arquivos": [".claude/agents/revisor-texto-ditado.md"], "status": "ATIVO", "tags": ["utilitario"]}, {"id": "ag-transformador-requisitos", "camada": "agentes", "label": "transformador-requisitos", "descricao": "Converte pedido em requisitos", "arquivos": [".claude/agents/transformador-requisitos.md"], "status": "ATIVO", "tags": ["utilitario"]}, {"id": "ag-padronizador-estilo", "camada": "agentes", "label": "padronizador-estilo", "descricao": "Padroniza estilo de texto", "arquivos": [".claude/agents/padronizador-estilo.md"], "status": "ATIVO", "tags": ["utilitario"]}, {"id": "ag-bug-hunter-sites", "camada": "agentes", "label": "bug-hunter-sites", "descricao": "Caca bugs em sites", "arquivos": [".claude/agents/bug-hunter-sites.md"], "status": "ATIVO", "tags": ["auditor"]}, {"id": "ag-auditor-tipografia", "camada": "agentes", "label": "auditor-tipografia", "descricao": "Audita tipografia", "arquivos": [".claude/agents/auditor-tipografia.md"], "status": "ATIVO", "tags": ["auditor"]}, {"id": "ag-auditor-espacamento", "camada": "agentes", "label": "auditor-espacamento", "descricao": "Audita espacamento", "arquivos": [".claude/agents/auditor-espacamento.md"], "status": "ATIVO", "tags": ["auditor"]}, {"id": "ag-auditor-estrutura", "camada": "agentes", "label": "auditor-estrutura", "descricao": "Audita estrutura de documento", "arquivos": [".claude/agents/auditor-estrutura.md"], "status": "ATIVO", "tags": ["auditor"]}, {"id": "ag-auditor-copias-md", "camada": "agentes", "label": "auditor-copias-md", "descricao": "Audita copias duplicadas de MD", "arquivos": [".claude/agents/auditor-copias-md.md"], "status": "ATIVO", "tags": ["auditor"]}, {"id": "ag-medidor-tokens", "camada": "agentes", "label": "medidor-tokens", "descricao": "Mede consumo de tokens", "arquivos": [".claude/agents/medidor-tokens.md"], "status": "ATIVO", "tags": ["sistema"]}, {"id": "ag-concierge", "camada": "agentes", "label": "concierge", "descricao": "Concierge de entrada, roteia pedidos", "arquivos": [".claude/agents/concierge.md"], "status": "ATIVO", "tags": ["sistema"]}, {"id": "ag-supervisor-sistema", "camada": "agentes", "label": "supervisor-sistema", "descricao": "Supervisiona saude do sistema", "arquivos": [".claude/agents/supervisor-sistema.md"], "status": "ATIVO", "tags": ["sistema"]}, {"id": "ag-diagnosticador", "camada": "agentes", "label": "diagnosticador-sistema", "descricao": "Diagnostica falhas do sistema", "arquivos": [".claude/agents/diagnosticador-sistema.md"], "status": "ATIVO", "tags": ["sistema"]}, {"id": "ag-resumo-sessao", "camada": "agentes", "label": "resumo-sessao", "descricao": "Gera resumo de sessao", "arquivos": [".claude/agents/resumo-sessao.md"], "status": "ATIVO", "tags": ["sistema"]}, {"id": "ag-transicao-sessao", "camada": "agentes", "label": "transicao-sessao", "descricao": "Executa transicao de contexto", "arquivos": [".claude/agents/transicao-sessao.md"], "status": "ATIVO", "tags": ["sistema"]}, {"id": "ag-clinica-minas-dev", "camada": "agentes", "label": "clinica-minas-dev", "descricao": "Dev do sistema Clinica Minas", "arquivos": [".claude/agents/clinica-minas-dev.md"], "status": "ATIVO", "tags": ["projeto"]}, {"id": "mcp-cerebra-legal", "camada": "agentes", "label": "MCP cerebra-legal", "descricao": "MCP juridico Cerebra", "arquivos": [], "status": "ATIVO", "tags": ["mcp"]}, {"id": "mcp-brlaw", "camada": "agentes", "label": "MCP brlaw", "descricao": "MCP de direito brasileiro", "arquivos": [], "status": "ATIVO", "tags": ["mcp"]}, {"id": "mcp-medical", "camada": "agentes", "label": "MCP medical-mcp", "descricao": "MCP medico/PubMed", "arquivos": [], "status": "ATIVO", "tags": ["mcp"]}, {"id": "mcp-sqlite", "camada": "agentes", "label": "MCP sqlite", "descricao": "MCP SQLite local", "arquivos": [], "status": "ATIVO", "tags": ["mcp"]}, {"id": "mcp-filesystem", "camada": "agentes", "label": "MCP filesystem", "descricao": "MCP de filesystem", "arquivos": [], "status": "ATIVO", "tags": ["mcp"]}, {"id": "mcp-n8n", "camada": "agentes", "label": "MCP n8n-mcp", "descricao": "MCP N8N workflows", "arquivos": [], "status": "ATIVO", "tags": ["mcp"]}, {"id": "mcp-telegram", "camada": "agentes", "label": "MCP telegram-notify", "descricao": "MCP Telegram notify", "arquivos": [], "status": "ATIVO", "tags": ["mcp"]}, {"id": "mcp-pje", "camada": "agentes", "label": "MCP pje-mcp", "descricao": "MCP PJe (consultas)", "arquivos": [], "status": "ATIVO", "tags": ["mcp"]}, {"id": "mcp-codex", "camada": "agentes", "label": "MCP codex-subagent", "descricao": "MCP subagent Codex", "arquivos": [], "status": "ATIVO", "tags": ["mcp"]}, {"id": "mcp-context7", "camada": "agentes", "label": "MCP context7", "descricao": "MCP docs de libs/frameworks", "arquivos": [], "status": "ATIVO", "tags": ["mcp"]}, {"id": "dados-banco-geral", "camada": "dados", "label": "BANCO-DADOS-GERAL", "descricao": "Banco central (via symlink)", "arquivos": ["BANCO-DADOS-GERAL/"], "status": "ATIVO", "tags": ["banco"]}, {"id": "dados-banco-direito", "camada": "dados", "label": "BANCO-DADOS-DIREITO", "descricao": "Base de direito", "arquivos": ["BANCO-DADOS-DIREITO/"], "status": "ATIVO", "tags": ["banco"]}, {"id": "dados-banco-medicina", "camada": "dados", "label": "BANCO-DADOS-MEDICINA", "descricao": "Base de medicina", "arquivos": ["BANCO-DADOS-MEDICINA/"], "status": "ATIVO", "tags": ["banco"]}, {"id": "dados-banco-pericia", "camada": "dados", "label": "BANCO-DADOS-PERICIA", "descricao": "Base de pericia", "arquivos": ["BANCO-DADOS-PERICIA/"], "status": "ATIVO", "tags": ["banco"]}, {"id": "dados-banco-ti-ia", "camada": "dados", "label": "BANCO-DADOS-TI-IA", "descricao": "Base de TI/IA", "arquivos": ["BANCO-DADOS-TI-IA/"], "status": "ATIVO", "tags": ["banco"]}, {"id": "dados-casos-clinicos", "camada": "dados", "label": "casos-clinicos", "descricao": "Casos clinicos reaproveitaveis", "arquivos": ["_MESA/10-PERICIA/casos-clinicos/"], "status": "ATIVO", "tags": ["banco"]}, {"id": "dados-memoria-vault", "camada": "dados", "label": "memoria-vault", "descricao": "Vault de memoria operacional", "arquivos": [".claude/memoria-vault/"], "status": "ATIVO", "tags": ["memoria"]}, {"id": "dados-claude-memory", "camada": "dados", "label": "CLAUDE-MEMORY (98)", "descricao": "98 entradas de memoria global", "arquivos": [".claude/projects/-Users-jesus/memory/MEMORY.md"], "status": "ATIVO", "tags": ["memoria"]}, {"id": "dados-python-base", "camada": "dados", "label": "PYTHON-BASE falhas.json", "descricao": "90 falhas Python catalogadas", "arquivos": ["_MESA/01-ATIVO/PYTHON-BASE/03-FALHAS-SOLUCOES/db/falhas.json"], "status": "ATIVO", "tags": ["memoria"]}, {"id": "dados-processos", "camada": "dados", "label": "data-processos", "descricao": "Processos PJe baixados", "arquivos": ["stemmia-forense/data/processos/"], "status": "ATIVO", "tags": ["banco"]}, {"id": "dados-saida", "camada": "dados", "label": "data-saida", "descricao": "Saidas de pipelines", "arquivos": ["stemmia-forense/data/saida/"], "status": "ATIVO", "tags": ["banco"]}, {"id": "ext-analisador-final", "camada": "externos", "label": "ANALISADOR-FINAL", "descricao": "Pasta externa ANALISADOR FINAL", "arquivos": ["~/Desktop/ANALISADOR FINAL/"], "status": "ATIVO", "tags": ["symlink"]}, {"id": "ext-mesa-python-base", "camada": "dados", "label": "PYTHON-BASE (autoalimentável)", "descricao": "PYTHON-BASE externo em _MESA", "arquivos": ["~/Desktop/_MESA/01-ATIVO/PYTHON-BASE/"], "status": "ATIVO", "tags": ["symlink"]}, {"id": "ext-processos-pje-win", "camada": "externos", "label": "processos-pje-windows", "descricao": "Processos baixados pelo Windows/Parallels", "arquivos": ["Parallels/WinDownloads/"], "status": "ATIVO", "tags": ["symlink"]}, {"id": "ext-pericia-folder", "camada": "externos", "label": "PERICIA-folder", "descricao": "Pasta MESA 10-PERICIA", "arquivos": ["~/Desktop/_MESA/10-PERICIA/"], "status": "ATIVO", "tags": ["symlink"]}, {"id": "ext-fenix-laudos", "camada": "externos", "label": "FENIX-modelos-laudo", "descricao": "Modelos de laudo do Fenix", "arquivos": ["~/Desktop/FENIX/modelos-laudo/"], "status": "ATIVO", "tags": ["symlink"]}, {"id": "ext-fenix-peticoes", "camada": "externos", "label": "FENIX-modelos-peticao", "descricao": "Modelos de peticao do Fenix (QUEBRADO)", "arquivos": ["~/Desktop/FENIX/modelos-peticao/"], "status": "QUEBRADO", "tags": ["symlink"]}, {"id": "agente-indexador-python", "camada": "agentes", "label": "indexador-python-base", "status": "ATIVO", "descricao": "Autoaprendizagem: indexa scripts Python novos", "arquivos": ["~/.claude/agents/indexador-python-base.md"], "tags": ["python", "autoaprendizagem"]}, {"id": "hook-python-indexer", "camada": "controle", "label": "python_base_indexer.py", "status": "ATIVO", "descricao": "Hook PostToolUse + launchd digest 1h", "arquivos": ["~/stemmia-forense/hooks/python_base_indexer.py"], "tags": ["hook", "launchd"]}], "ligacoes": [{"de": "fluxo-pje", "para": "fluxo-analise-rapida", "tipo": "dispara"}, {"de": "fluxo-pje", "para": "dados-processos", "tipo": "gera"}, {"de": "fluxo-pje", "para": "ext-processos-pje-win", "tipo": "consulta"}, {"de": "fluxo-pje", "para": "mcp-pje", "tipo": "consulta"}, {"de": "fluxo-analise-rapida", "para": "ag-orq-analise-rapida", "tipo": "dispara"}, {"de": "ag-orq-analise-rapida", "para": "ag-extrator-partes", "tipo": "dispara"}, {"de": "ag-orq-analise-rapida", "para": "ag-resumidor-fatos", "tipo": "dispara"}, {"de": "ag-orq-analise-rapida", "para": "ag-classificador-tipo-acao", "tipo": "dispara"}, {"de": "ag-orq-analise-rapida", "para": "ag-detector-urgencia", "tipo": "dispara"}, {"de": "ag-orq-analise-rapida", "para": "ag-mapeador-provas", "tipo": "dispara"}, {"de": "ag-orq-analise-rapida", "para": "ag-extrator-info-doc", "tipo": "dispara"}, {"de": "ag-orq-analise-rapida", "para": "ag-classificador-documento", "tipo": "dispara"}, {"de": "ag-orq-analise-rapida", "para": "ag-detetive-inconsistencias", "tipo": "dispara"}, {"de": "fluxo-analise-completa", "para": "ag-orq-analise-completa", "tipo": "dispara"}, {"de": "ag-orq-analise-completa", "para": "ag-extrator-partes", "tipo": "dispara"}, {"de": "ag-orq-analise-completa", "para": "ag-resumidor-fatos", "tipo": "dispara"}, {"de": "ag-orq-analise-completa", "para": "ag-mapeador-provas", "tipo": "dispara"}, {"de": "ag-orq-analise-completa", "para": "ag-analisador-quesitos", "tipo": "dispara"}, {"de": "ag-orq-analise-completa", "para": "ag-detetive-inconsistencias", "tipo": "dispara"}, {"de": "ag-orq-analise-completa", "para": "ag-classificador-tipo-acao", "tipo": "dispara"}, {"de": "ag-orq-analise-completa", "para": "ag-classificador-documento", "tipo": "dispara"}, {"de": "ag-orq-analise-completa", "para": "ag-extrator-info-doc", "tipo": "dispara"}, {"de": "fluxo-peticao", "para": "ag-triador-peticao", "tipo": "dispara"}, {"de": "ag-triador-peticao", "para": "ag-peticao-identificador", "tipo": "dispara"}, {"de": "ag-peticao-identificador", "para": "ag-peticao-extrator", "tipo": "dispara"}, {"de": "ag-peticao-extrator", "para": "ag-gerador-peticao-simples", "tipo": "dispara"}, {"de": "ag-peticao-extrator", "para": "ag-gerador-peticao-medio", "tipo": "dispara"}, {"de": "ag-peticao-extrator", "para": "ag-gerador-peticao-complexo", "tipo": "dispara"}, {"de": "ag-gerador-peticao-simples", "para": "ag-peticao-verificador", "tipo": "dispara"}, {"de": "ag-gerador-peticao-medio", "para": "ag-peticao-verificador", "tipo": "dispara"}, {"de": "ag-gerador-peticao-complexo", "para": "ag-peticao-verificador", "tipo": "dispara"}, {"de": "ag-peticao-verificador", "para": "ag-peticao-montador", "tipo": "dispara"}, {"de": "ag-peticao-montador", "para": "ag-peticao-gerador-pdf", "tipo": "gera"}, {"de": "ag-peticao-gerador-pdf", "para": "ag-nomeador-peticao", "tipo": "dispara"}, {"de": "fluxo-laudo", "para": "ag-redator-laudo", "tipo": "dispara"}, {"de": "ag-redator-laudo", "para": "ag-revisor-laudo", "tipo": "dispara"}, {"de": "ag-revisor-laudo", "para": "ag-verificador-cids", "tipo": "consulta"}, {"de": "ag-revisor-laudo", "para": "ag-verificador-datas", "tipo": "consulta"}, {"de": "ag-revisor-laudo", "para": "ag-verificador-100", "tipo": "consulta"}, {"de": "fluxo-laudo", "para": "ag-gerador-roteiro", "tipo": "consulta"}, {"de": "fluxo-erros-materiais", "para": "ag-orq-erros-materiais", "tipo": "dispara"}, {"de": "ag-orq-erros-materiais", "para": "ag-verificador-cids", "tipo": "dispara"}, {"de": "ag-orq-erros-materiais", "para": "ag-verificador-datas", "tipo": "dispara"}, {"de": "ag-orq-erros-materiais", "para": "ag-verificador-nomes-numeros", "tipo": "dispara"}, {"de": "ag-orq-erros-materiais", "para": "ag-verificador-medicamentos", "tipo": "dispara"}, {"de": "ag-orq-erros-materiais", "para": "ag-verificador-exames", "tipo": "dispara"}, {"de": "fluxo-jurisprudencia", "para": "ag-orq-jurisprudencia", "tipo": "dispara"}, {"de": "ag-orq-jurisprudencia", "para": "ag-buscador-base-local", "tipo": "dispara"}, {"de": "ag-orq-jurisprudencia", "para": "ag-buscador-tribunais", "tipo": "dispara"}, {"de": "ag-orq-jurisprudencia", "para": "ag-buscador-academico", "tipo": "dispara"}, {"de": "ag-buscador-tribunais", "para": "mcp-brlaw", "tipo": "consulta"}, {"de": "ag-buscador-tribunais", "para": "mcp-cerebra-legal", "tipo": "consulta"}, {"de": "ag-buscador-academico", "para": "mcp-medical", "tipo": "consulta"}, {"de": "fluxo-aceite", "para": "ag-orq-proposta-verif", "tipo": "dispara"}, {"de": "fluxo-aceite", "para": "ag-peticao-conferidor", "tipo": "consulta"}, {"de": "fluxo-monitor", "para": "mcp-pje", "tipo": "consulta"}, {"de": "fluxo-monitor", "para": "mcp-telegram", "tipo": "gera"}, {"de": "fluxo-autoaprendizagem", "para": "ag-mapeador-habilidades", "tipo": "dispara"}, {"de": "fluxo-autoaprendizagem", "para": "dados-claude-memory", "tipo": "gera"}, {"de": "fluxo-mutirao", "para": "fluxo-analise-rapida", "tipo": "depende"}, {"de": "dados-banco-geral", "para": "ext-analisador-final", "tipo": "symlink"}, {"de": "dados-python-base", "para": "ext-mesa-python-base", "tipo": "symlink"}, {"de": "dados-casos-clinicos", "para": "ext-pericia-folder", "tipo": "symlink"}, {"de": "ag-orq-analise-rapida", "para": "dados-claude-memory", "tipo": "consulta"}, {"de": "ag-orq-analise-completa", "para": "dados-claude-memory", "tipo": "consulta"}, {"de": "ag-redator-laudo", "para": "dados-banco-medicina", "tipo": "consulta"}, {"de": "ag-redator-laudo", "para": "dados-banco-pericia", "tipo": "consulta"}, {"de": "ag-buscador-base-local", "para": "dados-banco-geral", "tipo": "consulta"}, {"de": "ag-buscador-base-local", "para": "dados-banco-direito", "tipo": "consulta"}, {"de": "ctrl-claudemd", "para": "ag-concierge", "tipo": "depende"}, {"de": "ctrl-protocolo", "para": "ag-supervisor-sistema", "tipo": "depende"}, {"de": "ctrl-auditoria", "para": "ag-diagnosticador", "tipo": "gera"}, {"de": "ag-mapeador-habilidades", "para": "dados-memoria-vault", "tipo": "gera"}, {"de": "ag-resumo-sessao", "para": "dados-memoria-vault", "tipo": "gera"}, {"de": "fluxo-pje", "para": "dados-python-base", "tipo": "consulta"}, {"de": "hook-python-indexer", "para": "agente-indexador-python", "tipo": "dispara"}, {"de": "agente-indexador-python", "para": "python-base", "tipo": "gera"}]};
+</script>
+<script>
+(function(){
+  "use strict";
+
+  const STATUS_COLORS = { ATIVO: "#10b981", PARADO: "#f59e0b", QUEBRADO: "#ef4444" };
+  const camadaById = Object.fromEntries(DADOS.camadas.map(c => [c.id, c]));
+
+  const activeCamadas = new Set(DADOS.camadas.map(c => c.id));
+  const activeStatus  = new Set(["ATIVO","PARADO","QUEBRADO"]);
+  let searchTerm = "";
+
+  // Build camadas filter UI
+  const camadasFilterEl = document.getElementById("camadas-filter");
+  DADOS.camadas.forEach(c => {
+    const count = DADOS.nos.filter(n => n.camada === c.id).length;
+    const label = document.createElement("label");
+    label.className = "filter-item";
+    label.innerHTML =
+      '<input type="checkbox" data-camada="' + c.id + '" checked>' +
+      '<span class="filter-swatch" style="background:' + c.cor + '"></span>' +
+      '<span>' + c.label + '</span>' +
+      '<span class="filter-count">' + count + '</span>';
+    camadasFilterEl.appendChild(label);
+  });
+
+  // Populate status counts
+  ["ATIVO","PARADO","QUEBRADO"].forEach(s => {
+    const n = DADOS.nos.filter(x => x.status === s).length;
+    const el = document.getElementById("count-" + s);
+    if (el) el.textContent = n;
+  });
+
+  // Prepare graph data (deep copies D3 can mutate)
+  const nodes = DADOS.nos.map(n => Object.assign({}, n));
+  const nodesById = Object.fromEntries(nodes.map(n => [n.id, n]));
+  const links = DADOS.ligacoes
+    .filter(l => nodesById[l.de] && nodesById[l.para])
+    .map(l => ({ source: l.de, target: l.para, tipo: l.tipo }));
+
+  // Compute degree for radius
+  const degree = {};
+  nodes.forEach(n => degree[n.id] = 0);
+  links.forEach(l => {
+    degree[l.source] = (degree[l.source] || 0) + 1;
+    degree[l.target] = (degree[l.target] || 0) + 1;
+  });
+  const maxDeg = Math.max(1, ...Object.values(degree));
+  nodes.forEach(n => {
+    n._deg = degree[n.id] || 0;
+    n._r = 7 + (n._deg / maxDeg) * 7;
+  });
+
+  // Build neighbor map
+  const neighbors = {};
+  nodes.forEach(n => neighbors[n.id] = new Set());
+  links.forEach(l => {
+    neighbors[l.source].add(l.target);
+    neighbors[l.target].add(l.source);
+  });
+
+  const svg = d3.select("svg.graph");
+  const container = document.getElementById("graph-container");
+  let width = container.clientWidth;
+  let height = container.clientHeight;
+
+  const g = svg.append("g");
+
+  const zoom = d3.zoom()
+    .scaleExtent([0.2, 5])
+    .on("zoom", ev => g.attr("transform", ev.transform));
+  svg.call(zoom);
+
+  const linkSel = g.append("g").attr("class","links")
+    .selectAll("line")
+    .data(links)
+    .join("line")
+    .attr("class","link");
+
+  const nodeSel = g.append("g").attr("class","nodes")
+    .selectAll("g")
+    .data(nodes, d => d.id)
+    .join("g")
+    .attr("class","node");
+
+  nodeSel.append("circle")
+    .attr("class","node-circle")
+    .attr("r", d => d._r)
+    .attr("fill", d => (camadaById[d.camada] || {}).cor || "#555")
+    .attr("stroke", d => STATUS_COLORS[d.status] || "#888")
+    .attr("stroke-width", 2.2);
+
+  nodeSel.append("text")
+    .attr("class","node-label")
+    .attr("x", d => d._r + 4)
+    .attr("y", 3)
+    .text(d => d.label);
+
+  nodeSel.on("mouseover", function(ev, d){
+      if (!isVisible(d)) return;
+      nodeSel.classed("dim", n => n.id !== d.id && !neighbors[d.id].has(n.id));
+      linkSel.classed("highlighted", l => l.source.id === d.id || l.target.id === d.id);
+      linkSel.classed("dim", l => l.source.id !== d.id && l.target.id !== d.id);
+      d3.select(this).select(".node-circle").attr("r", d._r + 5);
+    })
+    .on("mouseout", function(ev, d){
+      nodeSel.classed("dim", false);
+      linkSel.classed("highlighted", false).classed("dim", false);
+      d3.select(this).select(".node-circle").attr("r", d._r);
+      applyFilters();
+    })
+    .on("click", function(ev, d){
+      ev.stopPropagation();
+      openDetail(d);
+    });
+
+  nodeSel.call(d3.drag()
+    .on("start", (ev, d) => {
+      if (!ev.active) sim.alphaTarget(0.3).restart();
+      d.fx = d.x; d.fy = d.y;
+    })
+    .on("drag",  (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
+    .on("end",   (ev, d) => {
+      if (!ev.active) sim.alphaTarget(0);
+      d.fx = null; d.fy = null;
+    }));
+
+  const sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(80).strength(0.6))
+    .force("charge", d3.forceManyBody().strength(-200))
+    .force("center", d3.forceCenter(width/2, height/2))
+    .force("collide", d3.forceCollide().radius(d => d._r + 12))
+    .on("tick", tick);
+
+  function tick(){
+    linkSel
+      .attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+    nodeSel.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+  }
+
+  window.addEventListener("resize", () => {
+    width = container.clientWidth;
+    height = container.clientHeight;
+    sim.force("center", d3.forceCenter(width/2, height/2));
+    sim.alpha(0.3).restart();
+  });
+
+  // ---- Filters
+  function isVisible(n){
+    if (!activeCamadas.has(n.camada)) return false;
+    if (!activeStatus.has(n.status)) return false;
+    return true;
+  }
+  function matchesSearch(n){
+    if (!searchTerm) return true;
+    const t = searchTerm.toLowerCase();
+    return (n.label || "").toLowerCase().includes(t) ||
+           (n.descricao || "").toLowerCase().includes(t);
+  }
+  function applyFilters(){
+    nodeSel.style("opacity", d => {
+      if (!isVisible(d)) return 0.08;
+      if (searchTerm && !matchesSearch(d)) return 0.18;
+      return 1;
+    });
+    nodeSel.classed("highlighted", d => searchTerm && matchesSearch(d) && isVisible(d));
+    linkSel.style("opacity", l => {
+      const sv = isVisible(l.source), tv = isVisible(l.target);
+      if (!sv || !tv) return 0.05;
+      return 0.55;
+    });
+  }
+
+  document.querySelectorAll('#camadas-filter input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener("change", () => {
+      const id = cb.getAttribute("data-camada");
+      if (cb.checked) activeCamadas.add(id); else activeCamadas.delete(id);
+      applyFilters();
+    });
+  });
+  document.querySelectorAll('#status-filter input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener("change", () => {
+      const s = cb.getAttribute("data-status");
+      if (cb.checked) activeStatus.add(s); else activeStatus.delete(s);
+      applyFilters();
+    });
+  });
+
+  const searchEl = document.getElementById("search");
+  searchEl.addEventListener("input", () => {
+    searchTerm = searchEl.value.trim();
+    applyFilters();
+  });
+
+  // ---- Detail panel
+  const detailEl = document.getElementById("detail");
+  const detailContentEl = document.getElementById("detail-content");
+  document.getElementById("close-detail").addEventListener("click", closeDetail);
+
+  function openDetail(d){
+    const camada = camadaById[d.camada] || { label: d.camada, cor: "#555" };
+    const fileLi = (d.arquivos || []).map(f => "<li>" + escapeHtml(f) + "</li>").join("");
+    const tagHtml = (d.tags || []).map(t => '<span class="tag">' + escapeHtml(t) + "</span>").join("");
+    const firstFile = (d.arquivos && d.arquivos[0]) ? d.arquivos[0] : "";
+    const openBtn = firstFile
+      ? '<a class="btn" href="file://' + absolutePath(firstFile) + '" target="_blank" rel="noopener">Abrir no Finder</a>'
+      : '';
+    detailContentEl.innerHTML =
+      '<h2>' + escapeHtml(d.label) + '</h2>' +
+      '<div class="meta-row">' +
+        '<span class="badge badge-' + d.status + '">' + d.status + '</span>' +
+        '<span style="color:' + camada.cor + '">&#9632; ' + escapeHtml(camada.label) + '</span>' +
+      '</div>' +
+      '<div class="meta-label">Descricao</div>' +
+      '<div class="detail-text">' + escapeHtml(d.descricao || "&mdash;") + '</div>' +
+      (fileLi ? '<div class="meta-label">Arquivos</div><ul class="detail-files">' + fileLi + '</ul>' : '') +
+      (tagHtml ? '<div class="meta-label">Tags</div><div>' + tagHtml + '</div>' : '') +
+      '<div class="meta-label">ID</div>' +
+      '<div class="detail-text" style="font-family:monospace; font-size:11px; color:#6b7280;">' + escapeHtml(d.id) + '</div>' +
+      openBtn;
+    detailEl.classList.add("open");
+  }
+  function closeDetail(){
+    detailEl.classList.remove("open");
+  }
+  function absolutePath(p){
+    if (!p) return "";
+    if (p.startsWith("/")) return p;
+    if (p.startsWith("~")) return "/Users/jesus" + p.substring(1);
+    return "/Users/jesus/Desktop/STEMMIA%20Dexter/" + p.replace(/ /g, "%20");
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  // ---- Keyboard shortcuts
+  document.addEventListener("keydown", ev => {
+    if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === "f") {
+      ev.preventDefault();
+      searchEl.focus(); searchEl.select();
+    } else if (ev.key === "Escape") {
+      closeDetail();
+      if (searchEl.value) { searchEl.value = ""; searchTerm = ""; applyFilters(); }
+    }
+  });
+
+  // Click background closes detail
+  svg.on("click", () => closeDetail());
+
+  applyFilters();
+})();
+</script>
+</body>
+</html>

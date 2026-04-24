@@ -1,0 +1,87 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;overflow:hidden}
+body{
+  background:#0a0e1a;color:#e5e7eb;
+  font-family:-apple-system,"SF Pro Display",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  padding:80px 70px;
+  background-image:
+    radial-gradient(ellipse 800px 400px at 50% 0%, rgba(96,165,250,0.10), transparent);
+}
+.kicker{font-size:18px;color:#60a5fa;letter-spacing:4px;text-transform:uppercase;font-weight:600}
+h1{font-size:72px;font-weight:800;letter-spacing:-2.5px;line-height:1;margin-top:14px}
+.sub{font-size:22px;color:#9ca3af;margin-top:18px;margin-bottom:42px;max-width:900px}
+.pipe{display:flex;flex-direction:column;gap:10px}
+.step{
+  display:grid;
+  grid-template-columns:48px 1fr auto;
+  align-items:center;
+  gap:18px;
+  background:#111827;
+  border:1px solid #1f2937;
+  border-left:4px solid var(--c,#60a5fa);
+  border-radius:10px;
+  padding:14px 18px;
+}
+.n{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:#1f2937;
+  color:#e5e7eb;
+  font-weight:700;font-size:14px;
+  display:grid;place-items:center;
+}
+.body{min-width:0}
+.name{font-size:18px;font-weight:600;letter-spacing:0.2px}
+.script{font-size:13px;color:#9ca3af;margin-top:3px;font-family:"SF Mono",Menlo,monospace}
+.tag{
+  font-size:11px;letter-spacing:1.2px;text-transform:uppercase;
+  padding:6px 12px;border-radius:20px;white-space:nowrap;font-weight:600;
+}
+.jr{background:rgba(251,191,36,0.12);color:#fbbf24}
+.pl{background:rgba(52,211,153,0.12);color:#34d399}
+.sr{background:rgba(167,139,250,0.15);color:#a78bfa}
+.neutral{background:rgba(156,163,175,0.10);color:#9ca3af}
+
+.s1{--c:#60a5fa}
+.s2{--c:#60a5fa}
+.s3{--c:#60a5fa}
+.s4{--c:#a78bfa}
+.s5{--c:#a78bfa}
+.s6{--c:#a78bfa}
+.s7{--c:#a78bfa}
+.s8{--c:#34d399}
+.s9{--c:#34d399}
+.s10{--c:#f87171}
+.s11{--c:#f87171}
+
+footer{
+  position:absolute;bottom:40px;left:70px;right:70px;
+  display:flex;justify-content:space-between;
+  font-size:16px;color:#6b7280;letter-spacing:1.5px;
+}
+footer b{color:#e5e7eb}
+</style></head>
+<body>
+  <div class="kicker">PIPELINE · 11 ETAPAS · AUTOMATIZADO</div>
+  <h1>Um processo,<br>do começo ao fim.</h1>
+  <div class="sub">Cada etapa = scripts/agentes próprios. Nenhum serviço externo pago.</div>
+
+  <div class="pipe">
+    <div class="step s1"><div class="n">1</div><div class="body"><div class="name">NOMEAÇÃO → ACEITE</div><div class="script">triador-peticao · peticao-montador</div></div><span class="tag pl">Pleno</span></div>
+    <div class="step s2"><div class="n">2</div><div class="body"><div class="name">DOWNLOAD DO PROCESSO (PJe)</div><div class="script">pje_download_v139.py · Selenium + CDP</div></div><span class="tag jr">Júnior</span></div>
+    <div class="step s3"><div class="n">3</div><div class="body"><div class="name">EXTRAÇÃO DE TEXTO</div><div class="script">pdftotext · regex parsers</div></div><span class="tag jr">Júnior</span></div>
+    <div class="step s4"><div class="n">4</div><div class="body"><div class="name">ANÁLISE COMPLETA (8 sub-agentes paralelos)</div><div class="script">orq-analise-completa · gera 12 artefatos</div></div><span class="tag sr">Sênior</span></div>
+    <div class="step s5"><div class="n">5</div><div class="body"><div class="name">TRIAGEM DE COMPLEXIDADE + PROPOSTA</div><div class="script">triagem_complexidade.py · 862 linhas · 21 fatores</div></div><span class="tag pl">Pleno</span></div>
+    <div class="step s6"><div class="n">6</div><div class="body"><div class="name">AGENDAMENTO</div><div class="script">gerador-peticao-medio · bot Telegram</div></div><span class="tag jr">Júnior</span></div>
+    <div class="step s7"><div class="n">7</div><div class="body"><div class="name">ROTEIRO DO EXAME</div><div class="script">gerador-roteiro-pericial · escalas por patologia</div></div><span class="tag pl">Pleno</span></div>
+    <div class="step s8"><div class="n">8</div><div class="body"><div class="name">PERÍCIA PRESENCIAL</div><div class="script">—</div></div><span class="tag neutral">—</span></div>
+    <div class="step s9"><div class="n">9</div><div class="body"><div class="name">LAUDO + REVISÃO AUTOMÁTICA</div><div class="script">redator-laudo · revisor-laudo · verificador-100</div></div><span class="tag pl">Pleno</span></div>
+    <div class="step s10"><div class="n">10</div><div class="body"><div class="name">CONTESTAÇÃO (multi-fonte paralela)</div><div class="script">orq-jurisprudencia · 3 buscadores simultâneos</div></div><span class="tag sr">Sênior</span></div>
+    <div class="step s11"><div class="n">11</div><div class="body"><div class="name">ARQUIVAMENTO + MÉTRICAS</div><div class="script">alimenta banco de aprendizado</div></div><span class="tag neutral">—</span></div>
+  </div>
+
+  <footer><span>stemmia.com.br</span><span>2 / 3</span></footer>
+</body></html>

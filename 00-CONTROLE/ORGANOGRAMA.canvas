@@ -1,0 +1,1626 @@
+{
+  "nodes": [
+    {
+      "id": "ctrl-readme",
+      "type": "text",
+      "text": "### README\n**Status:** ATIVO\n**Camada:** controle\n\nPorta de entrada do hub STEMMIA Dexter\n\n`STEMMIA Dexter/README.md`",
+      "x": -1600,
+      "y": 0,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-claudemd",
+      "type": "text",
+      "text": "### CLAUDE.md (hub)\n**Status:** ATIVO\n**Camada:** controle\n\nInstrucoes globais, perfil e regras absolutas\n\n`.claude/CLAUDE.md`",
+      "x": -1600,
+      "y": 180,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-codex",
+      "type": "text",
+      "text": "### CODEX-PESQUISA-VALIDADA\n**Status:** ATIVO\n**Camada:** controle\n\nBase de conhecimento validada para buscas\n\n`00-CONTROLE/CODEX-PESQUISA-VALIDADA.md`",
+      "x": -1600,
+      "y": 360,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-mapa",
+      "type": "text",
+      "text": "### MAPA-FERRAMENTAS\n**Status:** ATIVO\n**Camada:** controle\n\nMapa global de ferramentas/MCPs/agentes\n\n`00-CONTROLE/MAPA-PROCESSOS.html`",
+      "x": -1600,
+      "y": 540,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-decisoes",
+      "type": "text",
+      "text": "### DECISOES\n**Status:** ATIVO\n**Camada:** controle\n\nRegistro de decisoes tecnicas\n\n`00-CONTROLE/PENDENCIAS.md`",
+      "x": -1600,
+      "y": 720,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-rotina",
+      "type": "text",
+      "text": "### ROTINA\n**Status:** ATIVO\n**Camada:** controle\n\nRotina diaria do perito\n\n`00-CONTROLE/AGORA.md`",
+      "x": -1600,
+      "y": 900,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-inventario",
+      "type": "text",
+      "text": "### INVENTARIO\n**Status:** ATIVO\n**Camada:** controle\n\nInventario de processos baixados\n\n`00-CONTROLE/PROCESSOS-BAIXADOS-2026-04-14.md`",
+      "x": -1600,
+      "y": 1080,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-agora",
+      "type": "text",
+      "text": "### AGORA\n**Status:** ATIVO\n**Camada:** controle\n\nO que esta em execucao hoje\n\n`00-CONTROLE/AGORA.md`",
+      "x": -1600,
+      "y": 1260,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-plano-org",
+      "type": "text",
+      "text": "### PLANO-ORGANIZACAO-SISTEMA\n**Status:** ATIVO\n**Camada:** controle\n\nPlano vigente de organizacao\n\n`00-CONTROLE/PLANO-ORGANIZACAO-SISTEMA.md`",
+      "x": -1600,
+      "y": 1440,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-template-plano",
+      "type": "text",
+      "text": "### TEMPLATE-PLANO\n**Status:** ATIVO\n**Camada:** controle\n\nTemplate padrao para novos planos\n\n`00-CONTROLE/TEMPLATE-PLANO.md`",
+      "x": -1600,
+      "y": 1620,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-auditoria",
+      "type": "text",
+      "text": "### AUDITORIA-2026-04-19\n**Status:** ATIVO\n**Camada:** controle\n\nAuditoria mais recente do sistema\n\n`00-CONTROLE/AUDITORIA-2026-04-19.md`",
+      "x": -1600,
+      "y": 1800,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "ctrl-protocolo",
+      "type": "text",
+      "text": "### PROTOCOLO-CLAUDE-CONSISTENTE\n**Status:** ATIVO\n**Camada:** controle\n\nProtocolo de uso consistente do Claude\n\n`00-CONTROLE/PROTOCOLO-CLAUDE-CONSISTENTE.md`",
+      "x": -1600,
+      "y": 1980,
+      "width": 300,
+      "height": 140,
+      "color": "5"
+    },
+    {
+      "id": "fluxo-pje",
+      "type": "text",
+      "text": "### B.1 Download PJe\n**Status:** ATIVO\n**Camada:** fluxos\n\nBaixa processos via Playwright/Selenium\n\n`src/pje/baixar_push_pje_playwright.py`",
+      "x": -800,
+      "y": 0,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "fluxo-analise-rapida",
+      "type": "text",
+      "text": "### B.2 Analise rapida\n**Status:** QUEBRADO\n**Camada:** fluxos\n\nAnalise expressa pos-download\n\n`agents/orq-analise-rapida.md`",
+      "x": -800,
+      "y": 180,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "fluxo-analise-completa",
+      "type": "text",
+      "text": "### B.3 Analise completa\n**Status:** QUEBRADO\n**Camada:** fluxos\n\nAnalise profunda com 8 subagentes\n\n`agents/orq-analise-completa.md`",
+      "x": -800,
+      "y": 360,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "fluxo-peticao",
+      "type": "text",
+      "text": "### B.4 Peticao\n**Status:** ATIVO\n**Camada:** fluxos\n\nGeracao de peticao triada por complexidade\n\n`agents/triador-peticao.md`",
+      "x": -800,
+      "y": 540,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "fluxo-laudo",
+      "type": "text",
+      "text": "### B.5 Laudo\n**Status:** QUEBRADO\n**Camada:** fluxos\n\nRedacao e revisao de laudo pericial\n\n`agents/redator-laudo.md`",
+      "x": -800,
+      "y": 720,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "fluxo-mutirao",
+      "type": "text",
+      "text": "### B.6 Mutirao\n**Status:** PARADO\n**Camada:** fluxos\n\nMutirao de processos em lote\n\n`MUTIRAO/`",
+      "x": -800,
+      "y": 900,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "fluxo-monitor",
+      "type": "text",
+      "text": "### B.7 Monitor movimentacoes\n**Status:** ATIVO\n**Camada:** fluxos\n\nMonitor de novas movimentacoes PJe/DataJud\n\n`stemmia-forense/src/pje/monitor.py`",
+      "x": -800,
+      "y": 1080,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "fluxo-erros-materiais",
+      "type": "text",
+      "text": "### B.8 Erros materiais\n**Status:** ATIVO\n**Camada:** fluxos\n\nVerificacao paralela de erros em peticoes/laudos\n\n`agents/orq-erros-materiais.md`",
+      "x": -800,
+      "y": 1260,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "fluxo-jurisprudencia",
+      "type": "text",
+      "text": "### B.9 Jurisprudencia\n**Status:** ATIVO\n**Camada:** fluxos\n\n3 buscadores paralelos de jurisprudencia BR\n\n`agents/orq-jurisprudencia.md`",
+      "x": -800,
+      "y": 1440,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "fluxo-aceite",
+      "type": "text",
+      "text": "### B.10 Aceite/Proposta\n**Status:** ATIVO\n**Camada:** fluxos\n\n3 geradores de proposta + calculo de honorarios\n\n`calcular_honorarios.py`",
+      "x": -800,
+      "y": 1620,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "fluxo-autoaprendizagem",
+      "type": "text",
+      "text": "### B.11 Autoaprendizagem\n**Status:** ATIVO\n**Camada:** fluxos\n\nStop hook detecta habilidades novas e erros\n\n`stemmia-forense/automacoes/detectar_habilidade_nova.py`",
+      "x": -800,
+      "y": 1800,
+      "width": 300,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "ag-orq-analise-rapida",
+      "type": "text",
+      "text": "### orq-analise-rapida\n**Status:** ATIVO\n**Camada:** agentes\n\nOrquestrador de analise rapida\n\n`.claude/agents/orq-analise-rapida.md`",
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-orq-analise-completa",
+      "type": "text",
+      "text": "### orq-analise-completa\n**Status:** ATIVO\n**Camada:** agentes\n\nOrquestrador de analise completa (8 subagentes)\n\n`.claude/agents/orq-analise-completa.md`",
+      "x": 0,
+      "y": 180,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-orq-analise-documento",
+      "type": "text",
+      "text": "### orq-analise-documento\n**Status:** ATIVO\n**Camada:** agentes\n\nOrquestrador de analise de documento isolado\n\n`.claude/agents/orq-analise-documento.md`",
+      "x": 0,
+      "y": 360,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-orq-erros-materiais",
+      "type": "text",
+      "text": "### orq-erros-materiais\n**Status:** ATIVO\n**Camada:** agentes\n\nOrquestra 5 verificadores em paralelo\n\n`.claude/agents/orq-erros-materiais.md`",
+      "x": 0,
+      "y": 540,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-orq-jurisprudencia",
+      "type": "text",
+      "text": "### orq-jurisprudencia\n**Status:** ATIVO\n**Camada:** agentes\n\nOrquestra 3 buscadores juridicos\n\n`.claude/agents/orq-jurisprudencia.md`",
+      "x": 0,
+      "y": 720,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-orq-proposta-verif",
+      "type": "text",
+      "text": "### orquestrador-verificacao-proposta\n**Status:** ATIVO\n**Camada:** agentes\n\nVerifica proposta/aceite antes de envio\n\n`.claude/agents/orquestrador-verificacao-proposta.md`",
+      "x": 0,
+      "y": 900,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-triador-peticao",
+      "type": "text",
+      "text": "### triador-peticao\n**Status:** ATIVO\n**Camada:** agentes\n\nClassifica peticao por complexidade\n\n`.claude/agents/triador-peticao.md`",
+      "x": 0,
+      "y": 1080,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-verificador-cids",
+      "type": "text",
+      "text": "### verificador-cids\n**Status:** ATIVO\n**Camada:** agentes\n\nValida CIDs citados\n\n`.claude/agents/verificador-cids.md`",
+      "x": 0,
+      "y": 1260,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-verificador-datas",
+      "type": "text",
+      "text": "### verificador-datas\n**Status:** ATIVO\n**Camada:** agentes\n\nCruza datas no texto\n\n`.claude/agents/verificador-datas.md`",
+      "x": 0,
+      "y": 1440,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-verificador-nomes-numeros",
+      "type": "text",
+      "text": "### verificador-nomes-numeros\n**Status:** ATIVO\n**Camada:** agentes\n\nVerifica nomes, CPFs, numeros processuais\n\n`.claude/agents/verificador-nomes-numeros.md`",
+      "x": 0,
+      "y": 1620,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-verificador-medicamentos",
+      "type": "text",
+      "text": "### verificador-medicamentos\n**Status:** ATIVO\n**Camada:** agentes\n\nValida medicamentos/posologia\n\n`.claude/agents/verificador-medicamentos.md`",
+      "x": 0,
+      "y": 1800,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-verificador-exames",
+      "type": "text",
+      "text": "### verificador-exames\n**Status:** ATIVO\n**Camada:** agentes\n\nValida exames citados\n\n`.claude/agents/verificador-exames.md`",
+      "x": 0,
+      "y": 1980,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-peticao-verificador",
+      "type": "text",
+      "text": "### peticao-verificador\n**Status:** ATIVO\n**Camada:** agentes\n\nVerifica peticao gerada\n\n`.claude/agents/peticao-verificador.md`",
+      "x": 0,
+      "y": 2160,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-verificador-100",
+      "type": "text",
+      "text": "### verificador-100\n**Status:** ATIVO\n**Camada:** agentes\n\nChecklist de 100 pontos do laudo\n\n`.claude/agents/verificador-100.md`",
+      "x": 0,
+      "y": 2340,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-peticao-conferidor",
+      "type": "text",
+      "text": "### peticao-conferidor\n**Status:** ATIVO\n**Camada:** agentes\n\nConfere peticao contra criterios\n\n`.claude/agents/peticao-conferidor.md`",
+      "x": 0,
+      "y": 2520,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-verificador-fontes",
+      "type": "text",
+      "text": "### verificador-de-fontes\n**Status:** ATIVO\n**Camada:** agentes\n\nCheca links e fontes citadas\n\n`.claude/agents/verificador-de-fontes.md`",
+      "x": 0,
+      "y": 2700,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-verificador-cruzado",
+      "type": "text",
+      "text": "### verificador-cruzado\n**Status:** ATIVO\n**Camada:** agentes\n\nCruzamento entre documentos\n\n`.claude/agents/verificador-cruzado.md`",
+      "x": 0,
+      "y": 2880,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-buscador-base-local",
+      "type": "text",
+      "text": "### buscador-base-local\n**Status:** ATIVO\n**Camada:** agentes\n\nBusca PRIMEIRO na base local\n\n`.claude/agents/buscador-base-local.md`",
+      "x": 0,
+      "y": 3060,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-buscador-tribunais",
+      "type": "text",
+      "text": "### buscador-tribunais\n**Status:** ATIVO\n**Camada:** agentes\n\nBusca em tribunais BR\n\n`.claude/agents/buscador-tribunais.md`",
+      "x": 0,
+      "y": 3240,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-buscador-academico",
+      "type": "text",
+      "text": "### buscador-academico\n**Status:** ATIVO\n**Camada:** agentes\n\nBusca em PubMed e bases academicas\n\n`.claude/agents/buscador-academico.md`",
+      "x": 0,
+      "y": 3420,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-pesquisador-produtos",
+      "type": "text",
+      "text": "### pesquisador-produtos\n**Status:** ATIVO\n**Camada:** agentes\n\nPesquisa produtos/multi-loja\n\n`.claude/agents/pesquisador-produtos.md`",
+      "x": 0,
+      "y": 3600,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-gerador-peticao-simples",
+      "type": "text",
+      "text": "### gerador-peticao-simples\n**Status:** ATIVO\n**Camada:** agentes\n\nGera peticao simples\n\n`.claude/agents/gerador-peticao-simples.md`",
+      "x": 0,
+      "y": 3780,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-gerador-peticao-medio",
+      "type": "text",
+      "text": "### gerador-peticao-medio\n**Status:** ATIVO\n**Camada:** agentes\n\nGera peticao media\n\n`.claude/agents/gerador-peticao-medio.md`",
+      "x": 0,
+      "y": 3960,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-gerador-peticao-complexo",
+      "type": "text",
+      "text": "### gerador-peticao-complexo\n**Status:** ATIVO\n**Camada:** agentes\n\nGera peticao complexa\n\n`.claude/agents/gerador-peticao-complexo.md`",
+      "x": 0,
+      "y": 4140,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-peticao-identificador",
+      "type": "text",
+      "text": "### peticao-identificador\n**Status:** ATIVO\n**Camada:** agentes\n\nIdentifica tipo/parte autora\n\n`.claude/agents/peticao-identificador.md`",
+      "x": 0,
+      "y": 4320,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-peticao-extrator",
+      "type": "text",
+      "text": "### peticao-extrator\n**Status:** ATIVO\n**Camada:** agentes\n\nExtrai dados-chave da peticao\n\n`.claude/agents/peticao-extrator.md`",
+      "x": 0,
+      "y": 4500,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-peticao-montador",
+      "type": "text",
+      "text": "### peticao-montador\n**Status:** ATIVO\n**Camada:** agentes\n\nMonta peticao final\n\n`.claude/agents/peticao-montador.md`",
+      "x": 0,
+      "y": 4680,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-peticao-gerador-pdf",
+      "type": "text",
+      "text": "### peticao-gerador-pdf\n**Status:** ATIVO\n**Camada:** agentes\n\nGera PDF final da peticao\n\n`.claude/agents/peticao-gerador-pdf.md`",
+      "x": 0,
+      "y": 4860,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-nomeador-peticao",
+      "type": "text",
+      "text": "### nomeador-peticao\n**Status:** ATIVO\n**Camada:** agentes\n\nNomeia arquivo de peticao\n\n`.claude/agents/nomeador-peticao.md`",
+      "x": 0,
+      "y": 5040,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-redator-laudo",
+      "type": "text",
+      "text": "### redator-laudo\n**Status:** ATIVO\n**Camada:** agentes\n\nRedige laudo pericial\n\n`.claude/agents/redator-laudo.md`",
+      "x": 0,
+      "y": 5220,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-revisor-laudo",
+      "type": "text",
+      "text": "### revisor-laudo\n**Status:** ATIVO\n**Camada:** agentes\n\nRevisa laudo antes da entrega\n\n`.claude/agents/revisor-laudo.md`",
+      "x": 0,
+      "y": 5400,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-gerador-roteiro",
+      "type": "text",
+      "text": "### gerador-roteiro-pericial\n**Status:** ATIVO\n**Camada:** agentes\n\nMonta roteiro pre-pericia\n\n`.claude/agents/gerador-roteiro-pericial.md`",
+      "x": 0,
+      "y": 5580,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-extrator-partes",
+      "type": "text",
+      "text": "### extrator-partes\n**Status:** ATIVO\n**Camada:** agentes\n\nExtrai partes do processo\n\n`.claude/agents/extrator-partes.md`",
+      "x": 0,
+      "y": 5760,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-resumidor-fatos",
+      "type": "text",
+      "text": "### resumidor-fatos\n**Status:** ATIVO\n**Camada:** agentes\n\nResume fatos relevantes\n\n`.claude/agents/resumidor-fatos.md`",
+      "x": 0,
+      "y": 5940,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-classificador-tipo-acao",
+      "type": "text",
+      "text": "### classificador-tipo-acao\n**Status:** ATIVO\n**Camada:** agentes\n\nClassifica tipo de acao\n\n`.claude/agents/classificador-tipo-acao.md`",
+      "x": 0,
+      "y": 6120,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-classificador-documento",
+      "type": "text",
+      "text": "### classificador-documento\n**Status:** ATIVO\n**Camada:** agentes\n\nClassifica documento recebido\n\n`.claude/agents/classificador-documento.md`",
+      "x": 0,
+      "y": 6300,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-classificador-intencoes",
+      "type": "text",
+      "text": "### classificador-intencoes\n**Status:** ATIVO\n**Camada:** agentes\n\nClassifica intencao do usuario\n\n`.claude/agents/classificador-intencoes.md`",
+      "x": 0,
+      "y": 6480,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-classificador-recursos",
+      "type": "text",
+      "text": "### classificador-recursos\n**Status:** ATIVO\n**Camada:** agentes\n\nClassifica recursos do sistema\n\n`.claude/agents/classificador-recursos.md`",
+      "x": 0,
+      "y": 6660,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-detector-urgencia",
+      "type": "text",
+      "text": "### detector-urgencia\n**Status:** ATIVO\n**Camada:** agentes\n\nDetecta urgencia em documentos\n\n`.claude/agents/detector-urgencia.md`",
+      "x": 0,
+      "y": 6840,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-detetive-inconsistencias",
+      "type": "text",
+      "text": "### detetive-inconsistencias\n**Status:** ATIVO\n**Camada:** agentes\n\nProcura inconsistencias\n\n`.claude/agents/detetive-inconsistencias.md`",
+      "x": 0,
+      "y": 7020,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-mapeador-provas",
+      "type": "text",
+      "text": "### mapeador-provas\n**Status:** ATIVO\n**Camada:** agentes\n\nMapeia provas do processo\n\n`.claude/agents/mapeador-provas.md`",
+      "x": 0,
+      "y": 7200,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-analisador-quesitos",
+      "type": "text",
+      "text": "### analisador-quesitos-auto\n**Status:** ATIVO\n**Camada:** agentes\n\nAnalisa quesitos automaticamente\n\n`.claude/agents/analisador-quesitos-auto.md`",
+      "x": 0,
+      "y": 7380,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-extrator-info-doc",
+      "type": "text",
+      "text": "### extrator-informacoes-doc\n**Status:** ATIVO\n**Camada:** agentes\n\nExtrai metadados do documento\n\n`.claude/agents/extrator-informacoes-doc.md`",
+      "x": 0,
+      "y": 7560,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-coach-cognitivo",
+      "type": "text",
+      "text": "### coach-cognitivo\n**Status:** ATIVO\n**Camada:** agentes\n\nCoach cognitivo TEA/TDAH\n\n`.claude/agents/coach-cognitivo.md`",
+      "x": 0,
+      "y": 7740,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-analista-neuro",
+      "type": "text",
+      "text": "### analista-neurocomportamental\n**Status:** ATIVO\n**Camada:** agentes\n\nAnalise neurocomportamental\n\n`.claude/agents/analista-neurocomportamental.md`",
+      "x": 0,
+      "y": 7920,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-mapeador-habilidades",
+      "type": "text",
+      "text": "### mapeador-habilidades\n**Status:** ATIVO\n**Camada:** agentes\n\nMapeia habilidades por sessao\n\n`.claude/agents/mapeador-habilidades.md`",
+      "x": 0,
+      "y": 8100,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-designer-juridico",
+      "type": "text",
+      "text": "### designer-juridico\n**Status:** ATIVO\n**Camada:** agentes\n\nDesign de documentos juridicos\n\n`.claude/agents/designer-juridico.md`",
+      "x": 0,
+      "y": 8280,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-designer-musical",
+      "type": "text",
+      "text": "### designer-musical\n**Status:** ATIVO\n**Camada:** agentes\n\nDesign musical\n\n`.claude/agents/designer-musical.md`",
+      "x": 0,
+      "y": 8460,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-designer-nicho",
+      "type": "text",
+      "text": "### designer-nicho\n**Status:** ATIVO\n**Camada:** agentes\n\nDesign para nichos especificos\n\n`.claude/agents/designer-nicho.md`",
+      "x": 0,
+      "y": 8640,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-designer-brief",
+      "type": "text",
+      "text": "### designer-brief\n**Status:** ATIVO\n**Camada:** agentes\n\nBrief de design\n\n`.claude/agents/designer-brief.md`",
+      "x": 0,
+      "y": 8820,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-capturador-ideias",
+      "type": "text",
+      "text": "### capturador-ideias\n**Status:** ATIVO\n**Camada:** agentes\n\nCaptura ideias soltas\n\n`.claude/agents/capturador-ideias.md`",
+      "x": 0,
+      "y": 9000,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-tradutor-tecnico",
+      "type": "text",
+      "text": "### tradutor-tecnico\n**Status:** ATIVO\n**Camada:** agentes\n\nTraducao tecnica\n\n`.claude/agents/tradutor-tecnico.md`",
+      "x": 0,
+      "y": 9180,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-revisor-ditado",
+      "type": "text",
+      "text": "### revisor-texto-ditado\n**Status:** ATIVO\n**Camada:** agentes\n\nRevisa texto vindo de ditado\n\n`.claude/agents/revisor-texto-ditado.md`",
+      "x": 0,
+      "y": 9360,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-transformador-requisitos",
+      "type": "text",
+      "text": "### transformador-requisitos\n**Status:** ATIVO\n**Camada:** agentes\n\nConverte pedido em requisitos\n\n`.claude/agents/transformador-requisitos.md`",
+      "x": 0,
+      "y": 9540,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-padronizador-estilo",
+      "type": "text",
+      "text": "### padronizador-estilo\n**Status:** ATIVO\n**Camada:** agentes\n\nPadroniza estilo de texto\n\n`.claude/agents/padronizador-estilo.md`",
+      "x": 0,
+      "y": 9720,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-bug-hunter-sites",
+      "type": "text",
+      "text": "### bug-hunter-sites\n**Status:** ATIVO\n**Camada:** agentes\n\nCaca bugs em sites\n\n`.claude/agents/bug-hunter-sites.md`",
+      "x": 0,
+      "y": 9900,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-auditor-tipografia",
+      "type": "text",
+      "text": "### auditor-tipografia\n**Status:** ATIVO\n**Camada:** agentes\n\nAudita tipografia\n\n`.claude/agents/auditor-tipografia.md`",
+      "x": 0,
+      "y": 10080,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-auditor-espacamento",
+      "type": "text",
+      "text": "### auditor-espacamento\n**Status:** ATIVO\n**Camada:** agentes\n\nAudita espacamento\n\n`.claude/agents/auditor-espacamento.md`",
+      "x": 0,
+      "y": 10260,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-auditor-estrutura",
+      "type": "text",
+      "text": "### auditor-estrutura\n**Status:** ATIVO\n**Camada:** agentes\n\nAudita estrutura de documento\n\n`.claude/agents/auditor-estrutura.md`",
+      "x": 0,
+      "y": 10440,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-auditor-copias-md",
+      "type": "text",
+      "text": "### auditor-copias-md\n**Status:** ATIVO\n**Camada:** agentes\n\nAudita copias duplicadas de MD\n\n`.claude/agents/auditor-copias-md.md`",
+      "x": 0,
+      "y": 10620,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-medidor-tokens",
+      "type": "text",
+      "text": "### medidor-tokens\n**Status:** ATIVO\n**Camada:** agentes\n\nMede consumo de tokens\n\n`.claude/agents/medidor-tokens.md`",
+      "x": 0,
+      "y": 10800,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-concierge",
+      "type": "text",
+      "text": "### concierge\n**Status:** ATIVO\n**Camada:** agentes\n\nConcierge de entrada, roteia pedidos\n\n`.claude/agents/concierge.md`",
+      "x": 0,
+      "y": 10980,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-supervisor-sistema",
+      "type": "text",
+      "text": "### supervisor-sistema\n**Status:** ATIVO\n**Camada:** agentes\n\nSupervisiona saude do sistema\n\n`.claude/agents/supervisor-sistema.md`",
+      "x": 0,
+      "y": 11160,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-diagnosticador",
+      "type": "text",
+      "text": "### diagnosticador-sistema\n**Status:** ATIVO\n**Camada:** agentes\n\nDiagnostica falhas do sistema\n\n`.claude/agents/diagnosticador-sistema.md`",
+      "x": 0,
+      "y": 11340,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-resumo-sessao",
+      "type": "text",
+      "text": "### resumo-sessao\n**Status:** ATIVO\n**Camada:** agentes\n\nGera resumo de sessao\n\n`.claude/agents/resumo-sessao.md`",
+      "x": 0,
+      "y": 11520,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-transicao-sessao",
+      "type": "text",
+      "text": "### transicao-sessao\n**Status:** ATIVO\n**Camada:** agentes\n\nExecuta transicao de contexto\n\n`.claude/agents/transicao-sessao.md`",
+      "x": 0,
+      "y": 11700,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "ag-clinica-minas-dev",
+      "type": "text",
+      "text": "### clinica-minas-dev\n**Status:** ATIVO\n**Camada:** agentes\n\nDev do sistema Clinica Minas\n\n`.claude/agents/clinica-minas-dev.md`",
+      "x": 0,
+      "y": 11880,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "mcp-cerebra-legal",
+      "type": "text",
+      "text": "### MCP cerebra-legal\n**Status:** ATIVO\n**Camada:** agentes\n\nMCP juridico Cerebra",
+      "x": 0,
+      "y": 12060,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "mcp-brlaw",
+      "type": "text",
+      "text": "### MCP brlaw\n**Status:** ATIVO\n**Camada:** agentes\n\nMCP de direito brasileiro",
+      "x": 0,
+      "y": 12240,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "mcp-medical",
+      "type": "text",
+      "text": "### MCP medical-mcp\n**Status:** ATIVO\n**Camada:** agentes\n\nMCP medico/PubMed",
+      "x": 0,
+      "y": 12420,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "mcp-sqlite",
+      "type": "text",
+      "text": "### MCP sqlite\n**Status:** ATIVO\n**Camada:** agentes\n\nMCP SQLite local",
+      "x": 0,
+      "y": 12600,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "mcp-filesystem",
+      "type": "text",
+      "text": "### MCP filesystem\n**Status:** ATIVO\n**Camada:** agentes\n\nMCP de filesystem",
+      "x": 0,
+      "y": 12780,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "mcp-n8n",
+      "type": "text",
+      "text": "### MCP n8n-mcp\n**Status:** ATIVO\n**Camada:** agentes\n\nMCP N8N workflows",
+      "x": 0,
+      "y": 12960,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "mcp-telegram",
+      "type": "text",
+      "text": "### MCP telegram-notify\n**Status:** ATIVO\n**Camada:** agentes\n\nMCP Telegram notify",
+      "x": 0,
+      "y": 13140,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "mcp-pje",
+      "type": "text",
+      "text": "### MCP pje-mcp\n**Status:** ATIVO\n**Camada:** agentes\n\nMCP PJe (consultas)",
+      "x": 0,
+      "y": 13320,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "mcp-codex",
+      "type": "text",
+      "text": "### MCP codex-subagent\n**Status:** ATIVO\n**Camada:** agentes\n\nMCP subagent Codex",
+      "x": 0,
+      "y": 13500,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "mcp-context7",
+      "type": "text",
+      "text": "### MCP context7\n**Status:** ATIVO\n**Camada:** agentes\n\nMCP docs de libs/frameworks",
+      "x": 0,
+      "y": 13680,
+      "width": 300,
+      "height": 140,
+      "color": "2"
+    },
+    {
+      "id": "dados-banco-geral",
+      "type": "text",
+      "text": "### BANCO-DADOS-GERAL\n**Status:** ATIVO\n**Camada:** dados\n\nBanco central (via symlink)\n\n`BANCO-DADOS-GERAL/`",
+      "x": 800,
+      "y": 0,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "dados-banco-direito",
+      "type": "text",
+      "text": "### BANCO-DADOS-DIREITO\n**Status:** ATIVO\n**Camada:** dados\n\nBase de direito\n\n`BANCO-DADOS-DIREITO/`",
+      "x": 800,
+      "y": 180,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "dados-banco-medicina",
+      "type": "text",
+      "text": "### BANCO-DADOS-MEDICINA\n**Status:** ATIVO\n**Camada:** dados\n\nBase de medicina\n\n`BANCO-DADOS-MEDICINA/`",
+      "x": 800,
+      "y": 360,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "dados-banco-pericia",
+      "type": "text",
+      "text": "### BANCO-DADOS-PERICIA\n**Status:** ATIVO\n**Camada:** dados\n\nBase de pericia\n\n`BANCO-DADOS-PERICIA/`",
+      "x": 800,
+      "y": 540,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "dados-banco-ti-ia",
+      "type": "text",
+      "text": "### BANCO-DADOS-TI-IA\n**Status:** ATIVO\n**Camada:** dados\n\nBase de TI/IA\n\n`BANCO-DADOS-TI-IA/`",
+      "x": 800,
+      "y": 720,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "dados-casos-clinicos",
+      "type": "text",
+      "text": "### casos-clinicos\n**Status:** ATIVO\n**Camada:** dados\n\nCasos clinicos reaproveitaveis\n\n`_MESA/10-PERICIA/casos-clinicos/`",
+      "x": 800,
+      "y": 900,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "dados-memoria-vault",
+      "type": "text",
+      "text": "### memoria-vault\n**Status:** ATIVO\n**Camada:** dados\n\nVault de memoria operacional\n\n`.claude/memoria-vault/`",
+      "x": 800,
+      "y": 1080,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "dados-claude-memory",
+      "type": "text",
+      "text": "### CLAUDE-MEMORY (98)\n**Status:** ATIVO\n**Camada:** dados\n\n98 entradas de memoria global\n\n`.claude/projects/-Users-jesus/memory/MEMORY.md`",
+      "x": 800,
+      "y": 1260,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "dados-python-base",
+      "type": "text",
+      "text": "### PYTHON-BASE falhas.json\n**Status:** ATIVO\n**Camada:** dados\n\n90 falhas Python catalogadas\n\n`_MESA/01-ATIVO/PYTHON-BASE/03-FALHAS-SOLUCOES/db/falhas.json`",
+      "x": 800,
+      "y": 1440,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "dados-processos",
+      "type": "text",
+      "text": "### data-processos\n**Status:** ATIVO\n**Camada:** dados\n\nProcessos PJe baixados\n\n`stemmia-forense/data/processos/`",
+      "x": 800,
+      "y": 1620,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "dados-saida",
+      "type": "text",
+      "text": "### data-saida\n**Status:** ATIVO\n**Camada:** dados\n\nSaidas de pipelines\n\n`stemmia-forense/data/saida/`",
+      "x": 800,
+      "y": 1800,
+      "width": 300,
+      "height": 140,
+      "color": "6"
+    },
+    {
+      "id": "ext-analisador-final",
+      "type": "text",
+      "text": "### ANALISADOR-FINAL\n**Status:** ATIVO\n**Camada:** externos\n\nPasta externa ANALISADOR FINAL\n\n`~/Desktop/ANALISADOR FINAL/`",
+      "x": 1600,
+      "y": 0,
+      "width": 300,
+      "height": 140,
+      "color": "1"
+    },
+    {
+      "id": "ext-mesa-python-base",
+      "type": "text",
+      "text": "### MESA-PYTHON-BASE\n**Status:** ATIVO\n**Camada:** externos\n\nPYTHON-BASE externo em _MESA\n\n`~/Desktop/_MESA/01-ATIVO/PYTHON-BASE/`",
+      "x": 1600,
+      "y": 180,
+      "width": 300,
+      "height": 140,
+      "color": "1"
+    },
+    {
+      "id": "ext-processos-pje-win",
+      "type": "text",
+      "text": "### processos-pje-windows\n**Status:** ATIVO\n**Camada:** externos\n\nProcessos baixados pelo Windows/Parallels\n\n`Parallels/WinDownloads/`",
+      "x": 1600,
+      "y": 360,
+      "width": 300,
+      "height": 140,
+      "color": "1"
+    },
+    {
+      "id": "ext-pericia-folder",
+      "type": "text",
+      "text": "### PERICIA-folder\n**Status:** ATIVO\n**Camada:** externos\n\nPasta MESA 10-PERICIA\n\n`~/Desktop/_MESA/10-PERICIA/`",
+      "x": 1600,
+      "y": 540,
+      "width": 300,
+      "height": 140,
+      "color": "1"
+    },
+    {
+      "id": "ext-fenix-laudos",
+      "type": "text",
+      "text": "### FENIX-modelos-laudo\n**Status:** ATIVO\n**Camada:** externos\n\nModelos de laudo do Fenix\n\n`~/Desktop/FENIX/modelos-laudo/`",
+      "x": 1600,
+      "y": 720,
+      "width": 300,
+      "height": 140,
+      "color": "1"
+    },
+    {
+      "id": "ext-fenix-peticoes",
+      "type": "text",
+      "text": "### FENIX-modelos-peticao\n**Status:** QUEBRADO\n**Camada:** externos\n\nModelos de peticao do Fenix (QUEBRADO)\n\n`~/Desktop/FENIX/modelos-peticao/`",
+      "x": 1600,
+      "y": 900,
+      "width": 300,
+      "height": 140,
+      "color": "1"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-0",
+      "fromNode": "fluxo-pje",
+      "toNode": "fluxo-analise-rapida",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-1",
+      "fromNode": "fluxo-pje",
+      "toNode": "dados-processos",
+      "label": "gera"
+    },
+    {
+      "id": "edge-2",
+      "fromNode": "fluxo-pje",
+      "toNode": "ext-processos-pje-win",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-3",
+      "fromNode": "fluxo-pje",
+      "toNode": "mcp-pje",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-4",
+      "fromNode": "fluxo-analise-rapida",
+      "toNode": "ag-orq-analise-rapida",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-5",
+      "fromNode": "ag-orq-analise-rapida",
+      "toNode": "ag-extrator-partes",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-6",
+      "fromNode": "ag-orq-analise-rapida",
+      "toNode": "ag-resumidor-fatos",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-7",
+      "fromNode": "ag-orq-analise-rapida",
+      "toNode": "ag-classificador-tipo-acao",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-8",
+      "fromNode": "ag-orq-analise-rapida",
+      "toNode": "ag-detector-urgencia",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-9",
+      "fromNode": "ag-orq-analise-rapida",
+      "toNode": "ag-mapeador-provas",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-10",
+      "fromNode": "ag-orq-analise-rapida",
+      "toNode": "ag-extrator-info-doc",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-11",
+      "fromNode": "ag-orq-analise-rapida",
+      "toNode": "ag-classificador-documento",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-12",
+      "fromNode": "ag-orq-analise-rapida",
+      "toNode": "ag-detetive-inconsistencias",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-13",
+      "fromNode": "fluxo-analise-completa",
+      "toNode": "ag-orq-analise-completa",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-14",
+      "fromNode": "ag-orq-analise-completa",
+      "toNode": "ag-extrator-partes",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-15",
+      "fromNode": "ag-orq-analise-completa",
+      "toNode": "ag-resumidor-fatos",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-16",
+      "fromNode": "ag-orq-analise-completa",
+      "toNode": "ag-mapeador-provas",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-17",
+      "fromNode": "ag-orq-analise-completa",
+      "toNode": "ag-analisador-quesitos",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-18",
+      "fromNode": "ag-orq-analise-completa",
+      "toNode": "ag-detetive-inconsistencias",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-19",
+      "fromNode": "ag-orq-analise-completa",
+      "toNode": "ag-classificador-tipo-acao",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-20",
+      "fromNode": "ag-orq-analise-completa",
+      "toNode": "ag-classificador-documento",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-21",
+      "fromNode": "ag-orq-analise-completa",
+      "toNode": "ag-extrator-info-doc",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-22",
+      "fromNode": "fluxo-peticao",
+      "toNode": "ag-triador-peticao",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-23",
+      "fromNode": "ag-triador-peticao",
+      "toNode": "ag-peticao-identificador",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-24",
+      "fromNode": "ag-peticao-identificador",
+      "toNode": "ag-peticao-extrator",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-25",
+      "fromNode": "ag-peticao-extrator",
+      "toNode": "ag-gerador-peticao-simples",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-26",
+      "fromNode": "ag-peticao-extrator",
+      "toNode": "ag-gerador-peticao-medio",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-27",
+      "fromNode": "ag-peticao-extrator",
+      "toNode": "ag-gerador-peticao-complexo",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-28",
+      "fromNode": "ag-gerador-peticao-simples",
+      "toNode": "ag-peticao-verificador",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-29",
+      "fromNode": "ag-gerador-peticao-medio",
+      "toNode": "ag-peticao-verificador",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-30",
+      "fromNode": "ag-gerador-peticao-complexo",
+      "toNode": "ag-peticao-verificador",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-31",
+      "fromNode": "ag-peticao-verificador",
+      "toNode": "ag-peticao-montador",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-32",
+      "fromNode": "ag-peticao-montador",
+      "toNode": "ag-peticao-gerador-pdf",
+      "label": "gera"
+    },
+    {
+      "id": "edge-33",
+      "fromNode": "ag-peticao-gerador-pdf",
+      "toNode": "ag-nomeador-peticao",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-34",
+      "fromNode": "fluxo-laudo",
+      "toNode": "ag-redator-laudo",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-35",
+      "fromNode": "ag-redator-laudo",
+      "toNode": "ag-revisor-laudo",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-36",
+      "fromNode": "ag-revisor-laudo",
+      "toNode": "ag-verificador-cids",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-37",
+      "fromNode": "ag-revisor-laudo",
+      "toNode": "ag-verificador-datas",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-38",
+      "fromNode": "ag-revisor-laudo",
+      "toNode": "ag-verificador-100",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-39",
+      "fromNode": "fluxo-laudo",
+      "toNode": "ag-gerador-roteiro",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-40",
+      "fromNode": "fluxo-erros-materiais",
+      "toNode": "ag-orq-erros-materiais",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-41",
+      "fromNode": "ag-orq-erros-materiais",
+      "toNode": "ag-verificador-cids",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-42",
+      "fromNode": "ag-orq-erros-materiais",
+      "toNode": "ag-verificador-datas",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-43",
+      "fromNode": "ag-orq-erros-materiais",
+      "toNode": "ag-verificador-nomes-numeros",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-44",
+      "fromNode": "ag-orq-erros-materiais",
+      "toNode": "ag-verificador-medicamentos",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-45",
+      "fromNode": "ag-orq-erros-materiais",
+      "toNode": "ag-verificador-exames",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-46",
+      "fromNode": "fluxo-jurisprudencia",
+      "toNode": "ag-orq-jurisprudencia",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-47",
+      "fromNode": "ag-orq-jurisprudencia",
+      "toNode": "ag-buscador-base-local",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-48",
+      "fromNode": "ag-orq-jurisprudencia",
+      "toNode": "ag-buscador-tribunais",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-49",
+      "fromNode": "ag-orq-jurisprudencia",
+      "toNode": "ag-buscador-academico",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-50",
+      "fromNode": "ag-buscador-tribunais",
+      "toNode": "mcp-brlaw",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-51",
+      "fromNode": "ag-buscador-tribunais",
+      "toNode": "mcp-cerebra-legal",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-52",
+      "fromNode": "ag-buscador-academico",
+      "toNode": "mcp-medical",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-53",
+      "fromNode": "fluxo-aceite",
+      "toNode": "ag-orq-proposta-verif",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-54",
+      "fromNode": "fluxo-aceite",
+      "toNode": "ag-peticao-conferidor",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-55",
+      "fromNode": "fluxo-monitor",
+      "toNode": "mcp-pje",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-56",
+      "fromNode": "fluxo-monitor",
+      "toNode": "mcp-telegram",
+      "label": "gera"
+    },
+    {
+      "id": "edge-57",
+      "fromNode": "fluxo-autoaprendizagem",
+      "toNode": "ag-mapeador-habilidades",
+      "label": "dispara"
+    },
+    {
+      "id": "edge-58",
+      "fromNode": "fluxo-autoaprendizagem",
+      "toNode": "dados-claude-memory",
+      "label": "gera"
+    },
+    {
+      "id": "edge-59",
+      "fromNode": "fluxo-mutirao",
+      "toNode": "fluxo-analise-rapida",
+      "label": "depende"
+    },
+    {
+      "id": "edge-60",
+      "fromNode": "dados-banco-geral",
+      "toNode": "ext-analisador-final",
+      "label": "symlink"
+    },
+    {
+      "id": "edge-61",
+      "fromNode": "dados-python-base",
+      "toNode": "ext-mesa-python-base",
+      "label": "symlink"
+    },
+    {
+      "id": "edge-62",
+      "fromNode": "dados-casos-clinicos",
+      "toNode": "ext-pericia-folder",
+      "label": "symlink"
+    },
+    {
+      "id": "edge-63",
+      "fromNode": "ag-orq-analise-rapida",
+      "toNode": "dados-claude-memory",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-64",
+      "fromNode": "ag-orq-analise-completa",
+      "toNode": "dados-claude-memory",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-65",
+      "fromNode": "ag-redator-laudo",
+      "toNode": "dados-banco-medicina",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-66",
+      "fromNode": "ag-redator-laudo",
+      "toNode": "dados-banco-pericia",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-67",
+      "fromNode": "ag-buscador-base-local",
+      "toNode": "dados-banco-geral",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-68",
+      "fromNode": "ag-buscador-base-local",
+      "toNode": "dados-banco-direito",
+      "label": "consulta"
+    },
+    {
+      "id": "edge-69",
+      "fromNode": "ctrl-claudemd",
+      "toNode": "ag-concierge",
+      "label": "depende"
+    },
+    {
+      "id": "edge-70",
+      "fromNode": "ctrl-protocolo",
+      "toNode": "ag-supervisor-sistema",
+      "label": "depende"
+    },
+    {
+      "id": "edge-71",
+      "fromNode": "ctrl-auditoria",
+      "toNode": "ag-diagnosticador",
+      "label": "gera"
+    },
+    {
+      "id": "edge-72",
+      "fromNode": "ag-mapeador-habilidades",
+      "toNode": "dados-memoria-vault",
+      "label": "gera"
+    },
+    {
+      "id": "edge-73",
+      "fromNode": "ag-resumo-sessao",
+      "toNode": "dados-memoria-vault",
+      "label": "gera"
+    },
+    {
+      "id": "edge-74",
+      "fromNode": "fluxo-pje",
+      "toNode": "dados-python-base",
+      "label": "consulta"
+    }
+  ]
+}

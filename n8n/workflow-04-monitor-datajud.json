@@ -1,0 +1,233 @@
+{
+  "name": "Monitor DataJud — Stemmia",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "cron-diario-6h",
+      "name": "Cron Diário 6h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lista de processos ativos — CNJ SEM FORMATAÇÃO (DataJud exige)\n// Atualizar conforme novas nomeações\nconst processos = [\n  { cnj: \"01029355820038130396\", cnj_fmt: \"0102935-58.2003.8.13.0396\", alias: \"Processo Antigo 396\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50006284620198130309\", cnj_fmt: \"5000628-46.2019.8.13.0309\", alias: \"Perícia 22 Inhapim\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50016159820258130074\", cnj_fmt: \"5001615-98.2025.8.13.0074\", alias: \"Perícia 14 Bom Despacho\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50024246220258130309\", cnj_fmt: \"5002424-62.2025.8.13.0309\", alias: \"Contestação Inhapim\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50025266020248130005\", cnj_fmt: \"5002526-60.2024.8.13.0005\", alias: \"Pendente Laudo\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50031337920218130231\", cnj_fmt: \"5003133-79.2021.8.13.0231\", alias: \"Pendente Agendamento\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50044628120248130309\", cnj_fmt: \"5004462-81.2024.8.13.0309\", alias: \"Perícia 7 Inhapim\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50052673020258130105\", cnj_fmt: \"5005267-30.2025.8.13.0105\", alias: \"Pendente Aceite 105\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50074094820208130245\", cnj_fmt: \"5007409-48.2020.8.13.0245\", alias: \"Pendente Aceite 245\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50082977320258130105\", cnj_fmt: \"5008297-73.2025.8.13.0105\", alias: \"Pendente Aceite 105-2\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50140175520248130105\", cnj_fmt: \"5014017-55.2024.8.13.0105\", alias: \"Pendente Aceite 105-3\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50163667020208130105\", cnj_fmt: \"5016366-70.2020.8.13.0105\", alias: \"Pendente Aceite 105-4\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50177004220208130105\", cnj_fmt: \"5017700-42.2020.8.13.0105\", alias: \"Pendente Agendamento 105\", tribunal: \"api_publica_tjmg\" },\n  { cnj: \"50658154420238130702\", cnj_fmt: \"5065815-44.2023.8.13.0702\", alias: \"Pendente Agendamento 702\", tribunal: \"api_publica_tjmg\" }\n];\n\n// Data de corte: últimas 72h (3 dias — margem de segurança)\nconst agora = new Date();\nconst corte = new Date(agora.getTime() - 72 * 60 * 60 * 1000);\nconst dataCorte = corte.toISOString().split('T')[0];\n\nreturn processos.map(p => ({\n  json: { ...p, data_corte: dataCorte }\n}));"
+      },
+      "id": "listar-processos",
+      "name": "Listar Processos Ativos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [280, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api-publica.datajud.cnj.jus.br/{{ $json.tribunal }}/_search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "ApiKey cDZHYzlZa0JadVREZDJCendQbXY6SkJlTzNjLV9TRENyQk1RdnFKZGRQdw=="
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query\": {\n    \"match\": { \"numeroProcesso\": \"{{ $json.cnj }}\" }\n  },\n  \"size\": 1,\n  \"_source\": [\"numeroProcesso\", \"classe\", \"orgaoJulgador\", \"movimentos\", \"dataAjuizamento\"]\n}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 1000
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "consultar-datajud",
+      "name": "Consultar DataJud",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [560, 300],
+      "onError": "continueRegularOutput",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst novidades = [];\n\nfor (const item of items) {\n  const data = item.json;\n  const alias = data.alias || data.cnj;\n\n  // Se a API retornou hits\n  const hits = data?.hits?.hits || data?.body?.hits?.hits || [];\n\n  if (hits.length === 0) continue;\n\n  const processo = hits[0]._source || hits[0];\n  const movimentos = processo.movimentos || [];\n  const dataCorte = new Date(data.data_corte || '2026-01-01');\n\n  // Filtrar movimentos recentes\n  const recentes = movimentos.filter(m => {\n    const dataM = new Date(m.dataHora);\n    return dataM >= dataCorte;\n  });\n\n  if (recentes.length === 0) continue;\n\n  // Classificar tipo de movimentação\n  for (const mov of recentes) {\n    const nome = (mov.nome || '').toLowerCase();\n    const complementos = (mov.complementosTabelados || []).map(c => (c.nome || '').toLowerCase()).join(' ');\n    const textoCompleto = nome + ' ' + complementos;\n\n    let tipo = 'MOVIMENTAÇÃO';\n    let urgente = false;\n\n    if (textoCompleto.includes('nomeação') || textoCompleto.includes('perito')) {\n      tipo = '🔵 NOMEAÇÃO';\n      urgente = true;\n    } else if (textoCompleto.includes('intimação') || textoCompleto.includes('intimado')) {\n      tipo = '🔴 INTIMAÇÃO';\n      urgente = true;\n    } else if (textoCompleto.includes('prazo')) {\n      tipo = '⏰ PRAZO';\n      urgente = true;\n    } else if (textoCompleto.includes('despacho')) {\n      tipo = '📋 DESPACHO';\n    } else if (textoCompleto.includes('decisão')) {\n      tipo = '⚖️ DECISÃO';\n      urgente = true;\n    } else if (textoCompleto.includes('juntada') || textoCompleto.includes('petição')) {\n      tipo = '📎 JUNTADA';\n    } else if (textoCompleto.includes('sentença')) {\n      tipo = '🏛️ SENTENÇA';\n      urgente = true;\n    }\n\n    novidades.push({\n      cnj: data.cnj_fmt || data.cnj,\n      alias: alias,\n      tipo: tipo,\n      movimento: mov.nome || 'Sem nome',\n      data: mov.dataHora ? new Date(mov.dataHora).toLocaleDateString('pt-BR') : '?',\n      complementos: complementos,\n      urgente: urgente,\n      orgao: processo.orgaoJulgador?.nome || ''\n    });\n  }\n}\n\nif (novidades.length === 0) {\n  return [{ json: { tem_novidade: false, mensagem: 'Nenhuma novidade nos últimos 2 dias.' } }];\n}\n\n// Montar mensagem do Telegram\nconst urgentes = novidades.filter(n => n.urgente);\nconst normais = novidades.filter(n => !n.urgente);\n\nlet msg = '📋 MONITOR STEMMIA — ' + new Date().toLocaleDateString('pt-BR') + '\\n\\n';\n\nif (urgentes.length > 0) {\n  msg += '🚨 URGENTES:\\n';\n  for (const n of urgentes) {\n    msg += `${n.tipo} | ${n.alias}\\n`;\n    msg += `   ${n.movimento} (${n.data})\\n`;\n    if (n.orgao) msg += `   ${n.orgao}\\n`;\n    msg += '\\n';\n  }\n}\n\nif (normais.length > 0) {\n  msg += '📌 Outras movimentações:\\n';\n  for (const n of normais) {\n    msg += `${n.tipo} | ${n.alias} — ${n.movimento} (${n.data})\\n`;\n  }\n}\n\nmsg += '\\n✅ ' + novidades.length + ' movimentação(ões) detectada(s)';\n\nreturn [{ json: { tem_novidade: true, mensagem: msg, novidades: novidades, total: novidades.length } }];"
+      },
+      "id": "filtrar-novidades",
+      "name": "Filtrar Novidades",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [840, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-tem-novidade",
+              "leftValue": "={{ $json.tem_novidade }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if-tem-novidade",
+      "name": "Tem Novidade?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot8603024374:AAH81RHxIBwOsTaDI87nM7ap2DHcuE3xnxA/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"8397602236\",\n  \"text\": \"{{ $json.mensagem }}\",\n  \"parse_mode\": \"HTML\"\n}"
+      },
+      "id": "enviar-telegram",
+      "name": "Enviar Telegram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1400, 200]
+    },
+    {
+      "parameters": {},
+      "id": "sem-novidades",
+      "name": "Sem Novidades",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1400, 420]
+    }
+  ],
+  "connections": {
+    "Cron Diário 6h": {
+      "main": [
+        [
+          {
+            "node": "Listar Processos Ativos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listar Processos Ativos": {
+      "main": [
+        [
+          {
+            "node": "Consultar DataJud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar DataJud": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Novidades",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Novidades": {
+      "main": [
+        [
+          {
+            "node": "Tem Novidade?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem Novidade?": {
+      "main": [
+        [
+          {
+            "node": "Enviar Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sem Novidades",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "versionId": "workflow-04-monitor-datajud",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "stemmia-forense"
+  },
+  "tags": [
+    {
+      "name": "monitor",
+      "id": "tag-monitor"
+    },
+    {
+      "name": "datajud",
+      "id": "tag-datajud"
+    },
+    {
+      "name": "stemmia",
+      "id": "tag-stemmia"
+    }
+  ]
+}

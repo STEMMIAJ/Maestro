@@ -1,0 +1,4 @@
+numero_processo,tribunal_origem,classe,orgaoJulgador,grau,ultima_atualizacao,total_movimentos,fontes,consta_local,tem_pdf,novo,data_atualizacao_sistema
+5002526-60.2024.8.13.0005,TJMG,Interdição/Curatela,Vara Única da Comarca de Açucena,G1,2026-04-03,101,djen_api,False,False,True,2026-04-19
+5002831-26.2023.8.13.0184,TJMG,Interdição/Curatela,"2ª Vara Cível, Criminal e da Infância e da Juventude da Comarca de Conselheiro Pena",G1,2026-03-15,80,djen_api,False,False,True,2026-04-19
+5006757-86.2025.8.13.0461,TJMG,Nomeação de Advogado,1ª Vara Cível da Comarca de Ouro Preto,G1,2026-02-21,16,djen_api,False,False,True,2026-04-19

@@ -1,0 +1,220 @@
+<html><head><script type="text/javascript" src="/jurisprudencia/js/ea_util.js"></script>
+
+
+    
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <title>Jurisprudência - Informe o código</title>              
+    </head>
+       
+    <body style="background-color: #FFFFFF;"> 
+        <br><br>
+        
+        <table width="50%" border="0" cellpadding="5" cellspacing="5" align="center">
+            <tbody><tr>
+                <td align="center" valign="middle">
+                    <img src="/imagens/logomarca.gif" title="TJMG" width="100" height="114"><br>
+                    Tribunal de Justiça do Estado de Minas Gerais
+                </td>
+            </tr>
+            <tr>
+                <td align="center"><h2>Pesquisa por Jurisprudência</h2></td>
+            </tr>            
+            <tr>
+                <td><script type="text/javascript" src="js/ea_util.js"></script>
+<script type="text/javascript" src="dwr/engine.js"></script>
+<script type="text/javascript" src="dwr/util.js"></script>
+<script type="text/javascript" src="dwr/interface/ValidacaoCaptchaAction.js"></script>
+
+        
+<!-- Início do include do captcha para qualquer página -->
+<script type="text/javascript">
+
+    var popup = true;
+       
+    if (window.dialogArguments) { // IE
+        window.opener = window.dialogArguments;
+    }
+
+    window.onload = load;
+
+    window.onbeforeunload = unload;
+
+    function validaNumeroCaptcha(e){
+
+        var unicode=e.charCode? e.charCode : e.keyCode;
+        if (unicode!=8){ //if the key isn't the backspace key (which we should allow)(127=DEL Key)
+            if (unicode<48||unicode>57) //if not a number
+                return false; //disable key press
+        }
+        document.getElementById("mensagem").innerHTML = "&nbsp;";
+        
+        return true;
+
+    }
+
+    function setTextoCaptchaFocus(){
+        document.getElementById('captcha_text').focus();
+
+    }
+    function recarregaImagem(){
+        //document.getElementById('captcha_image').src = "imagens/icon_wait.gif";
+                    
+        var ran_number = Math.random()*5;
+        var captcha_servlet = "captcha.svl?" + ran_number;
+                    
+        document.getElementById('captcha_image').src = captcha_servlet;        
+        document.getElementById('captcha_text').value = "";
+        document.getElementById('captcha_text').focus();
+    }
+    
+    function gerar()
+    {
+        
+        recarregaImagem();
+        
+    }
+    
+
+               
+    function load(){                    
+
+        if (window.opener)
+        {
+            window.opener.document.body.style.opacity = 0.4;
+            window.opener.document.body.style.filter = "filter: alpha(opacity=40)";
+        }
+              
+
+        document.getElementById('captcha_text').focus();
+             
+        
+    }
+    
+    
+
+    function unload()
+    {
+        if (window.opener)
+        {
+            window.opener.document.body.style.opacity = 1;
+            window.opener.document.body.style.filter = "filter: alpha(opacity=100)";
+        }
+        
+        var vReturnValue = new Object();
+        vReturnValue.captcha_text = document.getElementById("captcha_text").value;
+        window.returnValue = vReturnValue;   
+    }
+
+    function verificaNumero(campo)
+    {
+        if (campo.value.length == 5)
+        {
+            ValidacaoCaptchaAction.isCaptchaValid(campo.value, ret);
+        }
+                
+    }
+
+    function ret(valido)
+    {
+        if (valido)
+        {
+            
+            window.document.getElementById("captcha_text").style.display = "none";            
+            window.document.getElementById("wait").innerHTML = "Aguarde...";
+            window.document.getElementById("wait").style.display = "inline";            
+
+            if (window.document.getElementById("linkCaptcha"))
+            {
+                document.location.reload(true);                
+            }            
+
+            if (window.opener && popup)
+            {            
+                window.close();                        
+            }
+        }
+        else
+        {
+            document.getElementById("mensagem").innerHTML = "O número digitado não corresponde à imagem exibida. Favor informar o código novamente.";
+            setTimeout("gerar()", 1000);
+            return false;
+        }
+    }
+
+</script>
+
+
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link href="/css/layout.css" rel="stylesheet" type="text/css">
+    <link href="/css/tjmg2007.css" rel="stylesheet" type="text/css">
+
+    <title>Captcha</title>
+
+
+
+    
+  
+    <div id="mensagem" style="color: #FF0000; font-weight: bolder; text-align: center;">&nbsp;</div>
+
+    
+    <table border="0" width="100%">
+
+        <tbody><tr>
+            <td class="medio" align="center" colspan="3">Digite os números abaixo:</td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle" width="50%">
+
+                <img id="captcha_image" src="captcha.svl?4.300408218489606" alt="" onclick="javascript: setTextoCaptchaFocus()" align="middle">
+
+            </td>
+            <td style="text-align: left; vertical-align: middle; width: 10%;">
+                <input type="text" id="captcha_text" name="captcha_text" value="" size="5" maxlength="5" onkeypress="return validaNumeroCaptcha(event);" onkeyup="return verificaNumero(this);" class="campo_form" autocomplete="off">
+
+                <div id="wait" style="display: none;">                
+            </div></td>
+            <td>
+                <a href="javascript: void(0);" onclick="abrirJanelaCentralizada('captchaAudio2.svl','sound','350','200','no','no')"><img src="imagens/sound.png" style="border: 0;" alt="Ouvir código" title="Ouvir código"></a>
+            </td>
+        </tr>
+        <tr>
+            <td class="medio" align="center" colspan="3">
+                <br>Caso a imagem não apareça, clique em 'Gerar nova imagem'.
+            </td>
+        </tr>        
+        <tr>
+            <td class="medio" align="center" colspan="3">
+                <a href="javascript: location.reload(true);" id="gerar">Gerar nova imagem</a>&nbsp;&nbsp;-&nbsp;&nbsp;
+                <a href="captchaAudio.svl" onclick="javascript: setTextoCaptchaFocus()">Baixar o áudio</a>
+            </td>
+        </tr>
+      
+
+
+
+    </tbody></table>
+
+    
+
+                
+
+
+
+</td>
+            </tr>
+        </tbody></table>
+        
+        <a href="javascript: void(0);" onclick="document.location.reload(true);" id="linkCaptcha">
+          
+
+        <script>
+            popup = false;
+        </script>
+        
+
+
+</a><div id="hintbox"></div><div id="hintbox"></div></body></html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;overflow:hidden}
+body{
+  background:#0a0e1a;color:#e5e7eb;
+  font-family:-apple-system,"SF Pro Display",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  padding:100px 70px 80px;
+  display:flex;flex-direction:column;
+  background-image:
+    radial-gradient(ellipse 900px 600px at 50% 40%, rgba(167,139,250,0.12), transparent),
+    radial-gradient(ellipse 600px 400px at 10% 100%, rgba(96,165,250,0.08), transparent);
+}
+.kicker{font-size:18px;color:#a78bfa;letter-spacing:4px;text-transform:uppercase;font-weight:600}
+h1{font-size:68px;font-weight:800;letter-spacing:-2.5px;line-height:1;margin-top:16px}
+.sub{font-size:22px;color:#9ca3af;margin-top:20px;max-width:920px;line-height:1.4}
+
+.cols{
+  display:grid;grid-template-columns:1fr 1fr;gap:22px;
+  margin-top:50px;
+}
+.col{
+  background:#111827;border:1px solid #1f2937;
+  border-radius:18px;padding:30px 28px;
+}
+.col h3{
+  font-size:14px;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:20px;color:#9ca3af;font-weight:700;
+  display:flex;align-items:center;gap:10px;
+}
+.col h3::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--c)}
+.yes{--c:#34d399}
+.no{--c:#f87171}
+.col ul{list-style:none;font-size:19px;line-height:1.6}
+.col li{padding:8px 0;border-top:1px solid #1f2937}
+.col li:first-child{border-top:0}
+.col li::before{content:"— ";color:#6b7280}
+
+.punchbox{
+  margin-top:48px;
+  padding:42px 38px;
+  background:linear-gradient(135deg,rgba(96,165,250,0.15),rgba(167,139,250,0.12));
+  border:1px solid #1f2937;
+  border-radius:22px;
+  text-align:center;
+}
+.punch1{font-size:24px;color:#9ca3af;margin-bottom:14px;font-weight:500}
+.punch2{font-size:34px;font-weight:700;line-height:1.25;letter-spacing:-0.8px}
+.punch2 em{font-style:normal;color:#60a5fa}
+
+footer{
+  margin-top:auto;display:flex;justify-content:space-between;
+  font-size:16px;color:#6b7280;letter-spacing:1.5px;padding-top:40px;
+}
+footer b{color:#e5e7eb}
+</style></head>
+<body>
+  <div class="kicker">AVALIAÇÃO TÉCNICA · IMPARCIAL</div>
+  <h1>Como um tech lead<br>olharia esse sistema.</h1>
+  <div class="sub">Avaliação baseada em código real, não em autopromoção.</div>
+
+  <div class="cols">
+    <div class="col yes">
+      <h3>Contrataria como</h3>
+      <ul>
+        <li>AI Solutions Architect<br>júnior–pleno</li>
+        <li>Prompt Engineer pleno</li>
+        <li>Consultor LegalTech<br>/ MedTech com IA</li>
+      </ul>
+    </div>
+    <div class="col no">
+      <h3>Não contrataria como</h3>
+      <ul>
+        <li>Dev backend júnior<br>tradicional</li>
+        <li>SRE / DevOps</li>
+        <li>Engenheiro de dados puro</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="punchbox">
+    <div class="punch1">Não é médico que aprendeu a programar.</div>
+    <div class="punch2">É <em>especialista de domínio</em><br>que opera IA em nível arquitetural.</div>
+  </div>
+
+  <footer><span>stemmia.com.br</span><span>3 / 3</span></footer>
+</body></html>

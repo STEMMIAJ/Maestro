@@ -1,0 +1,60 @@
+{
+  "processos": [
+    {
+      "numero_processo": "5002526-60.2024.8.13.0005",
+      "tribunal_origem": "TJMG",
+      "classe": "Interdição/Curatela",
+      "orgaoJulgador": "Vara Única da Comarca de Açucena",
+      "grau": "G1",
+      "ultima_atualizacao": "2026-04-03",
+      "total_movimentos": 101,
+      "fontes": "djen_api",
+      "consta_local": false,
+      "tem_pdf": false,
+      "novo": true,
+      "data_atualizacao_sistema": "2026-04-19"
+    },
+    {
+      "numero_processo": "5002831-26.2023.8.13.0184",
+      "tribunal_origem": "TJMG",
+      "classe": "Interdição/Curatela",
+      "orgaoJulgador": "2ª Vara Cível, Criminal e da Infância e da Juventude da Comarca de Conselheiro Pena",
+      "grau": "G1",
+      "ultima_atualizacao": "2026-03-15",
+      "total_movimentos": 80,
+      "fontes": "djen_api",
+      "consta_local": false,
+      "tem_pdf": false,
+      "novo": true,
+      "data_atualizacao_sistema": "2026-04-19"
+    },
+    {
+      "numero_processo": "5006757-86.2025.8.13.0461",
+      "tribunal_origem": "TJMG",
+      "classe": "Nomeação de Advogado",
+      "orgaoJulgador": "1ª Vara Cível da Comarca de Ouro Preto",
+      "grau": "G1",
+      "ultima_atualizacao": "2026-02-21",
+      "total_movimentos": 16,
+      "fontes": "djen_api",
+      "consta_local": false,
+      "tem_pdf": false,
+      "novo": true,
+      "data_atualizacao_sistema": "2026-04-19"
+    }
+  ],
+  "total": 3,
+  "conhecidos": 0,
+  "novos": 0,
+  "novos_cnjs": [],
+  "descartados_validacao": [
+    "5002526-60.2024.8.13.0005",
+    "5002831-26.2023.8.13.0184",
+    "5006757-86.2025.8.13.0461"
+  ],
+  "classificacao": {
+    "perito": 0,
+    "indeterminado": 3,
+    "parte": 0
+  }
+}

@@ -1,0 +1,1059 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=9">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Expires" content="0">    
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <link href="css/sistema_antigo.css" rel="stylesheet" type="text/css">
+        <title>TJMG - Pesquisa por Jurisprudência</title>
+        <script language="JavaScript" src="/js/tjmg_ui.js"></script>
+        <script language="JavaScript" src="/js/tjmg.js"></script>
+        <script language="JavaScript" src="js/valida_dv_nu.js"></script>
+        <script type="text/javascript" src="/jurisprudencia/js/ea_util.js"></script>
+                
+        <link title="geral" rel="stylesheet" type="text/css" href="/portaltjmg/css/screen.css" media="screen">        
+        <link title="alternativo" rel="stylesheet" type="text/css" href="/portaltjmg/css/alternativo.css" media="screen">   
+        
+    <style type="text/css" media="screen">
+            a:link.linkListaEspelhoAcordaos {color: #990000;}
+            a:visited.linkListaEspelhoAcordaos {color: #2F2F0F;}
+
+            .cabecalho
+            {
+                width: 99%;                   
+                border: solid #CCCCCC 1px;
+                background-color:#DFDFDF;                
+                color: #880000;
+                height: 18px;                    
+                font-family: Verdana, Arial, Helvetica, sans-serif;
+                font-size: 9pt;
+                font-weight: bold;
+                font-style: normal;                
+            }
+
+            .caixa_processo
+            {
+                    width: 99%;                   
+                    margin-top: 20px;
+                    -webkit-border-radius: 5px;
+                    -moz-border-radius: 5px;
+                    border-radius: 5px;
+                    border: solid #CCCCCC 1px;
+                    background-color:#DFDFDF;
+                    text-indent: 5px;
+                    padding: 5px;
+            }
+
+            .corpo 
+            {
+                color: #333333;
+            }           
+            
+        </style><style type="text/css" media="print">        
+        td.leftRight
+        {
+            margin: 0;                
+        }
+
+        span#tabelaEspelho
+        {
+            width: 100%;    
+            margin-right: 0;
+        }
+
+        body
+        {
+            margin: 0;
+        }
+
+        img#logoTJ
+        {
+            visibility: visible;
+        }
+
+        img#imgBotao1
+        {
+            visibility: visible;
+        }
+
+        table#tabelaInformacoesAcordaos
+        {
+            margin-left: 0;
+        }
+
+        td.rightTop
+        {
+            visibility: hidden;
+        }
+
+        img#AWMEL3_4
+        {
+            visibility: hidden;
+        }
+
+        div#menutop
+        {
+            visibility: hidden;
+        }
+
+        img
+        {
+            visibility: hidden;
+        }
+
+        div.tabbar
+        {
+            visibility: hidden;
+        }
+
+        div#caminho
+        {
+            visibility: hidden;
+        }            
+
+        div#botaoImprimirInteiroTeor
+        {
+            visibility: hidden;
+        } 
+
+        div#panel2
+        {
+            visibility: hidden;
+        }   
+
+        div#botoesEspelho
+        {
+            visibility: hidden;
+        }        
+
+        div#cabecalhoMenu
+        {
+            visibility: hidden;
+            display: none;
+        }
+
+        td#curvaBotton
+        {
+            visibility: hidden;
+        }
+
+        div.menuPortal
+        {
+            visibility: hidden;                    
+        }        
+    </style><script>
+    if (navigator.userAgent.toLowerCase().indexOf("msie 7") != -1)
+    {
+        //Comentado, pois alguns navegadores IE 8 estão emulando o IE 7
+        //alert("ATENÇÃO: A versão do seu navegador é Internet Explorer 7.\nA Consulta à Jurisprudência está homologada para Internet Explorer 8 ou versão superior. Favor atualizar a versão do seu navegador.");
+    }
+    </script></head>
+    
+                
+    
+    
+        
+    
+        
+        <body onload="if (document.getElementById('panel2').style.display == 'none' &amp;&amp; (document.getElementById('siglaLegislativa').value != '' || document.getElementById('observacoes').value != '')) mostrarOcultarPanel(2);" onkeydown="if (capturaCtrlP(event)) { return false;}" onkeyup="if (capturaCtrlP(event)) {imprimirEspelho(); return false;}">        
+        	
+            <div id="cabecalhoMenu"><style type="text/css">
+    header .wrapper-header
+    {
+        background: #7e1819;
+        color: white;
+        padding: 0px 0 0px 0;
+    }
+</style>
+
+<header role="banner">             
+    <div class="wrapper-header">
+        <a target="_blank" title="Link para Portal TJMG" aria-label="Logo do Tribunal de Justiça do Estado de Minas Gerais" class="brand-logo logo-tjmg" href="http://www.tjmg.jus.br">
+        <img src="imagens/logo_tjmg.png">
+        </a>
+    </div>
+</header>  </div>
+            
+            <br>
+            
+            <div id="sistema">
+                <div class="containerSis" style="width: 1200px">
+    
+                
+                <table align="center" width="90%" border="0" cellspacing="0" cellpadding="0">                       
+                      
+                <tbody><tr>
+                    <td colspan="4" align="left" valign="top" class="leftRight" bgcolor="#FFFFFF">
+
+                        
+                        <h1>
+                            Resultado da busca
+                        </h1>
+
+                        <div class="textoUmaColuna">
+                            <div class="tabbar" align="left">
+  <a href="formEspelhoAcordao.do" class="tabact">Acórdãos</a>
+  <a href="decisao.do">Decisões Monocráticas</a>
+  <a href="decisaoVice.do">Decisões da 1ª e 3ª Vice-Presidência</a>   
+  <a href="sumulas.do">Súmulas</a>
+  <a href="decisaoTurmaRecursal.do">Decisões de Turma Recursal</a>
+    <a href="decisaoTurmaRecursalPJe.do">Decisões de Turma Recursal - PJe</a>
+  <a href="sentenca.do">Sentenças</a>
+  <a href="ajuda.do">Ajuda</a>
+</div>
+
+<div class="tabbar" align="left">
+  <a href="" class="tabact">Lista de Resultados</a>
+</div>
+
+                        </div>
+                        <br>
+                        <div align="left"><div class="textoUmaColuna">
+
+
+
+
+
+
+
+
+  <p class="info">
+	
+		Foram encontrados 19 Espelhos de Acórdãos com os critérios utilizados
+		<br>
+	
+		Palavras: honorarios E periciais E Governador E Valadares
+		<br>
+	
+		Utiliza termos relacionados: NÃO
+		<br>
+	
+  </p>
+
+
+
+
+
+
+
+
+<!-- Mensagem de erro geral do Struts (Validate por Ex) -->
+
+
+<!-- Mensagem geral do Struts  -->
+
+
+</div></div>
+
+                        
+
+
+
+
+
+ 
+	
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="dwr/engine.js"></script>
+<script type="text/javascript" src="dwr/util.js"></script>
+<script type="text/javascript" src="dwr/interface/ValidacaoCaptchaAction.js"></script>
+
+
+<table align="center">
+    <tbody><tr><td>
+            <div class="textoUmaColuna">
+
+                
+
+                
+
+                    <div align="center">
+                        <strong>Para acessar mais informações clique no número do acórdão.</strong>
+                    </div>
+
+                    
+
+                    <br>
+                    <div align="right"><input type="button" value="Nova pesquisa" name="novaPesquisa" onclick="document.location.href='formEspelhoAcordao.do'" class="botao_vinho"></div>
+
+
+                    
+                        
+                            
+                        
+                        
+                    
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=1&amp;totalLinhas=19&amp;paginaNumero=1&amp;linhasPorPagina=1&amp;palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                1 - Processo: Apelação Cível <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.20.568292-5/002
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    5003685-39.2018.8.13.0105 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=20&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=568292&amp;procSequencial=2&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) João Cancio</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            17/03/2026
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            18/03/2026
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: DIREITO CIVIL E DO CONSUMIDOR. APELAÇÃO CÍVEL. AÇÃO DE INDENIZAÇÃO POR DANOS MATERIAIS E MORAIS. VÍCIOS CONSTRUTIVOS EM UNIDADE AUTÔNOMA. PRELIMINARES DE CERCEAMENTO DE DEFESA E JULGAMENTO EXTRA PETITA. REJEIÇÃO. RESPONSABILIDADE SOLIDÁRIA DA CONSTRUTORA E DO ENGENHEIRO RESPONSÁVEL. ART. 618 DO CÓDIGO CIVIL. ARTS. 12 E 18 DO CDC. DANOS MORAIS CONFIGURADOS. QUANTUM MANTIDO. RECURSO DESPROVIDO.
+<br>
+<br>I. CASO EM EXAME
+<br>
+<br>Apelação Cível interposta contra sentença da 5ª Vara Cível da Comarca de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font>/MG que, nos autos de ação de indenização por danos materiais por vícios construtivos e vícios ocultos cumulada com danos morais, julgou parcialmente procedentes os pedidos para condenar a apelante e o engenheiro responsável pela obra ao ressarcimento solidário dos danos materiais, a serem apurados em liquidação de sentença, bem como ao pagamento de R$ 10.000,00 a título de danos morais, além de custas e <font color="#FF0000"><b>honorários</b></font>. A recorrente suscita nulidade por cerceamento de defesa, julgamento extra petita, ausência de responsabilidade pelos vícios e, subsidiariamente, a redução do valor fixado a título de danos morais.
+<br>
+<br>II. QUESTÃO EM DISCUSSÃO
+<br>
+<br>Há quatro questões em discussão: (i) definir se houve cerceamento de defesa em razão de alegada insuficiência do laudo <font color="#FF0000"><b>pericial</b></font>; (ii) estabelecer se a sentença incorreu em julgamento extra petita ao condenar por vícios na unidade autônoma; (iii) determinar se restou configurada a responsabilidade solidária da construtora e do engenheiro pelos vícios construtivos constatados; e (iv) verificar se o valor arbitrado a título de danos morais comporta redução.
+<br>
+<br>III. RAZÕES DE DECIDIR
+<br>
+<br>Afasta-se o cerceamento de defesa porque, após anulação da primeira sentença, foi reaberta a instrução, realizada prova <font color="#FF0000"><b>pericial</b></font> sob o crivo do contraditório, com apresentação de quesitos, indicação de assistentes técnicos e esclarecimentos complementares pelo perito judicial, que concluiu de forma fundamentada sobre as patologias existentes.
+<br>
+<br>Reconhece-se que a ausência de ensaios destrutivos não torna o laudo inconclusivo, pois o perito justificou tecnicamente a metodologia adotada, constatando a ineficiência do sistema de impermeabilização com base na análise da eficiência do sistema, sem demonstração de prejuízo concreto à defesa.
+<br>
+<br>Rejeita-se a alegação de julgamento extra petita, uma vez que a petição inicial descreve vícios no apartamento 102 e formula pedido de reparação pelos defeitos existentes na unidade dos autores, tendo a sentença limitado a condenação à unidade privativa, em consonância com a legitimidade ativa e com a prova <font color="#FF0000"><b>pericial</b></font> produzida.
+<br>
+<br>Reconhece-se a responsabilidade solidária da construtora e do engenheiro responsável, pois o laudo <font color="#FF0000"><b>pericial</b></font> classifica a maioria das anomalias como endógenas, decorrentes de falha de projeto ou execução, afastando causas externas relevantes, nos termos do art. 618 do Código Civil e dos arts. 12 e 18 do Código de Defesa do Consumidor.
+<br>
+<br>Aplica-se a responsabilidade objetiva aos fornecedores, cabendo-lhes demonstrar excludentes previstas no § 3º do art. 12 e § 3º do art. 14 do CDC, ônus do qual não se desincumbiram, sendo insuficiente a alegação de culpa de terceiros ou do próprio consumidor.
+<br>
+<br>Configura-se o dano moral porque os vícios construtivos comprometem a habitabilidade, a segurança e a fruição do imóvel adquirido para moradia, ultrapassando mero dissabor e frustrando legítima expectativa de moradia digna.
+<br>
+<br>Mantém-se o quantum indenizatório fixado em R$ 10.000,00, por se mostrar adequado aos princípios da razoabilidade e proporcionalidade, em consonância com os parâmetros adotados pela jurisprudência em casos análogos.
+<br>
+<br>IV. DISPOSITIVO E TESE
+<br>
+<br>Recurso desprovido.
+<br>
+<br>Tese de julgamento:
+<br>
+<br>Não há cerceamento de defesa quando realizada prova <font color="#FF0000"><b>pericial</b></font> sob contraditório, sendo suficiente para o convencimento judicial, ainda que ausentes ensaios destrutivos, se não demonstrado prejuízo
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=2&amp;totalLinhas=19&amp;paginaNumero=2&amp;linhasPorPagina=1&amp;palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                2 - Processo: Ap Cível/Rem Necessária <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.25.319503-6/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    0139290-47.2015.8.13.0105 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=25&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=319503&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Carlos Henrique Perpétuo Braga</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            27/11/2025
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            04/12/2025
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>Ementa: DIREITO ADMINISTRATIVO. APELAÇÕES CÍVEIS E REMESSA NECESSÁRIA. SERVIDOR PÚBLICO MUNICIPAL. ADICIONAL DE INSALUBRIDADE. LEI COMPLEMENTAR MUNICIPAL Nº 204/2015. EXISTÊNCIA DE PREVISÃO LEGAL E DESNECESSIDADE DE REGULAMENTAÇÃO. GRAU MÉDIO RECONHECIDO EM PERÍCIA. TERMO INICIAL. DATA DO INÍCIO DAS ATIVIDADES INSALUBRES. PRESCRIÇÃO QUINQUENAL. REFLEXOS SOBRE FÉRIAS, TERÇO CONSTITUCIONAL E 13º SALÁRIO. PRIMEIRO RECURSO PROVIDO. SEGUNDO RECURSO DESPROVIDO. REMESSA NECESSÁRIA PREJUDICADA.
+<br>I. CASO EM EXAME
+<br>1. Ações de cobrança de adicional de insalubridade propostas por servidor público municipal ocupante do cargo de auxiliar de inspeção sanitária contra o Município de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font>. Sentença de parcial procedência que condenou o ente municipal ao pagamento do adicional em grau médio (20%), a partir da data da perícia (16/03/2023), com reflexos legais. Interposição de apelações por ambas as partes: o servidor busca a retroação do pagamento; o Município sustenta a ausência de lei válida e a inexistência de condições insalubres.
+<br>II. QUESTÃO EM DISCUSSÃO
+<br>2. Há três questões em discussão:
+<br>(i) definir se o servidor municipal faz jus ao adicional de insalubridade à luz da legislação local;
+<br>(ii) estabelecer se é necessária regulamentação posterior para a efetivação do benefício; e
+<br>(iii) determinar o termo inicial do pagamento e a incidência de reflexos sobre outras verbas.
+<br>III. RAZÕES DE DECIDIR
+<br>3. A Constituição Federal, após a EC nº 19/1998, não veda o pagamento de adicional de insalubridade aos servidores públicos, cabendo aos entes federados disciplinar a matéria por legislação própria.
+<br>4. No Município de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font>, a Lei Complementar nº 204/2015 restabeleceu o direito ao adicional de insalubridade e definiu seus percentuais (10%, 20% e 40%), sendo norma autoaplicável, não havendo necessidade de regulamentação adicional.
+<br>5. A perícia judicial concluiu pela caracterização de insalubridade em graumédio (20%) nas atividades do autor, exercidas de forma habitual e permanente, com exposição a agentes biológicos e físicos.
+<br>6. O entendimento firmado pelo STJ no PUIL nº 413/RS - que fixa o termo inicial na data da perícia - aplica-se quando inexistem elementos que demonstrem a exposição anterior. No caso, o laudo <font color="#FF0000"><b>pericial</b></font> reconheceu que as condições insalubres existiram durante todo o pacto laboral, impondo o pagamento retroativo, observada a prescrição quinquenal.
+<br>7. O adicional incide sobre o vencimento-base do servidor e repercute nas parcelas calculadas com base na remuneração integral - férias, 1/3 constitucional e 13º salário.
+<br>8. Os consectários legais devem observar o IPCA-E e os juros de mora da caderneta de poupança até 08/12/2021. A partir daí, há que se observar  a taxa SELIC, conforme a EC nº 113/2021.
+<br>9. Os <font color="#FF0000"><b>honorários</b></font> advocatícios e as custas seguem o regime da Fazenda Pública, sendo fixados após a liquidação do julgado, nos termos do art. 85, §4º, II, do CPC.
+<br>IV. DISPOSITIVO E TESE
+<br>10. Primeiro recurso provido. Segundo recurso desprovido. Remessa necessária prejudicada.
+<br>Tese de julgamento:
+<br>1. O adicional de insalubridade é devido aos servidores do Município de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font>, por força da Lei Complementar Municipal nº 204/2015, independentemente de regulamentação posterior.
+<br>2. O termo inicial do pagamento deve retroagir a todo o período de efetivo exercício em condições insalubres, respeitada a prescrição quinquenal.
+<br>3. O adicional deve incidir sobre o vencimento-base do servidor, com reflexos em férias, terço constitucional e 13º salário.
+<br>
+<br>Dispositivos relevantes citados: CF/1988, art. 39, §3º; EC nº 19/1998; Lei Complementar Municipal nº 204/2015, arts. 84, VII, e 99; Lei Estadual nº 10.745/1992, art. 13; Decreto Estadual nº 39.032/1997, arts. 3º e 4º; CPC, art. 85, §4º, II; Lei nº 9.494/1997, art. 1º-F; EC nº 113/2021.
+<br>Jurisprudência relevante citada: STJ, PUIL nº 413/RS, Rel. Min. Benedito Gonçalves, Primeira Seção, DJe 18/04/
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=3&amp;totalLinhas=19&amp;paginaNumero=3&amp;linhasPorPagina=1&amp;palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                3 - Processo: Apelação Cível <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.25.364897-6/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    5003714-50.2022.8.13.0105 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=25&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=364897&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Carlos Henrique Perpétuo Braga</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            13/11/2025
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            24/11/2025
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>Ementa: DIREITO ADMINISTRATIVO E PROCESSUAL CIVIL. APELAÇÃO CÍVEL. SERVIDOR PÚBLICO MUNICIPAL. RECOMPOSIÇÃO SALARIAL PREVISTA NA LEI COMPLEMENTAR MUNICIPAL Nº 170/2014. IMPLEMENTAÇÃO DOS REAJUSTES NÃO CONCEDIDOS. PRESCRIÇÃO QUINQUENAL PARCIAL. REMESSA NECESSÁRIA. REFORMA PARCIAL DA SENTENÇA.
+<br>
+<br>I. CASO EM EXAME
+<br>1. Apelação cível interposta contra sentença que julgou procedente ação de cobrança ajuizada por servidor ocupante do cargo de Auditor Tributário, para determinar a implementação da tabela remuneratória prevista no Anexo I da Lei Complementar Municipal nº 170/2014, bem como o pagamento das diferenças retroativas decorrentes da não aplicação dos reajustes salariais de outubro de 2015, janeiro e outubro de 2016.
+<br>
+<br>II. QUESTÃO EM DISCUSSÃO
+<br>2. Há três questões em discussão: (i) definir se o Instituto de Previdência do Município de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font> (IPREM/GV) deve integrar a lide; (ii) averiguar se houve cerceamento de defesa em razão do julgamento antecipado do mérito, sem produção de prova <font color="#FF0000"><b>pericial</b></font> contábil; e (iii) determinar a extensão do direito do servidor à recomposição salarial prevista na Lei Complementar Municipal nº 170/2014, à luz da ADI nº 1.0000.17.098768-9/000 e da prescrição quinquenal.
+<br>
+<br>III. RAZÕES DE DECIDIR
+<br>3. A autarquia previdenciária (IPREM/GV) não possui interesse jurídico direto na lide, pois não se discute benefício previdenciário, mas obrigação de pagar vencimentos, o que afasta o litisconsórcio passivo necessário.
+<br>4. Não há cerceamento de defesa quando o magistrado julga antecipadamente a lide, entendendo desnecessária a produção de prova <font color="#FF0000"><b>pericial</b></font>, se os elementos documentais já permitem o convencimento, nos termos do art. 370 do CPC.
+<br>5. O direito de ação, em se tratando de prestações de trato sucessivo, prescreve apenas quanto às parcelas vencidas antes do quinquênio anterior à propositura da ação, conforme Súmula 85 do STJ.
+<br>6. O Anexo I da Lei Complementar Municipal nº 170/2014 permanece válido, não havendo afronta à Súmula Vinculante nº 42 do STF, pois não se trata de vinculação automática a índices federais, mas de reestruturação de vencimentos em períodos determinados.
+<br>7. Reconhecido administrativamente o não cumprimento dos reajustes previstos para outubro de 2015, janeiro e outubro de 2016, impõe-se a proclamação do direito do servidor à recomposição e ao pagamento das diferenças devidas.
+<br>8. Sendo ilíquida a sentença, os <font color="#FF0000"><b>honorários</b></font> advocatícios devem ser fixados na fase de liquidação (art. 85, §4º, II, do CPC).
+<br>
+<br>IV. DISPOSITIVO E TESE
+<br>9. Recurso parcialmente provido e, na remessa necessária, conhecida de ofício, sentença parcialmente reformada.
+<br>
+<br>Tese de julgamento:
+<br>
+<br>A autarquia previdenciária municipal não integra o polo passivo em ação de cobrança de diferenças remuneratórias, por ausência de interesse jurídico direto.
+<br>
+<br>O julgamento antecipado da lide não configura cerceamento de defesa, quando as provas constantes dos autos são suficientes para o convencimento do juiz.
+<br>
+<br>O direito à recomposição salarial prevista no Anexo I da LCM nº 170/2014 subsiste, devendo o Município implementar os reajustes não aplicados e pagar as diferenças, observada a prescrição quinquenal.
+<br>
+<br>Dispositivos relevantes citados: CF/1988, arts. 37, X, e 169; CPC, arts. 4º, 10, 370, 496, §3º, e 85, §4º, II; Lei 9.494/97, art. 1º-F; EC nº 113/2021; Decreto nº 20.910/1932; Lei Complementar Municipal nº 170/2014, arts. 28 e 56.
+<br>
+<br>Jurisprudência relevante citada: TJMG, ADI nº 1.0000.17.098768-9/000, Rel. Des. Paulo Cézar Dias, Órgão Especial; TJMG, Apelação Cível nº 1.0105.15.042016-1/001, Rel. Des. Maurício Soares, 3ª Câmara Cível, j. 05/12/2022; TJMG, Apelação Cível nº 1.0000.24.334153-4/001, Rel. Des. Carlos Henrique Perpétuo Braga, 19ª Câmara Cível, j. 07/11/2024.
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=4&amp;totalLinhas=19&amp;paginaNumero=4&amp;linhasPorPagina=1&amp;palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                4 - Processo: Apelação Cível <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.25.220299-9/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    5037592-29.2023.8.13.0105 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=25&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=220299&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Marcelo de Oliveira Milagres</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            06/08/2025
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            12/08/2025
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: DIREITO CIVIL E PROCESSUAL CIVIL. APELAÇÃO CÍVEL. AÇÃO DE BUSCA E APREENSÃO. CONTRATO DE FINANCIAMENTO COM GARANTIA FIDUCIÁRIA. ALEGAÇÃO DE COBRANÇA ABUSIVA DE ENCARGOS CONTRATUAIS. DESCARACTERIZAÇÃO DA MORA. PERÍCIA CONTÁBIL. REJEIÇÃO. RECURSO DESPROVIDO.
+<br>I. CASO EM EXAME
+<br>Apelação cível interposta sentença da 6ª Vara Cível da Comarca de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font> que, nos autos da ação de busca e apreensão, julgou procedente o pedido inicial, consolidando a posse e a propriedade do bem em favor do credor fiduciário e condenando o réu ao pagamento de custas processuais e <font color="#FF0000"><b>honorários</b></font> advocatícios, fixados em 10% sobre o valor da causa. O apelante alega abusividade na cobrança de encargos contratuais requerendo a descaracterização da mora e a realização de prova <font color="#FF0000"><b>pericial</b></font> contábil.
+<br>II. QUESTÃO EM DISCUSSÃO
+<br>Há duas questões em discussão: (i) definir se a ausência de apreciação de cláusulas contratuais supostamente abusivas pela sentença de primeiro grau caracteriza julgamento citra petita; (ii) estabelecer se a cobrança de encargos acessórios supostamente abusivos descaracteriza a mora e impede a busca e apreensão do bem alienado fiduciariamente.
+<br>III. RAZÕES DE DECIDIR
+<br>O julgamento citra petita configura-se quando o magistrado deixa de analisar fundamentos relevantes suscitados pela parte, conforme art. 490 do CPC; contudo, a ausência de apreciação de cláusulas acessórias e do pedido de perícia contábil, por si só, não acarreta nulidade da sentença quando esses pontos não alteram a conclusão do julgado.
+<br>A alegação de abusividade de encargos acessórios, como juros remuneratórios, capitalização e comissão de permanência, não descaracteriza a mora, especialmente quando não há prova de pagamento da parte principal da dívida, conforme entendimento dos Temas 28 e 972 do STJ.
+<br>A prova <font color="#FF0000"><b>pericial</b></font> contábil é desnecessária quando os encargos em discussão são acessórios e sua eventual ilegalidade não compromete a exigibilidadedo valor principal e das parcelas incontroversas.
+<br>A inadimplência absoluta ou o cumprimento defeituoso da obrigação justifica a busca e apreensão do bem financiado, à luz do art. 3º do Decreto-Lei nº 911/69 e do Tema 1040 do STJ.
+<br>O sistema jurídico não admite comportamento oportunista do devedor, que permanece com o bem sem adimplir as prestações, sobretudo a principal, invocando vícios em cláusulas acessórias como forma de obstar a eficácia da garantia fiduciária.
+<br>IV. DISPOSITIVO E TESE
+<br>Recurso desprovido.
+<br>Tese de julgamento:
+<br>A cobrança de encargos contratuais supostamente abusivos de natureza acessória não descaracteriza a mora do devedor quando não há pagamento da obrigação principal.
+<br>A pretensão de realização de prova <font color="#FF0000"><b>pericial</b></font> contábil é incabível quando os encargos questionados não comprometem a exigibilidade do valor principal da dívida garantida por alienação fiduciária.
+<br>A mora justifica a busca e apreensão do bem alienado fiduciariamente, mesmo diante da controvérsia sobre encargos acessórios, conforme jurisprudência consolidada do STJ.
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=5&amp;totalLinhas=19&amp;paginaNumero=5&amp;linhasPorPagina=1&amp;palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                5 - Processo: Ap Cível/Rem Necessária <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.24.492191-2/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    5028044-77.2023.8.13.0105 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=24&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=492191&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Marcelo Rodrigues</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            01/07/2025
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            08/07/2025
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>DIREITO CONSTITUCIONAL E ADMINISTRATIVO. RESPONSABILIDADE CIVIL DO ESTADO. MORTE APÓS OMISSÕES SUCESSIVAS NO ATENDIMENTO MÉDICO E CUSTÓDIA. RESPONSABILIDADE SOLIDÁRIA. DANO MORAL E MATERIAL. ARBITRAMENTO DE <font color="#FF0000"><b>HONORÁRIOS</b></font>. REEXAME NECESSÁRIO. SENTENÇA PARCIALMENTE REFORMADA. RECURSOS PREJUDICADOS.
+<br>I. CASO EM EXAME
+<br>Ação de indenização ajuizada por familiares de Wilson Alves da Rocha contra o Município de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font> e o Estado de Minas Gerais, em razão de sua morte ocorrida após omissões sucessivas de atendimento médico, tanto no Hospital Municipal quanto durante o período em que esteve sob custódia do Estado. A sentença julgou procedente o pedido, fixando indenização por danos morais no valor total de R$560.000,00 e pensionamento mensal à viúva correspondente a 2/3 do salário-mínimo até os 75 anos de idade. Houve reexame necessário e interposição de apelações por ambos os entes públicos.
+<br>II. QUESTÃO EM DISCUSSÃO
+<br>Há três questões em discussão: (i) determinar se há responsabilidade civil do Estado e do Município pela morte em decorrência de omissão no atendimento médico; (ii) estabelecer a validade da fixação de pensão mensal à viúva com base em presunção de dependência econômica; (iii) definir a adequação dos valores fixados a título de danos morais e <font color="#FF0000"><b>honorários</b></font> advocatícios.
+<br>III. RAZÕES DE DECIDIR
+<br>O regime de responsabilidade civil do Estado admite, em hipóteses excepcionais, a aplicação da responsabilidade objetiva em casos de omissão, especialmente quando a vítima está sob custódia estatal, diante do dever legal de proteção à integridade física.
+<br>Constatou-se omissão grave por parte do Hospital Municipal ao liberar o paciente após acidente grave sem a devida investigação clínica, bem como por parte do Estado de Minas Gerais, que ignorou recomendação expressa de avaliação hospitalar, mantendo o custodiado preso em condições incompatíveis com sua saúde.
+<br>O nexo de causalidade entre as condutas omissivas dosentes públicos e o falecimento foi confirmado por laudos <font color="#FF0000"><b>periciais</b></font> e demais elementos dos autos, legitimando a condenação solidária.
+<br>A jurisprudência do Superior Tribunal de Justiça presume a dependência econômica da viúva, sendo legítima a fixação de pensão mensal em 2/3 do salário-mínimo na ausência de comprovação de renda do falecido, até a idade-limite de 75 anos, conforme expectativa de vida do IBGE.
+<br>O valor fixado a título de danos morais obedeceu aos postulados da razoabilidade e proporcionalidade. 
+<br>A fixação de <font color="#FF0000"><b>honorários</b></font> advocatícios em causas ilíquidas envolvendo a Fazenda Pública deve ocorrer somente na fase de liquidação, conforme artigo 85, parágrafos 3º e 4º do CPC.
+<br>IV. DISPOSITIVO E TESE
+<br>Sentença reformada parcialmente em reexame necessário. Recursos de apelação julgados prejudicados.
+<br>Tese de julgamento:
+<br>A responsabilidade civil do Estado por omissão torna-se objetiva quando a vítima está sob sua custódia, diante do dever jurídico de proteção.
+<br>A presunção de dependência econômica da viúva autoriza a concessão de pensão mensal, mesmo na ausência de prova da renda da vítima.
+<br>O valor da indenização por danos morais deve ser mantido, dado que os postulados da razoabilidade e proporcionalidade, foram devidamente observados. 
+<br>A fixação dos <font color="#FF0000"><b>honorários</b></font> advocatícios em causas ilíquidas contra a Fazenda Pública deve ocorrer na fase de liquidação de sentença.
+<br>Dispositivos relevantes citados: CR, e 37, § 6º; CC, art. 948, II; CPC, art. 85, §§ 3º e 4º.
+<br>Jurisprudência relevante citada: STJ, AgInt no AREsp nº 1.367.751/SP, rel. Min. Raul Araújo, j. 03.06.2024; STJ, AgInt no REsp nº 1.993.201/MA, rel. Min. Paulo Sérgio Domingues, j. 04.03.2024; STJ, AgInt no AREsp nº 1.888.695/MG, rel. Min. Herman Benjamin, j. 15.03.2022; STJ, AgInt no AREsp nº 1713056/SP, rel. Min. Herman Benjamin, j. 15.10.2021.
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=6&amp;totalLinhas=19&amp;paginaNumero=6&amp;linhasPorPagina=1&amp;palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                6 - Processo: Agravo de Instrumento-Cv <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.22.269791-4/006
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    4714218-47.2024.8.13.0000 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=22&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=269791&amp;procSequencial=6&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Maria Lúcia Cabral Caruso</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            20/03/2025
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            26/03/2025
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: DIREITO PROCESSUAL CIVIL. AGRAVO DE INSTRUMENTO. LIQUIDAÇÃO DE SENTENÇA. NOMEAÇÃO DE ENGENHEIRO CIVIL COMO PERITO. POSSIBILIDADE. RESPONSABILIDADE PELO PAGAMENTO DOS <font color="#FF0000"><b>HONORÁRIOS</b></font> <font color="#FF0000"><b>PERICIAIS</b></font>. ÔNUS DO DEVEDOR NA LIQUIDAÇÃO DE SENTENÇA. RECURSO DESPROVIDO.
+<br>I. CASO EM EXAME
+<br>Agravo de instrumento interposto contra decisão da 4ª Vara Cível da Comarca de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font> que, nos autos da liquidação de sentença, determinou a produção de prova <font color="#FF0000"><b>pericial</b></font> e nomeou como perito um engenheiro civil, atribuindo à parte agravante a responsabilidade pelo pagamento dos <font color="#FF0000"><b>honorários</b></font> <font color="#FF0000"><b>periciais</b></font>. Alega a agravante que a perícia deve ser conduzida por profissional especializado em contabilidade e que não pode ser compelida a custear os <font color="#FF0000"><b>honorários</b></font>, pois não requereu a realização da perícia.
+<br>II. QUESTÃO EM DISCUSSÃO
+<br>Há duas questões em discussão: (i) definir se a nomeação de engenheiro civil para a realização da perícia destinada à apuração de lucros cessantes é válida; e (ii) estabelecer se a parte agravante deve arcar com os <font color="#FF0000"><b>honorários</b></font> <font color="#FF0000"><b>periciais</b></font> na liquidação de sentença.
+<br>III. RAZÕES DE DECIDIR
+<br>A nomeação de perito deve considerar a compatibilidade entre sua formação profissional e a complexidade da prova técnica a ser produzida, nos termos do art. 465 do CPC.
+<br>A jurisprudência admite que a perícia seja conduzida por profissional cuja formação, ainda que não específica, seja suficiente para a realização do exame técnico, desde que o perito tenha conhecimento técnico ou científico adequado.
+<br>A responsabilidade pelo pagamento dos <font color="#FF0000"><b>honorários</b></font> <font color="#FF0000"><b>periciais</b></font> na liquidação de sentença recai sobre o devedor, conforme entendimento consolidado pelo Superior Tribunal de Justiça no Tema Repetitivo n. 871, uma vez que a perícia busca quantificar os danos reconhecidos na fase de conhecimento.
+<br>IV. DISPOSITIVO E TESE
+<br>Recurso desprovido.
+<br>Tese de julgamento:
+<br>A nomeação de perito deve considerar a compatibilidade entre sua formação profissional ea complexidade da perícia, sendo válida a nomeação de profissional de área correlata se ele detiver conhecimento técnico suficiente.
+<br>Na liquidação de sentença por arbitramento, o pagamento dos <font color="#FF0000"><b>honorários</b></font> <font color="#FF0000"><b>periciais</b></font> compete ao devedor, nos termos do Tema Repetitivo n. 871 do STJ.
+<br>Dispositivos relevantes citados: CPC/2015, arts. 95 e 465.
+<br>Jurisprudência relevante citada: STJ, REsp n. 1.274.466/SC, Rel. Min. Paulo de Tarso Sanseverino, Segunda Seção, j. 14.05.2014, DJe 21.05.2014; STJ, REsp n. 2.121.056/PR, Rel. Min. Nancy Andrighi, Terceira Turma, j. 21.05.2024, DJe 24.05.2024.
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=7&amp;totalLinhas=19&amp;paginaNumero=7&amp;linhasPorPagina=1&amp;palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                7 - Processo: Apelação Cível <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.24.499923-1/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    0185286-44.2010.8.13.0105 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=24&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=499923&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) José Eustáquio Lucas Pereira</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            26/02/2025
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            10/03/2025
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>Ementa: DIREITO PREVIDENCIÁRIO. AÇÃO PREVIDENCIÁRIA. NULIDADE DE LAUDO <font color="#FF0000"><b>PERICIAL</b></font>. CONTRADIÇÃO E INCOERÊNCIA DO LAUDO. REALIZAÇÃO DE NOVA PERÍCIA.
+<br>I. CASO EM EXAME
+<br>1. Recurso de apelação interposto por Gilmar Silva, inconformado com a sentença proferida pelo Juiz de Direito da 1ª Vara Cível da Comarca de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font>, que julgou improcedente a Ação Previdenciária movida contra o Instituto Nacional do Seguro Social (INSS), a fim de restabelecer o auxílio-doença ou conceder aposentadoria por invalidez. A sentença ainda condenou o autor ao pagamento de custas e <font color="#FF0000"><b>honorários</b></font> advocatícios, com a exigibilidade suspensa. O apelante alegou nulidade do laudo <font color="#FF0000"><b>pericial</b></font> por ser contraditório e inconclusivo, além de omitir avaliação sobre a capacidade de trabalho do autor.
+<br>II. QUESTÃO EM DISCUSSÃO
+<br>2. A questão em discussão consiste em (i) definir a nulidade do laudo <font color="#FF0000"><b>pericial</b></font>, considerando as contradições e a falta de clareza quanto à incapacidade do autor; (ii) determinar a necessidade de realização de nova perícia médica, de forma a garantir uma decisão fundamentada e segura.
+<br>III. RAZÕES DE DECIDIR
+<br>3. O laudo <font color="#FF0000"><b>pericial</b></font> é contraditório e inconclusivo, não oferecendo segurança jurídica para embasar a decisão, já que o perito, ao afirmar que o autor está apto para o retorno ao trabalho, sugere a necessidade de reabilitação, sem esclarecer de forma objetiva as limitações do autor, que exerce a profissão de motorista de caminhão.
+<br>4. A jurisprudência do Tribunal de Justiça de Minas Gerais entende que, diante de laudos contraditórios e incompletos, é necessário que a sentença seja cassada e determinada a realização de nova perícia médica.
+<br>5. A realização de nova perícia é imprescindível para esclarecer de forma definitiva a incapacidade ou a possibilidade de recuperação do autor, conforme as disposições do artigo 62 da Lei nº 8.213/1991, que trata da reabilitação profissional para segurados em gozo de auxílio-doença.
+<br>6. O autor alega a impossibilidade de retomar suas atividades laborativas, dada a condição de saúde que afeta sua capacidade de conduzir veículos pesados. Além disso, o laudo <font color="#FF0000"><b>pericial</b></font> indicou a necessidade de reabilitação, sem no entanto detalhar sua aplicabilidade para o caso específico, o que torna o laudo insuficiente para a formação do convencimento do juiz.
+<br>IV. DISPOSITIVO E TESE
+<br>5. Sentença cassada.
+<br>6. Realização de nova perícia médica, com a máxima urgência, a ser realizada por outro médico ortopedista.
+<br>7. A reabilitação profissional do autor deverá ser considerada, caso se constate incapacidade ou redução de sua capacidade laboral.
+<br>Tese de julgamento:
+<br>1. O laudo <font color="#FF0000"><b>pericial</b></font> contraditório e inconclusivo, que não esclarece adequadamente as condições de saúde do autor, justifica a realização de nova perícia médica.
+<br>2. A necessidade de reabilitação profissional do segurado deve ser apurada com precisão, para garantir a continuidade do benefício previdenciário ou a concessão do benefício mais adequado.
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=8&amp;totalLinhas=19&amp;paginaNumero=8&amp;linhasPorPagina=1&amp;palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                8 - Processo: Apelação Cível <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.24.465344-0/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    5010283-04.2021.8.13.0105 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=24&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=465344&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Edilson Olímpio Fernandes</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            28/01/2025
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            04/02/2025
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: DIREITO ADMINISTRATIVO - APELAÇÃO CÍVEL - REMESSA NECESSÁRIA DE OFÍCIO - AÇÃO ORDINÁRIA - SERVIDOR PÚBLICO - ADICIONAL DE INSALUBRIDADE - MUNICÍPIO DE <font color="#FF0000"><b>GOVERNADOR</b></font> <font color="#FF0000"><b>VALADARES</b></font> - PREVISÃO NA ORGÂNICA MUNICIPAL E REGULAMENTAÇÃO EM LEI POSTERIOR - ADI 1.0000.00.125480-4/000 - INCONSTITUCIONALIDADE DA NORMA - IMPOSSIBILIDADE DE PAGAMENTO - LEI COMPLEMENTAR N. 204/2015 - PREVISÃO E REGULAMENTAÇÃO DA VANTAGEM - AUTOAPLICABILIDADE - PERÍCIA - GRAU MÉDIO- VANTAGEM DEVIDA - TERMO INICIAL - DATA DO LAUDO - <font color="#FF0000"><b>HONORÁRIOS</b></font> DE SUCUMBÊNCIA - FIXAÇÃO DO PERCENTUAL EM LIQUIDAÇÃO DE SENTENÇA. No âmbito do Município de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font>, o adicional de insalubridade era previsto na Lei Orgânica e expressamente regulamentado pela Lei n. 4.072/95. Todavia, este egrégio Tribunal de Justiça declarou a inconstitucionalidade da norma que previa o pagamento do benefício. Com o advento da Lei Complementar Municipal n. 204/2015, foi restabelecido o direito do servidor municipal ao adicional de insalubridade, cuja regulamentação constou da própria legislação. A previsão em lei municipal de pagamento de adicional de insalubridade em favor de servidor público, aliada à conclusão de laudo <font color="#FF0000"><b>pericial</b></font> que evidencia a exposição da parte autora a agentes biológicos em grau médio, impõe a concessão da vantagem. A Primeira Seção do colendo SUPERIOR TRIBUNAL DE JUSTIÇA consolidou o entendimento de que "o pagamento de insalubridade está condicionado ao laudo que prova efetivamente as condições insalubres a que estão submetidos os servidores. Assim, não cabe seu pagamento pelo período que antecedeu a perícia e a formalização do laudo comprobatório, devendo ser afastada a possibilidade de presumir insalubridade em épocas passadas, emprestando-se efeitos retroativos a laudo <font color="#FF0000"><b>pericial</b></font> atual" (PUIL 413/RS). Nas causas em que a Fazenda Pública for parte, determina o Código de Processo Civil que, não sendo líquida a sentença, a definição do percentual de <font color="#FF0000"><b>honorários</b></font> advocatícios devido somente ocorrerá quando liquidado o julgado (artigo 85, §4º, inciso II).
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=9&amp;totalLinhas=19&amp;paginaNumero=9&amp;linhasPorPagina=1&amp;palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                9 - Processo: Ap Cível/Rem Necessária <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.24.029945-3/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    3001789-10.2009.8.13.0105 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=24&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=29945&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Edilson Olímpio Fernandes</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            30/04/2024
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            03/05/2024
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: APELAÇÃO CÍVEL E REMESSA NECESSÁRIA - SERVIDOR PÚBLICO MUNICIPAL - INSTITUTO DE PREVIDÊNCIA DE <font color="#FF0000"><b>GOVERNADOR</b></font> <font color="#FF0000"><b>VALADARES</b></font> - APOSENTADORIA COM PROVENTOS INTEGRAIS - DOENÇA GRAVE INCLUÍDA EM ROL TAXATIVO - EXAME MÉDICO PERIÓDICO - ALTERAÇÃO DO PAGAMENTO DO BENEFÍCIO PREVIDENCIÁRIO - POSSIBILIDADE - EXERCÍCIO DA AUTOTUTELA - CONCLUSÃO ADMINISTRATIVA AFASTADA POR PROVA <font color="#FF0000"><b>PERICIAL</b></font> SUBMETIDA AO CRIVO DO CONTRADITÓRIO - ANULAÇÃO DO ATO - REESTABELECIMENTO DOS PROVENTOS INTEGRAIS - CONSECTÁRIOS LEGAIS - TEMA N. 905 DO STJ - CONDENAÇÃO REFERENTE A SERVIDOR PÚBLICO - SUPERVENIÊNCIA DA EC 113/2021 - <font color="#FF0000"><b>HONORÁRIOS</b></font> DE SUCUMBÊNCIA - FIXAÇÃO DO PERCENTUAL EM LIQUIDAÇÃO DE SENTENÇA. Conforme a tese firmada pelo colendo SUPREMO TRIBUNAL FEDERAL no Tema n. 524: "A concessão de aposentadoria de servidor público por invalidez com proventos integrais exige que a doença incapacitante esteja prevista em rol taxativo da legislação de regência". No exercício do poder de autotutela, a Administração Pública pode alterar ato proferido anteriormente. No caso, a alteração do pagamento dos proventos da parte autora, de integrais para proporcionais, se deu com base em exame médico periódico cujas conclusões foram desfeitas no curso do devido processo legal, com base em laudo <font color="#FF0000"><b>pericial</b></font> produzido sob o crivo do contraditório. Constatado que a servidora aposentada é portadora de doença grave prevista no rol do Decreto Municipal n. 7.381/2002, bem como que o quadro de saúde não se alterou desde a concessão da aposentadoria por invalidez, o que impõe a manutenção da sentença que condenou o IPREM/GV ao reestabelecimento do benefício com proventos integrais, decotados os valores pagos com base na regra da proporcionalidade. Aplica-se ao caso o entendimento firmado no Tema Repetitivo 905 pelo Superior Tribunal de Justiça no tocante aos consectários legais das condenações judiciais referentes a servidores e empregados públicos (item 3.1.1), sendo que a partir daentrada em vigor da EC 113/2021, deve ser observada exclusivamente a taxa Selic. Nas causas em que a Fazenda Pública for parte, determina o Código de Processo Civil que, não sendo líquida a sentença, a definição do percentual de <font color="#FF0000"><b>honorários</b></font> advocatícios devido somente ocorrerá quando liquidado o julgado (artigo 85, §4º, inciso II).
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=10&amp;totalLinhas=19&amp;paginaNumero=10&amp;linhasPorPagina=1&amp;palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                10 - Processo: Apelação Cível <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.23.111887-8/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    5018241-41.2021.8.13.0105 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=23&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=111887&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Márcio Idalmo Santos Miranda</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            02/08/2023
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            02/08/2023
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: DIREITO ADMINISTRATIVO E PROCESSUAL CIVIL - REEXAME NECESSÁRIO E APELAÇÃO CÍVEL - AÇÃO DE COBRANÇA - MUNICÍPIO DE <font color="#FF0000"><b>GOVERNADOR</b></font> <font color="#FF0000"><b>VALADARES</b></font> - SERVIDOR PÚBLICO - AUXILIAR DE SERVIÇOS GERAIS - PLEITO DE RECEBIMENTO DE ADICIONAL DE INSALUBRIDADE - DECLARAÇÃO DE INCONSTITUCIONALIDADE, POR ARRASTAMENTO, DA LEI MUNICIPAL N.º 4.072/95, INSTITUIDORA DA PARCELA - POSTERIOR ADVENTO DA LEI COMPLEMENTAR N.º 204/2015 - POSSIBILIDADE, EM TESE, DE CONCESSÃO DA VANTAGEM - EXPOSIÇÃO A AGENTES INSALUBRES - INCONTROVÉRSIA - LAUDO <font color="#FF0000"><b>PERICIAL</b></font> CONCLUSIVO - TERMO INICIAL DO PAGAMENTO - DATA DO LAUDO <font color="#FF0000"><b>PERICIAL</b></font> - PRECEDENTES DO SUPERIOR TRIBUNAL DE JUSTIÇA - <font color="#FF0000"><b>HONORÁRIOS</b></font> ADVOCATÍCIOS - FIXAÇÃO EM LIQUIDAÇÃO DE SENTENÇA - DECISÃO REFORMADA, EM PARTE - RECURSO VOLUNTÁRIO PREJUDICADO.
+<br>- A Emenda Constitucional n.º 19/98 suprimiu o inciso XXIII do artigo 7.º da Constituição da República do rol dos direitos sociais aplicáveis aos servidores públicos (§ 3.º do artigo 39), mas os entes federados não estão impedidos de disciplinar a vantagem remuneratória, decorrente do desempenho de atividades insalubres, penosas ou perigosas, em prol dos seus servidores, no exercício da competência prevista nos artigos 18, 25, 37, inc. X, e 39, § 4.º, do Texto Constitucional.
+<br>- Embora tenha sido declarada, por este Tribunal, a inconstitucionalidade por arrastamento da Lei Municipal n. 4.072/95, que instituía o pagamento, aos servidores do Município de <font color="#FF0000"><b>Governador</b></font> <font color="#FF0000"><b>Valadares</b></font>, de adicional de insalubridade, sobreveio, em 2015, a Lei Complementar n. 204, que lhes restabeleceu o direito à percepção dessa parcela.
+<br>- Diante da demonstração, por prova <font color="#FF0000"><b>pericial</b></font>, de que o servidor desempenha trabalho com exposição a agentes insalubres, para os fins de caracterização do direito à vantagem remuneratória prevista no artigo 99 da Lei Complementar n.º 204/2015, a procedência dos pedidos é medida que se impõe.
+<br>- A jurisprudência do Superior Tribunal de Justiça sedimentou-se no sentido de que o pagamento de adicional de insalubridade está condicionado ao laudo que prova efetivamente as condições insalubres a que estão submetidos os servidores públicos, de modo que não cabe seu pagamento por período pretérito, devendo ser afastada a possibilidade de presunção em épocas passadas, aplicando-se efeitos retroativos ao laudo <font color="#FF0000"><b>pericial</b></font> atual.
+<br>- Tratando-se de condenação ilíquida, a definição do percentual de <font color="#FF0000"><b>honorários</b></font> advocatícios não deve se dar desde logo, na sentença, mas, tão somente, após liquidado o julgado, na forma do artigo 85, § 4.º, inciso II, do CPC.
+                        </div>                        
+                                         
+
+                    
+
+                    
+                        
+                    
+
+                    <!-- PAGINADOR -->
+                    <br><br>
+                    
+                    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+<tbody><tr align="right">
+<td>
+p?gina 1 de 2</td>
+</tr><tr align="right">
+<td>
+<table border="0" cellspacing="1" cellpadding="4">
+ <tbody><tr>
+<td width="35" align="center" bgcolor="#DEDEDE">&lt;&lt;</td>
+<td width="35" align="center" bgcolor="#DEDEDE">&lt;</td>
+<td width="35" align="center" class="tabact:active"><b>1</b></td>
+<td width="35" align="center" bgcolor="#DEDEDE"><a href="pesquisaPalavrasEspelhoAcordao.do?palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;&amp;linhasPorPagina=10&amp;linhasPorPagina=10&amp;paginaNumero=2" onclick="if (typeof validaPesquisa == 'function') {return validaPesquisa();}">2</a></td>
+<td width="35" align="center" bgcolor="#DEDEDE" class="footerlink"><a class="logtext" href="pesquisaPalavrasEspelhoAcordao.do?palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;&amp;linhasPorPagina=10&amp;linhasPorPagina=10&amp;paginaNumero=2" alt="pr?xima" title="pr?xima p?gina" onclick="if (typeof validaPesquisa == 'function') {return validaPesquisa();}">&gt;</a></td>
+<td width="35" align="center" bgcolor="#DEDEDE" class="footerlink"><a class="logtext" href="pesquisaPalavrasEspelhoAcordao.do?palavras=honorarios periciais Governador Valadares&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;&amp;linhasPorPagina=10&amp;linhasPorPagina=10&amp;paginaNumero=2" alt="?ltima" title="?ltima p?gina" onclick="if (typeof validaPesquisa == 'function') {return validaPesquisa();}">&gt;&gt;</a></td>
+</tr>
+</tbody></table>
+<script type="text/javascript" language="JavaScript">
+// Select the pageNumber field
+function select() {
+  var pager = document.forms['pager'];
+  pager.pageNumber.focus();
+  pager.pageNumber.select();
+}
+
+// Function to adjust the page number (starts with 0)
+// a fun??o recebe o par?metro verificaSubmit para, caso seja chamada do onSubmit do form
+// retornar false e n?o submeter a p?gina;
+// se for chamada do link do bot?o n?o retorna false e executa a fun??o;
+function adjustPage(total, verificaSubmit) {
+  var pager = document.forms['pager'];
+  var page = parseInt(pager.pageNumber.value);
+  if (!pager.pageNumber.value) {
+    alert ("? preciso informar o n?mero da p?gina");
+    select();
+    if (verificaSubmit == 'noLink') return false;
+  } else if (!page) {
+    alert ("O formato do n?mero da p?gina est? incorreto");
+    select();
+    if (verificaSubmit == 'noLink') return false;
+  } else if (page < 1 || page > total) {
+    alert ("O n?mero da p?gina est? fora dos limites");
+    select();
+    if (verificaSubmit == 'noLink') return false;
+  } else {
+    pager.paginaNumero.value = page;
+    if (typeof validaPesquisa == 'function')
+    {
+    		if (validaPesquisa())
+    		{
+    			pager.submit();
+    		}
+    }
+    else
+    {
+    		pager.submit();
+    }
+  }
+}
+</script>
+  <table border="0" cellspacing="0" cellpadding="3" width="100%" bgcolor="#e7e7e7" summary="">
+  <form name="pager" onsubmit=" return adjustPage(2,'noLink'); " action="pesquisaPalavrasEspelhoAcordao.do" method="post"></form>
+    <tbody><tr align="right">
+       <td width="100%">ir para a p?gina:</td>
+       <td align="right"><input type="text" name="pageNumber" size="5"></td>
+       <td align="left"><a href="javascript: void(0);" onclick="adjustPage(2,'linkSubmit')">ir</a></td>
+    </tr>
+    <input type="hidden" name="paginaNumero">
+    <input type="hidden" name="palavras" value="honorarios periciais Governador Valadares">
+    <input type="hidden" name="pesquisarPor" value="ementa">
+    <input type="hidden" name="orderByData" value="2">
+    <input type="hidden" name="referenciaLegislativa" value="Clique na lupa para pesquisar as referências cadastradas...">
+    <input type="hidden" name="pesquisaPalavras" value="Pesquisar">
+    <input type="hidden" name="">
+    <input type="hidden" name="linhasPorPagina" value="10">
+  
+  </tbody></table></td>
+</tr>
+</tbody></table>
+
+                    
+                    <!-- FIM  PAGINADOR -->
+
+                
+                <br><br>
+                <div align="right"><input type="button" value="Nova pesquisa" name="novaPesquisa" onclick="document.location.href='formEspelhoAcordao.do'" class="botao_vinho"></div>
+            </div>
+        </td></tr>
+</tbody></table>
+
+
+
+                        
+
+                    </td>
+                </tr>
+
+            </tbody></table>
+            <br><br>
+            </div>
+            </div>
+                        
+            
+
+             
+
+
+
+
+
+        
+        
+
+        
+        
+        
+
+
+<div id="hintbox"></div></body></html>

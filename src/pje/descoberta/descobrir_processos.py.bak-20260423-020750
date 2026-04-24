@@ -1,0 +1,1403 @@
+#!/usr/bin/env python3
+"""
+Descobrir TODOS os Processos — Script Mestre de Descoberta.
+
+Consulta TODAS as fontes públicas disponíveis para encontrar processos
+do perito, reconcilia com a lista local e gera relatório consolidado.
+
+Fontes sem login:
+  1. DJe TJMG (HTML scraping por nome/CPF/CRM)
+  2. DataJud CNJ API (enriquecimento por CNJ conhecido)
+  3. PJe TJMG Consulta Pública (busca por CPF)
+
+Fontes com login (requer Chrome/VidaaS):
+  4. AJ TJMG (nomeações estaduais)
+  5. AJG Federal (nomeações federais)
+  6. Comunica PJe (intimações por CPF, requer .credenciais-cnj.json)
+
+Uso:
+  python3 descobrir_processos.py --sem-browser         # Só fontes públicas
+  python3 descobrir_processos.py --sem-browser --dias 7 # DJe últimos 7 dias
+  python3 descobrir_processos.py --com-browser          # Tudo (requer login)
+  python3 descobrir_processos.py --backfill 730         # DJe 2 anos
+  python3 descobrir_processos.py --json --salvar        # JSON + salvar
+
+SEGURANÇA: Somente leitura. NUNCA clica Aceitar/Rejeitar.
+"""
+
+import argparse
+import csv
+import json
+import os
+import re
+import ssl
+import sys
+import time
+import urllib.request
+import urllib.error
+import urllib.parse
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timedelta
+from pathlib import Path
+
+# ============================================================
+# PATHS
+# ============================================================
+
+SCRIPTS_DIR = Path(__file__).parent
+BASE_DIR = SCRIPTS_DIR.parent  # ANALISADOR FINAL/
+PROCESSOS_DIR = BASE_DIR / "processos"
+FONTES_DIR = SCRIPTS_DIR / "fontes"
+CONSOLIDADO_DIR = SCRIPTS_DIR / "consolidado"
+LOG_DIR = SCRIPTS_DIR / "log"
+PENDENTES_JSON = SCRIPTS_DIR / "_pendentes_download.json"
+STATUS_JSON = BASE_DIR / "STATUS-PROCESSOS.json"
+
+# Tornar pastas irmãs importáveis (fontes/, core/, ../config/)
+sys.path.insert(0, str(SCRIPTS_DIR))
+sys.path.insert(0, str(SCRIPTS_DIR.parent / "config"))
+
+# ============================================================
+# CONSTANTES
+# ============================================================
+# Fix 2026-04-19 (Passo 4 do plano binary-gliding-pine): PERITO_CPF,
+# PERITO_NOME, DATAJUD_KEY, DATAJUD_ENDPOINTS e RE_CNJ agora vêm de
+# config_pje (1 lugar só). Antes estavam hardcoded aqui (APIKey na linha 64).
+
+from config_pje import (
+    PERITO_CPF,
+    PERITO_CPF_FMT,
+    PERITO_NOME,
+    DATAJUD_KEY,
+    DATAJUD_ENDPOINTS,
+    RE_CNJ,
+)
+
+# Polimento 2026-04-19 (adendo plano binary-gliding-pine): tqdm, rich, tenacity.
+# Todos opcionais — fail-soft se não instalados.
+try:
+    from tqdm import tqdm as _tqdm
+    def tqdm(it, **kw):
+        kw.setdefault("leave", False)
+        return _tqdm(it, **kw)
+except Exception:
+    def tqdm(it, **kw):
+        return it
+
+try:
+    from rich import print as rprint
+except Exception:
+    def rprint(*a, **kw):
+        print(*a, **kw)
+
+try:
+    from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+    _TENACITY_OK = True
+except Exception:
+    _TENACITY_OK = False
+    def retry(*a, **kw):
+        def _wrap(f):
+            return f
+        return _wrap
+
+# Validação do config em runtime (fail-soft)
+try:
+    from config_validacao import validar_config as _validar_config
+    _res = _validar_config()
+    if not _res.get("ok", True):
+        rprint(f"[yellow][config-validacao] avisos: {_res}[/yellow]")
+except Exception as _e:
+    print(f"[config-validacao] skip: {_e}", file=sys.stderr)
+
+SSL_CTX = ssl.create_default_context()
+SSL_CTX.check_hostname = False
+SSL_CTX.verify_mode = ssl.CERT_NONE
+
+
+# ============================================================
+# LOG
+# ============================================================
+
+_log_lines = []
+
+def log(msg, level="INFO"):
+    ts = datetime.now().strftime("%H:%M:%S")
+    prefix = {"INFO": "ℹ", "OK": "✓", "ERRO": "✗", "AVISO": "⚠", "NOVO": "★"}.get(level, "·")
+    line = f"[{ts}] {prefix} {msg}"
+    _log_lines.append(f"[{datetime.now().isoformat()}] {level}: {msg}")
+    print(f"  {line}", file=sys.stderr)
+
+
+def salvar_log():
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    logfile = LOG_DIR / f"execucao_{datetime.now().strftime('%d%m%Y_%H%M')}.log"
+    logfile.write_text("\n".join(_log_lines), encoding="utf-8")
+
+
+# ============================================================
+# CARREGAR CNJs CONHECIDOS
+# ============================================================
+
+def carregar_cnjs_conhecidos():
+    """Carrega todos os CNJs conhecidos localmente."""
+    cnjs = set()
+
+    # De processos/*/FICHA.json
+    if PROCESSOS_DIR.exists():
+        for pasta in PROCESSOS_DIR.iterdir():
+            if not pasta.is_dir():
+                continue
+            ficha = pasta / "FICHA.json"
+            if ficha.exists():
+                try:
+                    data = json.loads(ficha.read_text(encoding="utf-8"))
+                    cnj = data.get("cnj") or data.get("numero_cnj") or data.get("numero_processo", "")
+                    if cnj and cnj != "None" and RE_CNJ.match(cnj):
+                        cnjs.add(cnj)
+                except (json.JSONDecodeError, OSError):
+                    pass
+            # CNJ no nome da pasta
+            m = RE_CNJ.search(pasta.name)
+            if m:
+                cnjs.add(m.group())
+
+    # De _pendentes_download.json
+    if PENDENTES_JSON.exists():
+        try:
+            pend = json.loads(PENDENTES_JSON.read_text(encoding="utf-8"))
+            for item in pend:
+                if isinstance(item, str) and RE_CNJ.match(item):
+                    cnjs.add(item)
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    return cnjs
+
+
+def cnj_tem_pdf(cnj):
+    """Verifica se um CNJ tem PDF baixado."""
+    if not PROCESSOS_DIR.exists():
+        return False
+    for pasta in PROCESSOS_DIR.iterdir():
+        if cnj in pasta.name or (pasta.is_dir() and (pasta / "FICHA.json").exists()):
+            ficha = pasta / "FICHA.json"
+            if ficha.exists():
+                try:
+                    data = json.loads(ficha.read_text(encoding="utf-8"))
+                    c = data.get("cnj") or data.get("numero_cnj") or data.get("numero_processo", "")
+                    if c == cnj:
+                        return (pasta / "PROCESSO-ORIGINAL.pdf").exists() or any(pasta.glob("*.pdf"))
+                except:
+                    pass
+    return False
+
+
+# ============================================================
+# FONTE 1: DJe TJMG
+# ============================================================
+
+def fonte_dje_tjmg(dias=3):
+    """Busca no DJe TJMG por nome/CPF/CRM."""
+    log(f"FONTE 1: DJe TJMG (últimos {dias} dias)")
+
+    try:
+        sys.path.insert(0, str(SCRIPTS_DIR / "monitor-publicacoes"))
+        from dje_tjmg import buscar_no_diario_html
+    except ImportError as e:
+        log(f"Erro importando dje_tjmg: {e}", "ERRO")
+        return {"fonte": "dje_tjmg", "cnjs": [], "erro": str(e)}
+
+    cnjs_encontrados = set()
+    matches_total = 0
+    hoje = datetime.now()
+
+    for i in range(dias):
+        d = hoje - timedelta(days=i)
+        if d.weekday() == 6:
+            continue
+        data_str = d.strftime("%d/%m/%Y")
+        matches = buscar_no_diario_html(data_str, modo_descoberta=True)
+        matches_total += len(matches)
+        for m in matches:
+            for cnj in m.get("cnjs_no_contexto", []):
+                cnjs_encontrados.add(cnj)
+
+    resultado = {
+        "fonte": "dje_tjmg",
+        "cnjs": sorted(list(cnjs_encontrados)),
+        "total_matches": matches_total,
+        "dias_pesquisados": dias,
+    }
+
+    FONTES_DIR.mkdir(parents=True, exist_ok=True)
+    (FONTES_DIR / "tjmg_dje_bruto.json").write_text(
+        json.dumps(resultado, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
+    log(f"DJe TJMG: {len(cnjs_encontrados)} CNJs, {matches_total} matches", "OK")
+    return resultado
+
+
+# ============================================================
+# FONTE 2: DataJud CNJ API (enriquecimento)
+# ============================================================
+
+# Polimento: retry com backoff em erro de rede (tenacity). Se tenacity
+# indisponível, decorator @retry vira no-op (definido no topo do arquivo).
+if _TENACITY_OK:
+    _datajud_retry = retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10),
+        retry=retry_if_exception_type((urllib.error.URLError, TimeoutError, ConnectionError)),
+        reraise=True,
+    )
+else:
+    def _datajud_retry(f):
+        return f
+
+
+def _consultar_datajud_cnj_net(url, body, headers):
+    """Chamada de rede isolada (para tenacity atuar só no IO)."""
+    req = urllib.request.Request(url, data=body, headers=headers, method="POST")
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+_consultar_datajud_cnj_net = _datajud_retry(_consultar_datajud_cnj_net)
+
+
+def consultar_datajud_cnj(cnj, tribunal="tjmg"):
+    """Consulta um CNJ no DataJud. Retry automático em falha de rede."""
+    url = DATAJUD_ENDPOINTS.get(tribunal)
+    if not url:
+        return None
+
+    cnj_limpo = re.sub(r"[^\d]", "", cnj)
+    body = json.dumps({
+        "query": {"match": {"numeroProcesso": cnj_limpo}},
+        "size": 1,
+    }).encode("utf-8")
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"APIKey {DATAJUD_KEY}",
+    }
+
+    try:
+        data = _consultar_datajud_cnj_net(url, body, headers)
+        hits = data.get("hits", {}).get("hits", [])
+        if hits:
+            return hits[0].get("_source", {})
+    except Exception:
+        pass
+    return None
+
+
+def fonte_datajud_enriquecer(cnjs):
+    """Enriquece CNJs conhecidos com dados do DataJud."""
+    log(f"FONTE 2: DataJud (enriquecendo {len(cnjs)} CNJs)")
+
+    resultados = {}
+    encontrados = 0
+
+    for i, cnj in enumerate(sorted(cnjs)):
+        # Detectar tribunal pelo segmento do CNJ
+        m = RE_CNJ.match(cnj)
+        if not m:
+            continue
+
+        tribunal = "tjmg"  # Default
+        segmento = cnj.split(".")[2] if len(cnj.split(".")) > 2 else ""
+        if segmento.startswith("5"):
+            tribunal = "trf6"  # Federal
+
+        dados = consultar_datajud_cnj(cnj, tribunal)
+        if not dados and tribunal != "tjmg":
+            dados = consultar_datajud_cnj(cnj, "tjmg")
+
+        if dados:
+            encontrados += 1
+            resultados[cnj] = {
+                "classe": dados.get("classe", {}).get("nome", ""),
+                "orgaoJulgador": dados.get("orgaoJulgador", {}).get("nome", ""),
+                "grau": dados.get("grau", ""),
+                "dataHoraUltimaAtualizacao": dados.get("dataHoraUltimaAtualizacao", "")[:10],
+                "total_movimentos": len(dados.get("movimentos", [])),
+            }
+        else:
+            resultados[cnj] = {"erro": "Não encontrado"}
+
+        if (i + 1) % 20 == 0:
+            log(f"  DataJud: {i+1}/{len(cnjs)} ({encontrados} encontrados)", "INFO")
+
+        time.sleep(0.3)
+
+    FONTES_DIR.mkdir(parents=True, exist_ok=True)
+    (FONTES_DIR / "datajud_enriquecido.json").write_text(
+        json.dumps(resultados, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
+    log(f"DataJud: {encontrados}/{len(cnjs)} encontrados", "OK")
+    return resultados
+
+
+# ============================================================
+# FONTE 3: PJe TJMG Consulta Pública
+# ============================================================
+
+def fonte_pje_consulta_publica():
+    """Busca processos na consulta pública do PJe TJMG por CPF."""
+    log("FONTE 3: PJe TJMG Consulta Pública (por CPF)")
+
+    try:
+        import requests
+    except ImportError:
+        log("requests não instalado, pulando PJe Consulta Pública", "AVISO")
+        return {"fonte": "pje_consulta_publica", "cnjs": [], "erro": "requests não instalado"}
+
+    session = requests.Session()
+    session.verify = False
+    session.headers.update({
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+    })
+
+    base_url = "https://pje-consulta-publica.tjmg.jus.br"
+
+    try:
+        # Passo 1: Obter página inicial e ViewState
+        resp = session.get(f"{base_url}/pje/ConsultaPublica/listView.seam", timeout=20)
+        if resp.status_code != 200:
+            log(f"PJe Consulta Pública: HTTP {resp.status_code}", "ERRO")
+            return {"fonte": "pje_consulta_publica", "cnjs": [], "erro": f"HTTP {resp.status_code}"}
+
+        html = resp.text
+
+        # Extrair ViewState (JSF/Seam — geralmente "j_id1")
+        vs_match = re.search(r'id="javax\.faces\.ViewState"\s+value="([^"]+)"', html)
+        if not vs_match:
+            vs_match = re.search(r'name="javax\.faces\.ViewState"\s+value="([^"]+)"', html)
+        if not vs_match:
+            log("PJe Consulta Pública: ViewState não encontrado", "AVISO")
+            return {"fonte": "pje_consulta_publica", "cnjs": [], "erro": "ViewState não encontrado"}
+
+        view_state = vs_match.group(1)
+        log(f"PJe ViewState: {view_state}")
+
+        # Passo 2: Submeter busca por CPF
+        data = {
+            "fPP": "fPP",
+            "autoScroll": "",
+            "fPP:dpDec:documentoParte": PERITO_CPF_FMT,
+            "fPP:searchProcessos": "Pesquisar",
+            "fPP:j_idcl": "",
+            "fPP:_link_hidden_": "",
+            "javax.faces.ViewState": view_state,
+        }
+
+        resp2 = session.post(
+            f"{base_url}/pje/ConsultaPublica/listView.seam",
+            data=data,
+            timeout=30,
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+        )
+
+        cnjs_encontrados = set()
+
+        if resp2.status_code == 200:
+            # Extrair CNJs da resposta
+            cnjs_raw = RE_CNJ.findall(resp2.text)
+            for cnj in cnjs_raw:
+                # Filtrar máscaras e placeholders
+                if cnj.startswith("9999") or cnj == "0000000-00.0000.0.00.0000":
+                    continue
+                cnjs_encontrados.add(cnj)
+
+            # Também procurar formato sem pontuação (20 dígitos)
+            nums_20 = re.findall(r'\b(\d{20})\b', resp2.text)
+            for n in nums_20:
+                if n.startswith("9999") or n == "0" * 20:
+                    continue
+                cnj_fmt = f"{n[:7]}-{n[7:9]}.{n[9:13]}.{n[13]}.{n[14:16]}.{n[16:]}"
+                if RE_CNJ.match(cnj_fmt):
+                    cnjs_encontrados.add(cnj_fmt)
+
+        resultado = {
+            "fonte": "pje_consulta_publica",
+            "cnjs": sorted(list(cnjs_encontrados)),
+            "total": len(cnjs_encontrados),
+        }
+
+        FONTES_DIR.mkdir(parents=True, exist_ok=True)
+        (FONTES_DIR / "tjmg_pje_bruto.json").write_text(
+            json.dumps(resultado, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+
+        log(f"PJe Consulta Pública: {len(cnjs_encontrados)} CNJs", "OK")
+        return resultado
+
+    except Exception as e:
+        log(f"PJe Consulta Pública: {e}", "ERRO")
+        return {"fonte": "pje_consulta_publica", "cnjs": [], "erro": str(e)}
+
+
+# ============================================================
+# FONTE 3B: PJe Consulta Pública TRF6 (1º e 2º grau)
+# ============================================================
+
+def fonte_pje_trf6():
+    """Busca processos na consulta pública do PJe TRF6 por CPF."""
+    log("FONTE 3B: PJe TRF6 Consulta Pública (1g + 2g)")
+
+    try:
+        import requests
+    except ImportError:
+        return {"fonte": "pje_trf6", "cnjs": [], "erro": "requests não instalado"}
+
+    cnjs_total = set()
+
+    for grau, url_base in [
+        ("1g", "https://pje1g.trf6.jus.br/consultapublica"),
+        ("2g", "https://pje2g.trf6.jus.br/consultapublica"),
+    ]:
+        try:
+            session = requests.Session()
+            session.verify = False
+            session.headers.update({
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            })
+
+            resp = session.get(f"{url_base}/ConsultaPublica/listView.seam", timeout=20)
+            if resp.status_code != 200:
+                log(f"TRF6 {grau}: HTTP {resp.status_code}", "AVISO")
+                continue
+
+            vs_match = re.search(r'id="javax\.faces\.ViewState"\s+value="([^"]+)"', resp.text)
+            if not vs_match:
+                vs_match = re.search(r'name="javax\.faces\.ViewState"\s+value="([^"]+)"', resp.text)
+            view_state = vs_match.group(1) if vs_match else "j_id1"
+
+            data = {
+                "fPP": "fPP",
+                "autoScroll": "",
+                "fPP:dpDec:documentoParte": PERITO_CPF_FMT,
+                "fPP:searchProcessos": "Pesquisar",
+                "fPP:j_idcl": "",
+                "fPP:_link_hidden_": "",
+                "javax.faces.ViewState": view_state,
+            }
+
+            resp2 = session.post(
+                f"{url_base}/ConsultaPublica/listView.seam",
+                data=data, timeout=30,
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
+            )
+
+            if resp2.status_code == 200:
+                cnjs_raw = RE_CNJ.findall(resp2.text)
+                for cnj in cnjs_raw:
+                    if cnj.startswith("9999") or cnj == "0000000-00.0000.0.00.0000":
+                        continue
+                    cnjs_total.add(cnj)
+                log(f"TRF6 {grau}: {len(cnjs_raw)} CNJs brutos", "OK")
+            else:
+                log(f"TRF6 {grau}: HTTP {resp2.status_code} no POST", "AVISO")
+
+        except Exception as e:
+            log(f"TRF6 {grau}: {e}", "AVISO")
+
+    resultado = {
+        "fonte": "pje_trf6",
+        "cnjs": sorted(list(cnjs_total)),
+        "total": len(cnjs_total),
+    }
+
+    if cnjs_total:
+        FONTES_DIR.mkdir(parents=True, exist_ok=True)
+        (FONTES_DIR / "trf6_pje_bruto.json").write_text(
+            json.dumps(resultado, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+
+    log(f"PJe TRF6 total: {len(cnjs_total)} CNJs", "OK")
+    return resultado
+
+
+# ============================================================
+# FONTE 3C: Portal TJMG Unificado (PJe + Themis + Projudi)
+# ============================================================
+
+def fonte_portal_tjmg():
+    """Busca processos no portal unificado do TJMG por CPF."""
+    log("FONTE 3C: Portal TJMG Unificado")
+
+    cnjs_encontrados = set()
+
+    try:
+        # O portal TJMG usa endpoint de consulta por CPF
+        url = "https://www.tjmg.jus.br/portal-tjmg/processos/andamento-processual/"
+        body = urllib.parse.urlencode({
+            "tipoPesquisa": "2",  # Por CPF/CNPJ
+            "cpfCnpj": PERITO_CPF,
+        }).encode("utf-8")
+
+        req = urllib.request.Request(
+            url, data=body,
+            headers={
+                "Content-Type": "application/x-www-form-urlencoded",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            },
+            method="POST",
+        )
+
+        with urllib.request.urlopen(req, timeout=20, context=SSL_CTX) as resp:
+            html = resp.read().decode("utf-8", errors="ignore")
+            cnjs_raw = RE_CNJ.findall(html)
+            for cnj in cnjs_raw:
+                if cnj.startswith("9999") or cnj == "0000000-00.0000.0.00.0000":
+                    continue
+                cnjs_encontrados.add(cnj)
+
+    except Exception as e:
+        log(f"Portal TJMG: {e}", "AVISO")
+
+    resultado = {
+        "fonte": "portal_tjmg",
+        "cnjs": sorted(list(cnjs_encontrados)),
+        "total": len(cnjs_encontrados),
+    }
+
+    if cnjs_encontrados:
+        FONTES_DIR.mkdir(parents=True, exist_ok=True)
+        (FONTES_DIR / "portal_tjmg_bruto.json").write_text(
+            json.dumps(resultado, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+
+    log(f"Portal TJMG: {len(cnjs_encontrados)} CNJs", "OK")
+    return resultado
+
+
+# ============================================================
+# FONTE 4/5: AJ TJMG + AJG Federal (requer browser)
+# ============================================================
+
+def fonte_aj_ajg(porta=9223):
+    """Consulta AJ TJMG e AJG Federal via CDP."""
+    log("FONTE 4/5: AJ TJMG + AJG Federal (via browser)")
+
+    cnjs_aj = set()
+    nomeacoes = []
+
+    # AJ TJMG
+    try:
+        sys.path.insert(0, str(SCRIPTS_DIR))
+        from consultar_aj import conectar_aj, listar_nomeacoes
+
+        log("Conectando AJ TJMG...")
+        page = conectar_aj(porta)
+        if page:
+            noms = listar_nomeacoes(page, situacao="TODAS")
+            for n in noms:
+                cnj = n.get("numero_processo_cnj", "")
+                if cnj and RE_CNJ.match(cnj):
+                    cnjs_aj.add(cnj)
+                    nomeacoes.append({
+                        "cnj": cnj,
+                        "fonte": "aj_tjmg",
+                        "situacao": n.get("situacao", ""),
+                        "data_nomeacao": n.get("data_nomeacao", ""),
+                        "valor_honorario": n.get("valor_honorario", ""),
+                        "unidade": n.get("unidade", ""),
+                    })
+            log(f"AJ TJMG: {len(cnjs_aj)} processos", "OK")
+    except Exception as e:
+        log(f"AJ TJMG: {e}", "ERRO")
+
+    # AJG Federal
+    cnjs_ajg = set()
+    try:
+        from consultar_ajg import conectar_ajg, listar_nomeacoes as listar_ajg
+
+        log("Conectando AJG Federal...")
+        page = conectar_ajg(porta)
+        if page:
+            noms = listar_ajg(page, situacao="TODAS")
+            for n in noms:
+                cnj = n.get("numero_processo_cnj", "")
+                if cnj and RE_CNJ.match(cnj):
+                    cnjs_ajg.add(cnj)
+                    nomeacoes.append({
+                        "cnj": cnj,
+                        "fonte": "ajg_federal",
+                        "situacao": n.get("situacao", ""),
+                        "data_nomeacao": n.get("data_nomeacao", ""),
+                        "unidade": n.get("unidade", ""),
+                    })
+            log(f"AJG Federal: {len(cnjs_ajg)} processos", "OK")
+    except Exception as e:
+        log(f"AJG Federal: {e}", "ERRO")
+
+    todos_cnjs = cnjs_aj | cnjs_ajg
+
+    resultado = {
+        "fonte": "aj_ajg",
+        "cnjs": sorted(list(todos_cnjs)),
+        "cnjs_aj": sorted(list(cnjs_aj)),
+        "cnjs_ajg": sorted(list(cnjs_ajg)),
+        "nomeacoes": nomeacoes,
+        "total": len(todos_cnjs),
+    }
+
+    FONTES_DIR.mkdir(parents=True, exist_ok=True)
+    (FONTES_DIR / "aj_ajg_bruto.json").write_text(
+        json.dumps(resultado, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
+    return resultado
+
+
+# ============================================================
+# FONTE 6: DJEN API Pública (sem autenticação — TJMG + TRF6)
+# ============================================================
+
+DJEN_BASE = "https://comunicaapi.pje.jus.br/api/v1/comunicacao"
+DJEN_TRIBUNAIS = ["TJMG", "TRF6"]
+DJEN_FILTRO_TEXTO = re.compile(r'PERIT|NOMEADO|LAUDO|EXPERT', re.IGNORECASE)
+
+
+def _buscar_djen_tribunal(tribunal, nome="JESUS EDUARDO", itens=100):
+    """Busca comunicações em um tribunal via API pública DJEN."""
+    params = urllib.parse.urlencode({
+        "nomeParte": nome,
+        "siglaTribunal": tribunal,
+        "itensPorPagina": itens,
+    })
+    url = f"{DJEN_BASE}?{params}"
+
+    req = urllib.request.Request(url, headers={"Accept": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=30, context=SSL_CTX) as resp:
+            # Respeitar rate limit
+            remaining = resp.headers.get("x-ratelimit-remaining")
+            if remaining and int(remaining) < 3:
+                log(f"DJEN {tribunal}: rate limit baixo ({remaining}), aguardando 5s", "AVISO")
+                time.sleep(5)
+            return json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        if e.code == 429:
+            log(f"DJEN {tribunal}: rate limited (429), aguardando 60s", "AVISO")
+            time.sleep(60)
+            try:
+                with urllib.request.urlopen(req, timeout=30, context=SSL_CTX) as resp:
+                    return json.loads(resp.read().decode("utf-8"))
+            except Exception:
+                pass
+        return None
+    except Exception:
+        return None
+
+
+def fonte_comunica_pje(dias=30):
+    """Descobre processos via API DJEN pública (TJMG + TRF6)."""
+    log("FONTE 6: DJEN API pública (TJMG + TRF6)")
+
+    cnjs_encontrados = set()
+    total_comunicacoes = 0
+
+    # Buscar em paralelo nos dois tribunais
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = {pool.submit(_buscar_djen_tribunal, trib): trib for trib in DJEN_TRIBUNAIS}
+        for future in as_completed(futures):
+            trib = futures[future]
+            try:
+                data = future.result()
+                if not data:
+                    log(f"DJEN {trib}: sem resposta", "AVISO")
+                    continue
+
+                items = data.get("items", [])
+                total_comunicacoes += len(items)
+                trib_cnjs = 0
+
+                for item in items:
+                    texto = item.get("texto", "").upper()
+                    # Filtrar por menção a perito/nomeação (eliminar homônimos)
+                    if not DJEN_FILTRO_TEXTO.search(texto):
+                        continue
+
+                    num = item.get("numero_processo", "")
+                    if len(num) == 20:
+                        cnj = f"{num[:7]}-{num[7:9]}.{num[9:13]}.{num[13]}.{num[14:16]}.{num[16:]}"
+                    else:
+                        cnj = num
+                    if RE_CNJ.match(cnj):
+                        cnjs_encontrados.add(cnj)
+                        trib_cnjs += 1
+
+                log(f"DJEN {trib}: {trib_cnjs} CNJs periciais (de {len(items)} comunicações)", "OK")
+
+            except Exception as e:
+                log(f"DJEN {trib}: {e}", "ERRO")
+
+    # Pausa entre fonte 6 e próximas operações (respeitar rate limit)
+    time.sleep(0.5)
+
+    resultado = {
+        "fonte": "djen_api",
+        "cnjs": sorted(list(cnjs_encontrados)),
+        "total": len(cnjs_encontrados),
+        "comunicacoes": total_comunicacoes,
+        "tribunais": DJEN_TRIBUNAIS,
+    }
+
+    FONTES_DIR.mkdir(parents=True, exist_ok=True)
+    (FONTES_DIR / "comunica_pje_bruto.json").write_text(
+        json.dumps(resultado, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
+    log(f"DJEN total: {len(cnjs_encontrados)} CNJs periciais (de {total_comunicacoes} comunicações)", "OK")
+    return resultado
+
+
+# ============================================================
+# VALIDAÇÃO PÓS-DESCOBERTA (PJe Consulta Pública por CNJ)
+# ============================================================
+
+def validar_cnjs_pje(cnjs_novos, max_validacoes=50):
+    """
+    Valida CNJs novos consultando PJe Consulta Pública por CNJ.
+    Verifica se "JESUS EDUARDO" ou CPF aparece como parte/perito.
+
+    Returns:
+        (confirmados, descartados) — dois sets de CNJs
+    """
+    if not cnjs_novos:
+        return set(), set()
+
+    log(f"Validando {len(cnjs_novos)} CNJs novos via PJe Consulta Pública...")
+
+    confirmados = set()
+    descartados = set()
+    erros = 0
+
+    try:
+        import requests as req
+    except ImportError:
+        log("requests não disponível — pulando validação", "AVISO")
+        return set(cnjs_novos), set()  # Assume todos válidos
+
+    url_base = "https://pje-consulta-publica.tjmg.jus.br"
+
+    _lista = sorted(cnjs_novos)[:max_validacoes]
+    for i, cnj in enumerate(tqdm(_lista, desc="Validando CNJs PJe", unit="cnj")):
+        try:
+            # Buscar processo por CNJ na consulta pública
+            sess = req.Session()
+            sess.verify = False
+
+            # GET página inicial para ViewState
+            resp = sess.get(f"{url_base}/pje/ConsultaPublica/listView.seam", timeout=15)
+            if resp.status_code != 200:
+                erros += 1
+                continue
+
+            # Extrair ViewState
+            import re as re_mod
+            vs_match = re_mod.search(r'id="javax\.faces\.ViewState"[^>]*value="([^"]*)"', resp.text)
+            if not vs_match:
+                vs_match = re_mod.search(r'name="javax\.faces\.ViewState"[^>]*value="([^"]*)"', resp.text)
+            view_state = vs_match.group(1) if vs_match else "j_id1"
+
+            # Formatar CNJ para campo de busca
+            cnj_limpo = cnj.replace("-", "").replace(".", "")
+
+            # POST busca por número do processo
+            data = {
+                "fPP": "fPP",
+                "autoScroll": "",
+                "fPP:numProcesso-inputNumeroProcessoDecoration:numProcesso-inputNumeroProcesso": cnj_limpo,
+                "fPP:searchProcessos": "Pesquisar",
+                "fPP:j_idcl": "",
+                "fPP:_link_hidden_": "",
+                "javax.faces.ViewState": view_state,
+            }
+
+            resp2 = sess.post(
+                f"{url_base}/pje/ConsultaPublica/listView.seam",
+                data=data, timeout=15,
+            )
+
+            if resp2.status_code == 200:
+                texto = resp2.text.upper()
+                # Verificar se o perito aparece nos resultados
+                if "JESUS EDUARDO" in texto or PERITO_CPF in texto or PERITO_CPF_FMT.replace(".", "").replace("-", "") in texto:
+                    confirmados.add(cnj)
+                    log(f"  ✓ {cnj} — CONFIRMADO", "OK")
+                else:
+                    descartados.add(cnj)
+                    log(f"  ✗ {cnj} — perito não encontrado", "AVISO")
+            else:
+                erros += 1
+
+            time.sleep(0.5)  # Rate limit
+
+        except Exception:
+            erros += 1
+            continue
+
+    # CNJs não validados (acima do max) ficam como DESCARTADOS (não dar benefício da dúvida)
+    nao_validados = set(cnjs_novos) - confirmados - descartados
+    if nao_validados:
+        log(f"  {len(nao_validados)} CNJs não validados (acima do limite) — descartados por precaução", "AVISO")
+        descartados |= nao_validados
+
+    log(f"Validação: {len(confirmados)} confirmados, {len(descartados)} descartados, {erros} erros", "OK")
+    return confirmados, descartados
+
+
+# ============================================================
+# VALIDAÇÃO TRF VIA DATAJUD (verifica se perito é parte)
+# ============================================================
+
+def validar_cnjs_datajud(cnjs_novos, max_validacoes=50):
+    """
+    Valida CNJs federais via DataJud — verifica se o nome do perito
+    aparece nas partes do processo.
+
+    Returns:
+        (confirmados, descartados) — dois sets de CNJs
+    """
+    if not cnjs_novos:
+        return set(), set()
+
+    log(f"Validando {len(cnjs_novos)} CNJs federais via DataJud...")
+
+    confirmados = set()
+    descartados = set()
+    termos_perito = ["JESUS EDUARDO", "NOLETO DA PENHA", PERITO_CPF]
+
+    _lista_dj = sorted(cnjs_novos)[:max_validacoes]
+    for i, cnj in enumerate(tqdm(_lista_dj, desc="Validando CNJs DataJud", unit="cnj")):
+        # Detectar tribunal
+        tribunal = "trf6" if ".4.06." in cnj else "tjmg"
+
+        dados = consultar_datajud_cnj(cnj, tribunal)
+        if not dados:
+            # Tentar outros tribunais
+            for t in ["trf6", "tjmg", "trt3"]:
+                if t != tribunal:
+                    dados = consultar_datajud_cnj(cnj, t)
+                    if dados:
+                        break
+
+        if dados:
+            # Serializar todo o JSON e procurar nome do perito
+            texto = json.dumps(dados, ensure_ascii=False).upper()
+            encontrado = any(t.upper() in texto for t in termos_perito)
+
+            if encontrado:
+                confirmados.add(cnj)
+                classe = dados.get("classe", {}).get("nome", "?")
+                log(f"  ✓ {cnj} — CONFIRMADO ({classe})", "OK")
+            else:
+                descartados.add(cnj)
+                classe = dados.get("classe", {}).get("nome", "?")
+                log(f"  ✗ {cnj} — perito não encontrado ({classe})", "AVISO")
+        else:
+            # Não encontrado no DataJud — descartar
+            descartados.add(cnj)
+            log(f"  ✗ {cnj} — não encontrado no DataJud", "AVISO")
+
+        time.sleep(0.3)
+
+    # CNJs acima do limite — descartar por precaução
+    nao_validados = set(cnjs_novos) - confirmados - descartados
+    if nao_validados:
+        descartados |= nao_validados
+        log(f"  {len(nao_validados)} CNJs TRF não validados — descartados", "AVISO")
+
+    log(f"Validação TRF: {len(confirmados)} confirmados, {len(descartados)} descartados", "OK")
+    return confirmados, descartados
+
+
+# ============================================================
+# RECONCILIADOR
+# ============================================================
+
+def reconciliar(fontes_resultados, datajud_dados, cnjs_conhecidos):
+    """Reconcilia resultados de todas as fontes."""
+    log("RECONCILIAÇÃO: Cruzando fontes...")
+
+    todos_cnjs = set(cnjs_conhecidos)
+    fonte_por_cnj = {}
+
+    # Mapear CNJs por fonte
+    for resultado in fontes_resultados:
+        fonte_nome = resultado.get("fonte", "?")
+        for cnj in resultado.get("cnjs", []):
+            if RE_CNJ.match(cnj):
+                todos_cnjs.add(cnj)
+                if cnj not in fonte_por_cnj:
+                    fonte_por_cnj[cnj] = []
+                fonte_por_cnj[cnj].append(fonte_nome)
+
+    # Para CNJs conhecidos, marcar como "local"
+    for cnj in cnjs_conhecidos:
+        if cnj not in fonte_por_cnj:
+            fonte_por_cnj[cnj] = []
+        if "local" not in fonte_por_cnj[cnj]:
+            fonte_por_cnj[cnj].append("local")
+
+    # Classificar novos vs conhecidos
+    novos = todos_cnjs - cnjs_conhecidos
+
+    # Montar tabela consolidada
+    processos = []
+    for cnj in sorted(todos_cnjs):
+        dj = datajud_dados.get(cnj, {})
+        proc = {
+            "numero_processo": cnj,
+            "tribunal_origem": "TJMG",
+            "classe": dj.get("classe", ""),
+            "orgaoJulgador": dj.get("orgaoJulgador", ""),
+            "grau": dj.get("grau", ""),
+            "ultima_atualizacao": dj.get("dataHoraUltimaAtualizacao", ""),
+            "total_movimentos": dj.get("total_movimentos", 0),
+            "fontes": ", ".join(fonte_por_cnj.get(cnj, ["local"])),
+            "consta_local": cnj in cnjs_conhecidos,
+            "tem_pdf": cnj_tem_pdf(cnj),
+            "novo": cnj in novos,
+            "data_atualizacao_sistema": datetime.now().strftime("%Y-%m-%d"),
+        }
+
+        # Detectar tribunal pelo segmento CNJ
+        partes = cnj.split(".")
+        if len(partes) >= 3:
+            j = partes[2] if len(partes) > 2 else ""
+            if j == "5":
+                proc["tribunal_origem"] = "TRF"
+            elif j == "8":
+                proc["tribunal_origem"] = "TJMG"
+
+        processos.append(proc)
+
+    return {
+        "processos": processos,
+        "total": len(processos),
+        "conhecidos": len(cnjs_conhecidos),
+        "novos": len(novos),
+        "novos_cnjs": sorted(list(novos)),
+    }
+
+
+# ============================================================
+# GERAR CSV
+# ============================================================
+
+def gerar_csv(consolidado):
+    """Gera CSV consolidado."""
+    CONSOLIDADO_DIR.mkdir(parents=True, exist_ok=True)
+    data_str = datetime.now().strftime("%d%m%Y")
+    csv_path = CONSOLIDADO_DIR / f"RELATORIO_PROCESSOS_{data_str}.csv"
+
+    processos = consolidado.get("processos", [])
+    if not processos:
+        return csv_path
+
+    campos = [
+        "numero_processo", "tribunal_origem", "classe", "orgaoJulgador",
+        "grau", "ultima_atualizacao", "total_movimentos", "fontes",
+        "consta_local", "tem_pdf", "novo", "data_atualizacao_sistema",
+    ]
+
+    with open(csv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=campos, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(processos)
+
+    return csv_path
+
+
+# ============================================================
+# CRIAR PASTAS PARA NOVOS
+# ============================================================
+
+def criar_pastas_novos(novos_cnjs, datajud_dados):
+    """Cria pastas e FICHA.json para processos novos."""
+    criados = 0
+    for cnj in novos_cnjs:
+        pasta = PROCESSOS_DIR / cnj
+        if pasta.exists():
+            continue
+
+        pasta.mkdir(parents=True, exist_ok=True)
+
+        dj = datajud_dados.get(cnj, {})
+        ficha = {
+            "cnj": cnj,
+            "classe": dj.get("classe", ""),
+            "orgaoJulgador": dj.get("orgaoJulgador", ""),
+            "grau": dj.get("grau", ""),
+            "data_descoberta": datetime.now().isoformat(),
+            "fonte_descoberta": "descobrir_processos.py",
+        }
+
+        (pasta / "FICHA.json").write_text(
+            json.dumps(ficha, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        criados += 1
+
+    if criados:
+        log(f"Criadas {criados} pastas para processos novos", "OK")
+
+
+def atualizar_pendentes(novos_cnjs):
+    """Adiciona novos CNJs ao _pendentes_download.json."""
+    pendentes = []
+    if PENDENTES_JSON.exists():
+        try:
+            pendentes = json.loads(PENDENTES_JSON.read_text(encoding="utf-8"))
+        except:
+            pass
+
+    existentes = set(pendentes)
+    adicionados = 0
+    for cnj in novos_cnjs:
+        if cnj not in existentes:
+            pendentes.append(cnj)
+            adicionados += 1
+
+    if adicionados:
+        PENDENTES_JSON.write_text(
+            json.dumps(pendentes, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        log(f"Adicionados {adicionados} CNJs ao _pendentes_download.json", "OK")
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+def main():
+    parser = argparse.ArgumentParser(description="Descobrir TODOS os processos do perito")
+    parser.add_argument("--sem-browser", action="store_true", help="Só fontes públicas (sem login)")
+    parser.add_argument("--com-browser", action="store_true", help="Todas as fontes (requer login Chrome)")
+    parser.add_argument("--backfill", type=int, metavar="N", help="DJe backfill N dias")
+    parser.add_argument("--dias", type=int, default=7, help="DJe últimos N dias (padrão: 7)")
+    parser.add_argument("--porta", type=int, default=9223, help="Porta CDP (padrão: 9223)")
+    parser.add_argument("--json", action="store_true", help="Saída JSON")
+    parser.add_argument("--salvar", action="store_true", help="Salvar resultados")
+    parser.add_argument("--skip-datajud", action="store_true", help="Pular enriquecimento DataJud")
+
+    args = parser.parse_args()
+
+    log("=" * 60)
+    log("DESCOBERTA DE PROCESSOS — INÍCIO")
+    log("=" * 60)
+    rprint("[cyan]Descoberta PJe — iniciando varredura de fontes públicas[/cyan]")
+
+    # Carregar CNJs conhecidos
+    cnjs_conhecidos = carregar_cnjs_conhecidos()
+    log(f"CNJs conhecidos localmente: {len(cnjs_conhecidos)}")
+
+    # Backfill mode
+    if args.backfill:
+        log(f"Modo backfill: {args.backfill} dias")
+        sys.path.insert(0, str(SCRIPTS_DIR / "monitor-publicacoes"))
+        from dje_tjmg import backfill_dje
+        resultado = backfill_dje(dias=args.backfill)
+        if args.json:
+            print(json.dumps(resultado, ensure_ascii=False, indent=2))
+        salvar_log()
+        return
+
+    # Coletar de fontes sem login (em paralelo)
+    fontes_resultados = []
+
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        futures = {}
+
+        # DJe TJMG
+        futures[pool.submit(fonte_dje_tjmg, args.dias)] = "dje_tjmg"
+
+        # PJe Consulta Pública TJMG (fonte 3) — DESABILITADO 2026-04-19 (Passo 4 plano
+        # binary-gliding-pine). Motivo: a busca por `documentoParte` no Seam/JSF do PJe
+        # TJMG devolve consistentemente 0 CNJs reais via HTTP simples (ViewState expira
+        # antes do POST, form JSF exige j_idXX dinâmicos). A blacklist por CPF agora é
+        # obtida diretamente por `fontes/consulta_publica_tjmg.py::obter_blacklist()`,
+        # que substitui este uso. Manter desabilitado até reescrever com browser.
+        # futures[pool.submit(fonte_pje_consulta_publica)] = "pje_tjmg"
+
+        # PJe Consulta Pública TRF6 — DESABILITADO (continua desligado em 2026-04-19).
+        # Motivo registrado: "retorna CNJs aleatórios". Investigação (Passo 4 plano
+        # binary-gliding-pine): o POST em `fonte_pje_trf6` (linha ~388) replica o form
+        # do TJMG (fPP:dpDec:documentoParte), mas o TRF6 usa OUTRA estrutura de form
+        # (fPP:dpCpf, idSelecaoPartePesquisa) e exige classe judicial. Sem snapshot
+        # real do HTML TRF6 (1g+2g), não é seguro reativar — risco de voltar a poluir
+        # com CNJs de homônimos. PENDENTE: capturar form real via DevTools e refazer
+        # POST com cnpj/classe corretos. Mantido desabilitado.
+        # futures[pool.submit(fonte_pje_trf6)] = "pje_trf6"
+
+        # Portal TJMG Unificado (fonte 3C) — DESABILITADO 2026-04-19 (Passo 4 plano
+        # binary-gliding-pine). Motivo: sempre retorna 0 CNJs (endpoint `andamento-processual/`
+        # não aceita POST simples, precisa token antiforgery do portal). Consulta Pública
+        # TJMG via `fontes/consulta_publica_tjmg.py` é a substituta oficial.
+        # futures[pool.submit(fonte_portal_tjmg)] = "portal_tjmg"
+
+        # Comunica PJe (se credenciais disponíveis)
+        futures[pool.submit(fonte_comunica_pje, args.dias)] = "comunica_pje"
+
+        for future in as_completed(futures):
+            nome = futures[future]
+            try:
+                resultado = future.result()
+                fontes_resultados.append(resultado)
+            except Exception as e:
+                log(f"Erro em {nome}: {e}", "ERRO")
+
+    # Fontes com login (se --com-browser)
+    if args.com_browser:
+        try:
+            resultado_aj = fonte_aj_ajg(args.porta)
+            fontes_resultados.append(resultado_aj)
+        except Exception as e:
+            log(f"Erro AJ/AJG: {e}", "ERRO")
+
+    # Incorporar CNJs do backfill DJe (se existir) com filtro de confiabilidade
+    backfill_path = SCRIPTS_DIR / "monitor-publicacoes" / "resultados" / "backfill_progresso.json"
+    if backfill_path.exists():
+        try:
+            backfill_data = json.loads(backfill_path.read_text(encoding="utf-8"))
+            backfill_matches = backfill_data.get("matches", [])
+            cnjs_confiaveis = set()
+
+            for m in backfill_matches:
+                termo = m.get("termo", "")
+                ctx = m.get("contexto", "").upper()
+                cnjs_match = m.get("cnjs_no_contexto", [])
+
+                # CNJ direto (termo é um CNJ que já monitoramos) = confiável
+                if RE_CNJ.match(termo):
+                    cnjs_confiaveis.update(cnjs_match)
+                # CPF ou CRM = confiável
+                elif "127.858.856" in termo or "12785885660" in termo or "92.148" in termo or "92148" in termo:
+                    cnjs_confiaveis.update(cnjs_match)
+                # JESUS EDUARDO = confiável
+                elif "JESUS" in termo.upper():
+                    cnjs_confiaveis.update(cnjs_match)
+                # NOLETO sozinho: só se contexto confirma perito
+                elif termo.upper() == "NOLETO":
+                    if "NOLETO DA PENHA" in ctx or "PAULO ROBERTO" in ctx:
+                        continue  # Advogado homônimo — descartar
+                    if "PERIT" in ctx or "NOMEADO" in ctx or "JESUS" in ctx:
+                        cnjs_confiaveis.update(cnjs_match)
+                    # Ambíguo: descartar para não poluir
+
+            if cnjs_confiaveis:
+                fontes_resultados.append({
+                    "fonte": "dje_backfill",
+                    "cnjs": sorted(list(cnjs_confiaveis)),
+                    "total": len(cnjs_confiaveis),
+                })
+                log(f"Backfill DJe: {len(cnjs_confiaveis)} CNJs confiáveis (de {len(backfill_data.get('cnjs_descobertos', []))} brutos)", "OK")
+        except Exception as e:
+            log(f"Erro ao ler backfill: {e}", "AVISO")
+
+    # Consolidar todos os CNJs descobertos
+    todos_cnjs_fontes = set()
+    cnjs_comunica_pje = set()  # Pré-validados pela API (texto menciona PERIT/NOMEADO)
+    for r in fontes_resultados:
+        for cnj in r.get("cnjs", []):
+            todos_cnjs_fontes.add(cnj)
+        if r.get("fonte") == "comunica_pje":
+            cnjs_comunica_pje.update(r.get("cnjs", []))
+
+    todos_cnjs = todos_cnjs_fontes | cnjs_conhecidos
+    novos = todos_cnjs - cnjs_conhecidos
+
+    log(f"Total CNJs de todas as fontes: {len(todos_cnjs)}")
+    log(f"Novos (não na lista local): {len(novos)}")
+
+    # Enriquecer com DataJud (se não pulou)
+    datajud_dados = {}
+    if not args.skip_datajud:
+        # Só enriquecer novos + uma amostra dos conhecidos (para não demorar)
+        cnjs_para_datajud = novos
+        if len(cnjs_para_datajud) < 10:
+            # Se poucos novos, enriquecer todos
+            cnjs_para_datajud = todos_cnjs
+        datajud_dados = fonte_datajud_enriquecer(cnjs_para_datajud)
+
+    # Reconciliar
+    consolidado = reconciliar(fontes_resultados, datajud_dados, cnjs_conhecidos)
+
+    # Gerar CSV
+    csv_path = gerar_csv(consolidado)
+    log(f"CSV: {csv_path}", "OK")
+
+    # Validar CNJs novos
+    if novos:
+        # CNJs do Comunica PJe são pré-validados (API filtra por PERIT/NOMEADO no texto)
+        novos_prevalidados = novos & cnjs_comunica_pje
+        novos_a_validar = novos - novos_prevalidados
+
+        if novos_prevalidados:
+            log(f"Comunica PJe: {len(novos_prevalidados)} CNJs pré-validados (pulam validação)", "OK")
+
+        novos_tjmg = {cnj for cnj in novos_a_validar if ".8.13." in cnj}
+        novos_trf = {cnj for cnj in novos_a_validar if ".4.01." in cnj or ".4.06." in cnj}
+        novos_outros = novos_a_validar - novos_tjmg - novos_trf
+
+        descartados_total = set()
+
+        # Validar TJMG via PJe Consulta Pública
+        if novos_tjmg:
+            confirmados_tjmg, descartados_tjmg = validar_cnjs_pje(novos_tjmg)
+            descartados_total |= descartados_tjmg
+        else:
+            confirmados_tjmg = set()
+
+        # Validar TRF via DataJud (verificar se perito aparece como parte)
+        if novos_trf:
+            confirmados_trf, descartados_trf = validar_cnjs_datajud(novos_trf)
+            descartados_total |= descartados_trf
+        else:
+            confirmados_trf = set()
+
+        novos = novos_prevalidados | confirmados_tjmg | confirmados_trf | novos_outros
+        consolidado["novos"] = len(novos)
+        consolidado["novos_cnjs"] = sorted(list(novos))
+        consolidado["descartados_validacao"] = sorted(list(descartados_total))
+        if descartados_total:
+            log(f"Descartados na validação: {len(descartados_total)} CNJs")
+
+    # ============================================================
+    # CLASSIFICAÇÃO PERITO / PARTE / INDETERMINADO
+    # (Passo 4 plano binary-gliding-pine — 2026-04-19)
+    # Antes: 160 CNJs sem classificar, Dr. Jesus separava manualmente os
+    # processos em que era parte (pessoais/familiares) vs perito.
+    # Agora: blacklist Consulta Pública TJMG + DataJud estruturado decidem.
+    # ============================================================
+    try:
+        from fontes.consulta_publica_tjmg import obter_blacklist
+        from core.filtro_perito import (
+            classificar_lote,
+            PAPEL_PERITO,
+            PAPEL_PARTE,
+            PAPEL_INDETERMINADO,
+        )
+
+        log("Classificando CNJs em PERITO / PARTE / INDETERMINADO…")
+
+        blacklist = obter_blacklist(verboso=True)
+        log(f"Blacklist TJMG: {len(blacklist)} CNJs (Dr. Jesus é parte)")
+
+        cnjs_lista = sorted(todos_cnjs)
+        # datajud_dados tem `dados` enriquecidos já reduzidos; para classificar
+        # precisamos do _source cru, mas aceita dict direto (filtro_perito lê
+        # auxiliaresDaJustica/poloAtivo/poloPassivo em ambos formatos).
+        classificacoes = classificar_lote(
+            cnjs_lista,
+            datajud_hits_by_cnj=datajud_dados,
+            blacklist_tjmg=blacklist,
+        )
+
+        cnjs_perito = [c for c, r in classificacoes.items() if r["papel"] == PAPEL_PERITO]
+        cnjs_indeterminado = [c for c, r in classificacoes.items() if r["papel"] == PAPEL_INDETERMINADO]
+        cnjs_parte = [c for c, r in classificacoes.items() if r["papel"] == PAPEL_PARTE]
+
+        data_str = datetime.now().strftime("%d%m%Y")
+        CONSOLIDADO_DIR.mkdir(parents=True, exist_ok=True)
+
+        def _gravar_csv_classificacao(nome, cnjs):
+            path = CONSOLIDADO_DIR / f"{nome}_{data_str}.csv"
+            with open(path, "w", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerow(["cnj", "papel", "razao", "sinais"])
+                for c in sorted(cnjs):
+                    r = classificacoes[c]
+                    writer.writerow([
+                        c,
+                        r["papel"],
+                        r["razao"],
+                        json.dumps(r["sinais"], ensure_ascii=False),
+                    ])
+            return path
+
+        csv_perito = _gravar_csv_classificacao("PERITO_CONFIRMADO", cnjs_perito)
+        csv_indet = _gravar_csv_classificacao("INDETERMINADO", cnjs_indeterminado)
+        csv_parte = _gravar_csv_classificacao("DESCARTE_PARTE", cnjs_parte)
+
+        log(f"CSV PERITO: {csv_perito}", "OK")
+        log(f"CSV INDETERMINADO: {csv_indet}", "OK")
+        log(f"CSV DESCARTE_PARTE: {csv_parte}", "OK")
+
+        total_classificado = len(cnjs_perito) + len(cnjs_indeterminado) + len(cnjs_parte)
+        log(
+            f"PERITO: {len(cnjs_perito)} | INDETERMINADO: {len(cnjs_indeterminado)} "
+            f"| PARTE: {len(cnjs_parte)} | Total: {total_classificado}",
+            "OK",
+        )
+
+        # Restringir downstream (pastas, pendentes, notificação) a PERITO + INDETERMINADO.
+        # PARTE nunca vira pasta de processo nem entra no PUSH.
+        cnjs_para_pipeline = set(cnjs_perito) | set(cnjs_indeterminado)
+        novos = novos & cnjs_para_pipeline
+        consolidado["novos"] = len(novos)
+        consolidado["novos_cnjs"] = sorted(list(novos))
+        consolidado["classificacao"] = {
+            "perito": len(cnjs_perito),
+            "indeterminado": len(cnjs_indeterminado),
+            "parte": len(cnjs_parte),
+        }
+    except Exception as e:
+        log(f"Erro na classificação perito/parte: {e}", "ERRO")
+
+    # Criar pastas e atualizar pendentes para novos confirmados
+    if novos:
+        criar_pastas_novos(novos, datajud_dados)
+        atualizar_pendentes(novos)
+
+        # Notificar Telegram
+        try:
+            from notificar_telegram import enviar_descoberta
+            enviar_descoberta(sorted(novos), consolidado["total"])
+        except Exception:
+            pass  # Token pode não estar configurado ainda
+
+    # Salvar consolidado JSON
+    if args.salvar:
+        CONSOLIDADO_DIR.mkdir(parents=True, exist_ok=True)
+        json_path = CONSOLIDADO_DIR / f"consolidacao_bruta_{datetime.now().strftime('%d%m%Y_%H%M')}.json"
+        json_path.write_text(
+            json.dumps(consolidado, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        log(f"JSON: {json_path}", "OK")
+
+    # Resumo final
+    log("=" * 60)
+    log(f"CONSOLIDAÇÃO: {consolidado['total']} únicos, {consolidado['novos']} NOVOS")
+    if novos:
+        log("NOVOS PROCESSOS:")
+        for cnj in sorted(novos):
+            dj = datajud_dados.get(cnj, {})
+            classe = dj.get("classe", "?")
+            orgao = dj.get("orgaoJulgador", "?")
+            log(f"  {cnj} | {classe} | {orgao}", "NOVO")
+    log("=" * 60)
+
+    # JSON output
+    if args.json:
+        print(json.dumps(consolidado, ensure_ascii=False, indent=2))
+
+    try:
+        _novos = len(consolidado.get("novos", []))
+        if _novos:
+            rprint(f"[green]Descoberta concluída — {_novos} CNJs novos[/green]")
+        else:
+            rprint("[cyan]Descoberta concluída — nenhum CNJ novo[/cyan]")
+    except Exception as _e:
+        rprint(f"[red]Erro final descoberta: {_e}[/red]")
+
+    salvar_log()
+
+
+if __name__ == "__main__":
+    main()

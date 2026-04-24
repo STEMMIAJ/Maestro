@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Trabalho — Stemmia Forense</title>
+<style>
+:root {
+  --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+  --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b;
+  --accent: #38bdf8; --green: #22c55e; --red: #ef4444;
+  --yellow: #eab308; --purple: #8b5cf6; --orange: #f97316;
+  --pink: #ec4899; --cyan: #06b6d4; --blue: #3b82f6;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ===== HEADER STICKY ===== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  border-bottom: 1px solid var(--bg3);
+  padding: 16px 0;
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.header h1 {
+  font-size: 20px;
+  color: #f8fafc;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.hd-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.hd-fontes {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.hd-fonte {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text2);
+}
+.hd-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.hd-time {
+  font-size: 11px;
+  color: var(--text3);
+}
+.hd-stats {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+}
+.hd-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.hd-stat .n { font-weight: 700; }
+
+/* ===== CONTAINER ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* ===== SECTION ===== */
+.section {
+  margin-bottom: 32px;
+}
+.section-title {
+  font-size: 17px;
+  color: #f1f5f9;
+  font-weight: 600;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--bg3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.section-title .count {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 400;
+}
+
+/* ===== TAREFAS ===== */
+.urg-group {
+  margin-bottom: 16px;
+}
+.urg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 6px 6px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.urg-count {
+  font-size: 14px;
+  font-weight: 700;
+}
+.urg-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.tarefa-item {
+  background: var(--bg2);
+  padding: 12px 16px;
+  border-left: 3px solid var(--bg3);
+  transition: background 0.1s;
+}
+.tarefa-item:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-left-color: var(--accent);
+}
+.tarefa-item:last-child {
+  border-radius: 0 0 6px 6px;
+}
+.tarefa-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.tarefa-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.tarefa-acao {
+  font-size: 14px;
+  color: #f1f5f9;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.tarefa-local {
+  font-size: 11px;
+  color: var(--text3);
+}
+.prazo {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+.prazo.vencido {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+.prazo.urgente {
+  background: #78350f;
+  color: #fde68a;
+}
+.prazo.normal {
+  color: var(--text2);
+}
+
+/* ===== KANBAN ===== */
+.kanban {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
+}
+.kb-col {
+  background: var(--bg2);
+  border-radius: 8px;
+  padding: 10px;
+  min-height: 80px;
+}
+.kb-header {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.kb-count {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.kb-items {
+  max-height: 160px;
+  overflow-y: auto;
+}
+.kb-item {
+  font-size: 10px;
+  padding: 3px 5px;
+  margin: 2px 0;
+  background: rgba(255,255,255,0.03);
+  border-radius: 3px;
+  color: var(--text2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kb-item:hover {
+  background: rgba(255,255,255,0.07);
+  color: var(--text);
+}
+
+/* ===== MOVIMENTACOES / DESCOBERTAS ===== */
+.sub-section {
+  margin-bottom: 16px;
+}
+.sub-section h3 {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.count-sm {
+  background: var(--bg3);
+  color: var(--text2);
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 400;
+  margin-left: 6px;
+}
+.mov-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 10px;
+}
+.mov-card {
+  background: var(--bg2);
+  border-radius: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--bg3);
+  border-left: 3px solid var(--accent);
+}
+.mov-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.mov-cidade {
+  font-size: 11px;
+  color: var(--text3);
+}
+.mov-text {
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.mov-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text3);
+}
+.mov-delta {
+  color: var(--accent);
+  font-weight: 600;
+}
+.desc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.desc-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--bg2);
+  border-radius: 6px;
+  border-left: 3px solid var(--purple);
+}
+.desc-info {
+  font-size: 12px;
+  color: var(--text2);
+}
+
+/* ===== TABELA COLAPSAVEL ===== */
+.collapsible-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border-radius: 8px;
+  border: 1px solid var(--bg3);
+  transition: background 0.15s;
+  user-select: none;
+}
+.collapsible-header:hover {
+  background: var(--bg3);
+}
+.collapsible-header .arrow {
+  font-size: 12px;
+  color: var(--text3);
+  transition: transform 0.2s;
+}
+.collapsible-header.open .arrow {
+  transform: rotate(180deg);
+}
+.collapsible-body {
+  display: none;
+  margin-top: 8px;
+}
+.collapsible-body.open {
+  display: block;
+}
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filters input, .filters select {
+  background: var(--bg2);
+  border: 1px solid var(--bg3);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.filters input { width: 240px; }
+.filters input:focus, .filters select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.filter-count {
+  font-size: 11px;
+  color: var(--text3);
+}
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid var(--bg3);
+  max-height: 500px;
+  overflow-y: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th {
+  background: var(--bg2);
+  color: var(--text2);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 8px 6px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+th:hover { color: var(--accent); }
+th.sorted-asc::after { content: ' \25B2'; font-size: 8px; }
+th.sorted-desc::after { content: ' \25BC'; font-size: 8px; }
+td {
+  padding: 7px 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  font-size: 12px;
+  vertical-align: top;
+}
+tr:hover { background: rgba(255,255,255,0.02); }
+.cnj {
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 11px;
+  color: #7dd3fc;
+  white-space: nowrap;
+}
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+.valor {
+  color: var(--green);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .header-inner { flex-direction: column; align-items: flex-start; }
+  .kanban { grid-template-columns: repeat(3, 1fr); }
+  .mov-grid { grid-template-columns: 1fr; }
+  .filters input { width: 100%; }
+  .container { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER STICKY ===== -->
+<header class="header">
+  <div class="header-inner">
+    <h1>Painel de Trabalho</h1>
+    <div class="hd-meta">
+      <div class="hd-fontes"><span class="hd-fonte" title="DJe TJMG: erro"><span class="hd-dot" style="background:#ef4444"></span>DJe TJMG</span> <span class="hd-fonte" title="DataJud API: ok"><span class="hd-dot" style="background:#22c55e"></span>DataJud API</span> <span class="hd-fonte" title="PJe Consulta: ok"><span class="hd-dot" style="background:#22c55e"></span>PJe Consulta</span> <span class="hd-fonte" title="Comunica PJe: ok"><span class="hd-dot" style="background:#22c55e"></span>Comunica PJe</span></div>
+      <span class="hd-time">22/04/2026 06:30 (208.1s)</span>
+      <div class="hd-stats">
+        <span class="hd-stat"><span class="n" style="color:var(--red)">20</span> vencidos</span>
+        <span class="hd-stat"><span class="n" style="color:var(--yellow)">0</span> urgentes</span>
+        <span class="hd-stat"><span class="n" style="color:var(--accent)">110</span> ativos</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ===== TAREFAS DO DIA ===== -->
+  <div class="section" id="tarefas">
+    <div class="section-title">
+      Tarefas Pendentes
+      <span class="count">110 processos ativos de 139</span>
+    </div>
+    <div class="urg-group">  <div class="urg-header" style="background:#7f1d1d;border-left:4px solid #ef4444">    <span style="color:#fca5a5">VENCIDO</span>    <span class="urg-count" style="color:#fca5a5">20</span>  </div>  <div class="urg-items">    <div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0309</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 200d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Inhapim — Inhapim - 1ª Vara Cível, Criminal e de E...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0105</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 186d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 3ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0184</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 173d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Conselheiro Pena — Conselheiro Pena - 1ª Vara Cível, Crimin...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0105</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 162d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 3ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0105</span>    <span class="tarefa-badge" style="background:#eab308">PENDENTE-ACEITE</span>    <span class="prazo vencido">vencido ha 135d</span>  </div>  <div class="tarefa-acao">Gerar petição de aceite (/aceite)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0105</span>    <span class="tarefa-badge" style="background:#eab308">PENDENTE-ACEITE</span>    <span class="prazo vencido">vencido ha 127d</span>  </div>  <div class="tarefa-acao">Gerar petição de aceite (/aceite)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...019.8.13.0309</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 98d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Inhapim — Inhapim - 1ª Vara Cível, Criminal e de E...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0074</span>    <span class="tarefa-badge" style="background:#eab308">PENDENTE-ACEITE</span>    <span class="prazo vencido">vencido ha 70d</span>  </div>  <div class="tarefa-acao">Gerar petição de aceite (/aceite)</div>  <div class="tarefa-local">Bom Despacho — Bom Despacho - 2ª Vara Cível, Criminal e...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0309</span>    <span class="tarefa-badge" style="background:#f97316">PENDENTE-PROPOSTA</span>    <span class="prazo vencido">vencido ha 51d</span>  </div>  <div class="tarefa-acao">Responder contestação (/contestar)</div>  <div class="tarefa-local">Inhapim — Inhapim - 1ª Vara Cível, Criminal e de E...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...020.8.13.0105</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 47d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 3ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0005</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 39d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Açucena — Açucena - Vara Única</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0089</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 21d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Brazópolis — Brazópolis - Vara Única</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0680</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 14d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Taiobeiras — Taiobeiras - Vara Única</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...021.8.13.0680</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 14d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Taiobeiras — Taiobeiras - Vara Única</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0680</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 14d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Taiobeiras — Taiobeiras - Vara Única</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...023.8.13.0680</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 14d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Taiobeiras — Taiobeiras - Vara Única</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0694</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 14d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Três Pontas — Três Pontas - 2ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0627</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 12d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Taiobeiras — Taiobeiras - Vara Única</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0680</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 12d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Taiobeiras — Taiobeiras - Vara Única</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0042</span>    <span class="tarefa-badge" style="background:#ec4899">PENDENTE-LAUDO</span>    <span class="prazo vencido">vencido ha 11d</span>  </div>  <div class="tarefa-acao">Elaborar laudo pericial</div>  <div class="tarefa-local">Arcos — Arcos - 2ª Vara Cível, Criminal e de Exe...</div></div>  </div></div>
+<div class="urg-group">  <div class="urg-header" style="background:#1e293b;border-left:4px solid #475569">    <span style="color:#94a3b8">SEM PRAZO</span>    <span class="urg-count" style="color:#94a3b8">90</span>  </div>  <div class="urg-items">    <div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...015.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...017.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...003.8.13.0396</span>    <span class="tarefa-badge" style="background:#eab308">PENDENTE-ACEITE</span>      </div>  <div class="tarefa-acao">Gerar petição de aceite (/aceite)</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...026.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...021.8.13.0184</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Conselheiro Pena — Conselheiro Pena - 1ª Vara Cível, Crimin...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...022.8.13.0362</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">João Monlevade — JOÃO MONLEVADE 02 VARA CÍVEL E CP CÍVEIS</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0329</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Itamogi — ITAMOGI 01 VARA</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...026.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...022.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...026.8.13.0184</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Conselheiro Pena — CONSELHEIRO PENA 02 VARA 1</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...026.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...026.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...026.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...017.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 3ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0329</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Itamogi — ITAMOGI 01 VARA</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0184</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Conselheiro Pena — Conselheiro Pena - 2ª Vara Cível, Crimin...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0184</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Conselheiro Pena — CONSELHEIRO PENA 02 VARA 1</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...019.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...023.8.13.0184</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Conselheiro Pena — Conselheiro Pena - 2ª Vara Cível, Crimin...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...021.8.13.0231</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Ribeirão das Neves — Ribeirão das Neves - 2ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 1ª Vara Cível, Criminal e de Execuções P...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0344</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Ituiutaba</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — 6ª VARA CÍVEL da Comarca de Governador V...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — 2ª Vara Cível, Criminal e da Infância e ...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...022.8.13.0396</span>    <span class="tarefa-badge" style="background:#f59e0b">PENDENTE-PDF</span>      </div>  <div class="tarefa-acao">Colocar PDF do processo na pasta</div>  <div class="tarefa-local">Mantena — MANTENA 01 VARA CÍVEL, CRIM. E EP</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...021.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...020.8.13.0245</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Santa Luzia — Santa Luzia - 4ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...018.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0134</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 3ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...020.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...020.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — 6ª Vara Cível da Comarca de Governador V...</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 3ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...025.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...024.8.13.0105</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Governador Valadares — Governador Valadares - 6ª Vara Cível</div></div>
+<div class="tarefa-item">  <div class="tarefa-top">    <span class="cnj">...023.8.13.0702</span>    <span class="tarefa-badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span>      </div>  <div class="tarefa-acao">Gerar petição de agendamento (/agendar)</div>  <div class="tarefa-local">Uberlândia — Uberlândia - 10ª Vara Cível</div></div>  </div></div>
+  </div>
+
+  <!-- ===== KANBAN PIPELINE ===== -->
+  <div class="section" id="pipeline">
+    <div class="section-title">
+      Pipeline
+      <span class="count">110 em andamento</span>
+    </div>
+    <div class="kanban">
+      <div class="kb-col" style="border-top:3px solid #eab308">  <div class="kb-header"><span style="color:#eab308">ACEITE</span></div>  <div class="kb-count" style="color:#eab308">4</div>  <div class="kb-items"><div class="kb-item" title="0102935-58.2003.8.13.0396">Mantena</div>
+<div class="kb-item" title="5001615-98.2025.8.13.0074">Bom Despacho</div>
+<div class="kb-item" title="5008297-73.2025.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5014017-55.2024.8.13.0105">Governador Val</div>
+</div></div>
+<div class="kb-col" style="border-top:3px solid #f59e0b">  <div class="kb-header"><span style="color:#f59e0b">PDF</span></div>  <div class="kb-count" style="color:#f59e0b">64</div>  <div class="kb-items"><div class="kb-item" title="0022707-76.2015.8.13.0396">Mantena</div>
+<div class="kb-item" title="0056651-98.2017.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000029-93.2026.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000162-72.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000232-55.2026.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000237-19.2022.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000247-58.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000412-28.2026.8.13.0184">Conselheiro Pe</div>
+<div class="kb-item" title="5000447-65.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000691-57.2026.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000692-76.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000914-44.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000920-17.2026.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000926-24.2026.8.13.0396">Mantena</div>
+<div class="kb-item" title="5000966-40.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5001486-97.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5001604-73.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5001606-43.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5001625-49.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5001634-11.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5001710-89.2025.8.13.0184">Conselheiro Pe</div>
+<div class="kb-item" title="5001797-88.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002156-38.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002188-43.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002205-16.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002388-50.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002392-87.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002456-97.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002587-72.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002637-35.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002785-22.2019.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002966-13.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5002973-39.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003064-32.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003087-41.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003154-06.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003178-68.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003213-91.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003247-66.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003351-58.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003396-62.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003403-88.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003730-96.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003806-23.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003853-94.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003935-62.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003988-09.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5003994-50.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004027-06.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004041-87.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004143-12.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004251-41.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004266-44.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004401-56.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004407-29.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004580-53.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004692-22.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004725-12.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004737-26.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5004952-02.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5005009-79.2025.8.13.0344">Ituiutaba</div>
+<div class="kb-item" title="5005249-09.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5005297-65.2025.8.13.0396">Mantena</div>
+<div class="kb-item" title="5005376-49.2022.8.13.0396">Mantena</div>
+</div></div>
+<div class="kb-col" style="border-top:3px solid #f97316">  <div class="kb-header"><span style="color:#f97316">ANALISE</span></div>  <div class="kb-count" style="color:#f97316">0</div>  <div class="kb-items"></div></div>
+<div class="kb-col" style="border-top:3px solid #f97316">  <div class="kb-header"><span style="color:#f97316">PROPOSTA</span></div>  <div class="kb-count" style="color:#f97316">1</div>  <div class="kb-items"><div class="kb-item" title="5002424-62.2025.8.13.0309">Inhapim</div>
+</div></div>
+<div class="kb-col" style="border-top:3px solid #8b5cf6">  <div class="kb-header"><span style="color:#8b5cf6">AGENDAMENTO</span></div>  <div class="kb-count" style="color:#8b5cf6">25</div>  <div class="kb-items"><div class="kb-item" title="5000048-32.2021.8.13.0184">Conselheiro Pe</div>
+<div class="kb-item" title="5000162-82.2022.8.13.0362">João Monlevade</div>
+<div class="kb-item" title="5000181-85.2025.8.13.0329">Itamogi</div>
+<div class="kb-item" title="5001140-30.2017.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5001360-54.2025.8.13.0329">Itamogi</div>
+<div class="kb-item" title="5001662-13.2024.8.13.0396">Mantena</div>
+<div class="kb-item" title="5001702-49.2024.8.13.0184">Conselheiro Pe</div>
+<div class="kb-item" title="5003107-57.2023.8.13.0184">Conselheiro Pe</div>
+<div class="kb-item" title="5003133-79.2021.8.13.0231">Ribeirão das N</div>
+<div class="kb-item" title="5005267-30.2025.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5007127-08.2021.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5007409-48.2020.8.13.0245">Santa Luzia</div>
+<div class="kb-item" title="5008504-19.2018.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5008789-02.2024.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5010234-65.2024.8.13.0134">Governador Val</div>
+<div class="kb-item" title="5011001-35.2020.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5013218-75.2025.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5015391-72.2025.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5016366-70.2020.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5022941-21.2025.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5024581-59.2025.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5030880-86.2024.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5034347-39.2025.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5035541-11.2024.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5065815-44.2023.8.13.0702">Uberlândia</div>
+</div></div>
+<div class="kb-col" style="border-top:3px solid #06b6d4">  <div class="kb-header"><span style="color:#06b6d4">AGENDADA</span></div>  <div class="kb-count" style="color:#06b6d4">0</div>  <div class="kb-items"></div></div>
+<div class="kb-col" style="border-top:3px solid #0ea5e9">  <div class="kb-header"><span style="color:#0ea5e9">REALIZADA</span></div>  <div class="kb-count" style="color:#0ea5e9">0</div>  <div class="kb-items"></div></div>
+<div class="kb-col" style="border-top:3px solid #ec4899">  <div class="kb-header"><span style="color:#ec4899">LAUDO</span></div>  <div class="kb-count" style="color:#ec4899">16</div>  <div class="kb-items"><div class="kb-item" title="5000154-81.2025.8.13.0627">Taiobeiras</div>
+<div class="kb-item" title="5000506-10.2025.8.13.0184">Conselheiro Pe</div>
+<div class="kb-item" title="5000628-46.2019.8.13.0309">Inhapim</div>
+<div class="kb-item" title="5001309-57.2025.8.13.0680">Taiobeiras</div>
+<div class="kb-item" title="5001356-58.2025.8.13.0089">Brazópolis</div>
+<div class="kb-item" title="5001543-78.2021.8.13.0680">Taiobeiras</div>
+<div class="kb-item" title="5001565-97.2025.8.13.0680">Taiobeiras</div>
+<div class="kb-item" title="5001566-19.2024.8.13.0680">Taiobeiras</div>
+<div class="kb-item" title="5001875-14.2024.8.13.0042">Arcos</div>
+<div class="kb-item" title="5002526-60.2024.8.13.0005">Açucena</div>
+<div class="kb-item" title="5003799-23.2023.8.13.0680">Taiobeiras</div>
+<div class="kb-item" title="5004032-07.2025.8.13.0694">Três Pontas</div>
+<div class="kb-item" title="5004462-81.2024.8.13.0309">Inhapim</div>
+<div class="kb-item" title="5017700-42.2020.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5018356-57.2024.8.13.0105">Governador Val</div>
+<div class="kb-item" title="5039279-07.2024.8.13.0105">Governador Val</div>
+</div></div>
+<div class="kb-col" style="border-top:3px solid #ef4444">  <div class="kb-header"><span style="color:#ef4444">CONTESTACAO</span></div>  <div class="kb-count" style="color:#ef4444">0</div>  <div class="kb-items"></div></div>
+    </div>
+  </div>
+
+  <!-- ===== MOVIMENTACOES + DESCOBERTAS ===== -->
+  
+
+  <!-- ===== TABELA COMPLETA (colapsavel) ===== -->
+  <div class="section" id="tabela">
+    <div class="collapsible-header" id="tbl-toggle" onclick="toggleTable()">
+      <span style="font-size:14px;font-weight:600;color:var(--text)">Todos os processos (139)</span>
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="collapsible-body" id="tbl-body">
+      <div class="filters">
+        <input type="text" id="filter-text" placeholder="Buscar CNJ, cidade..." autocomplete="off">
+        <select id="filter-etapa"><option value="">Todas</option>
+<option value="COMPLETO">COMPLETO</option>
+<option value="EXPIRADO">EXPIRADO</option>
+<option value="PENDENTE-ACEITE">PENDENTE-ACEITE</option>
+<option value="PENDENTE-AGENDAMENTO">PENDENTE-AGENDAMENTO</option>
+<option value="PENDENTE-LAUDO">PENDENTE-LAUDO</option>
+<option value="PENDENTE-PDF">PENDENTE-PDF</option>
+<option value="PENDENTE-PROPOSTA">PENDENTE-PROPOSTA</option>
+<option value="RECUSADO">RECUSADO</option>
+<option value="VAZIO">VAZIO</option>
+</select>
+        <span class="filter-count" id="filter-count">139 processos</span>
+      </div>
+      <div class="table-wrap">
+        <table id="proc-table">
+          <thead>
+            <tr>
+              <th data-col="cnj">CNJ</th>
+              <th data-col="cidade">Cidade</th>
+              <th data-col="etapa">Etapa</th>
+              <th data-col="acao">Proxima Acao</th>
+              <th data-col="data">Nomeacao</th>
+              <th data-col="valor">Honorario</th>
+              <th data-col="movs">Movs</th>
+            </tr>
+          </thead>
+          <tbody id="proc-tbody">
+            <tr data-cnj="0012022-56.2012.8.13.0059" data-sit="PERDA DE PRAZO" data-etapa="EXPIRADO" data-cidade="Barroso"><td class="cnj">0012022-56.2012.8.13.0059</td><td>Barroso</td><td><span class="badge" style="background:#ef4444">EXPIRADO</span></td><td></td><td>05/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="0022707-76.2015.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">0022707-76.2015.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="0056651-98.2017.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">0056651-98.2017.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="0102935-58.2003.8.13.0396" data-sit="" data-etapa="PENDENTE-ACEITE" data-cidade="Mantena"><td class="cnj">0102935-58.2003.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#eab308">PENDENTE-ACEITE</span></td><td>Gerar petição de aceite (/aceite)</td><td></td><td class="valor"></td><td style="text-align:center">362</td></tr>
+<tr data-cnj="1000435-22.2025.8.13.0105" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Governador Valadares"><td class="cnj">1000435-22.2025.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>19/02/2026</td><td class="valor"></td><td style="text-align:center">9</td></tr>
+<tr data-cnj="5000029-93.2026.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000029-93.2026.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000038-13.2025.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5000038-13.2025.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>27/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000047-81.2020.8.13.0184" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Conselheiro Pena"><td class="cnj">5000047-81.2020.8.13.0184</td><td>Conselheiro Pena</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>10/02/2026</td><td class="valor">R$ 561</td><td style="text-align:center">101</td></tr>
+<tr data-cnj="5000048-32.2021.8.13.0184" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Conselheiro Pena"><td class="cnj">5000048-32.2021.8.13.0184</td><td>Conselheiro Pena</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>02/10/2025</td><td class="valor">R$ 612</td><td style="text-align:center">76</td></tr>
+<tr data-cnj="5000154-81.2025.8.13.0627" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Taiobeiras"><td class="cnj">5000154-81.2025.8.13.0627</td><td>Taiobeiras</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>12/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">43</td></tr>
+<tr data-cnj="5000162-62.2026.8.13.0194" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Coronel Fabriciano"><td class="cnj">5000162-62.2026.8.13.0194</td><td>Coronel Fabriciano</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>11/02/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000162-72.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000162-72.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000162-82.2022.8.13.0362" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="João Monlevade"><td class="cnj">5000162-82.2022.8.13.0362</td><td>João Monlevade</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>05/11/2025</td><td class="valor"></td><td style="text-align:center">74</td></tr>
+<tr data-cnj="5000181-85.2025.8.13.0329" data-sit="CANCELADA PELO JUIZ" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Itamogi"><td class="cnj">5000181-85.2025.8.13.0329</td><td>Itamogi</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>27/11/2025</td><td class="valor"></td><td style="text-align:center">90</td></tr>
+<tr data-cnj="5000232-55.2026.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000232-55.2026.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000237-19.2022.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000237-19.2022.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000247-58.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000247-58.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000412-28.2026.8.13.0184" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Conselheiro Pena"><td class="cnj">5000412-28.2026.8.13.0184</td><td>Conselheiro Pena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>26/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000416-08.2021.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5000416-08.2021.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>26/03/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000447-65.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000447-65.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000506-10.2025.8.13.0184" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Conselheiro Pena"><td class="cnj">5000506-10.2025.8.13.0184</td><td>Conselheiro Pena</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>02/10/2025</td><td class="valor">R$ 612</td><td style="text-align:center">54</td></tr>
+<tr data-cnj="5000510-14.2025.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5000510-14.2025.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>20/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000628-46.2019.8.13.0309" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Inhapim"><td class="cnj">5000628-46.2019.8.13.0309</td><td>Inhapim</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>16/12/2025</td><td class="valor">R$ 362</td><td style="text-align:center">174</td></tr>
+<tr data-cnj="5000691-57.2026.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000691-57.2026.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000692-76.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000692-76.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000792-52.2025.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5000792-52.2025.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>04/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">46</td></tr>
+<tr data-cnj="5000914-44.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000914-44.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000920-17.2026.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000920-17.2026.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000926-24.2026.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000926-24.2026.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5000966-40.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5000966-40.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5001140-30.2017.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5001140-30.2017.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>19/08/2025</td><td class="valor">R$ 612</td><td style="text-align:center">164</td></tr>
+<tr data-cnj="5001309-57.2025.8.13.0680" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Taiobeiras"><td class="cnj">5001309-57.2025.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>10/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">33</td></tr>
+<tr data-cnj="5001356-58.2025.8.13.0089" data-sit="PERDA DE PRAZO" data-etapa="PENDENTE-LAUDO" data-cidade="Brazópolis"><td class="cnj">5001356-58.2025.8.13.0089</td><td>Brazópolis</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>03/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">49</td></tr>
+<tr data-cnj="5001360-54.2025.8.13.0329" data-sit="CANCELADA PELO JUIZ" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Itamogi"><td class="cnj">5001360-54.2025.8.13.0329</td><td>Itamogi</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>22/01/2026</td><td class="valor"></td><td style="text-align:center">26</td></tr>
+<tr data-cnj="5001486-97.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5001486-97.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5001543-78.2021.8.13.0680" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Taiobeiras"><td class="cnj">5001543-78.2021.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>10/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">68</td></tr>
+<tr data-cnj="5001565-97.2025.8.13.0680" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Taiobeiras"><td class="cnj">5001565-97.2025.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>12/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">21</td></tr>
+<tr data-cnj="5001566-19.2024.8.13.0680" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Taiobeiras"><td class="cnj">5001566-19.2024.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>10/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">87</td></tr>
+<tr data-cnj="5001604-73.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5001604-73.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5001606-43.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5001606-43.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5001615-98.2025.8.13.0074" data-sit="ACEITA" data-etapa="PENDENTE-ACEITE" data-cidade="Bom Despacho"><td class="cnj">5001615-98.2025.8.13.0074</td><td>Bom Despacho</td><td><span class="badge" style="background:#eab308">PENDENTE-ACEITE</span></td><td>Gerar petição de aceite (/aceite)</td><td>05/02/2026</td><td class="valor">R$ 561</td><td style="text-align:center">103</td></tr>
+<tr data-cnj="5001625-49.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5001625-49.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5001634-11.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5001634-11.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5001662-13.2024.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Mantena"><td class="cnj">5001662-13.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>27/11/2025</td><td class="valor"></td><td style="text-align:center">44</td></tr>
+<tr data-cnj="5001702-49.2024.8.13.0184" data-sit="SERVIÇO PRESTADO" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Conselheiro Pena"><td class="cnj">5001702-49.2024.8.13.0184</td><td>Conselheiro Pena</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>29/08/2025</td><td class="valor">R$ 612</td><td style="text-align:center">71</td></tr>
+<tr data-cnj="5001710-89.2025.8.13.0184" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Conselheiro Pena"><td class="cnj">5001710-89.2025.8.13.0184</td><td>Conselheiro Pena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>09/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5001797-88.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5001797-88.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5001875-14.2024.8.13.0042" data-sit="PERDA DE PRAZO" data-etapa="PENDENTE-LAUDO" data-cidade="Arcos"><td class="cnj">5001875-14.2024.8.13.0042</td><td>Arcos</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>13/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">57</td></tr>
+<tr data-cnj="5001994-69.2022.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5001994-69.2022.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>17/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002156-38.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002156-38.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002175-65.2025.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5002175-65.2025.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>05/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">25</td></tr>
+<tr data-cnj="5002188-43.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002188-43.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002205-16.2024.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002205-16.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002387-57.2023.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5002387-57.2023.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>26/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002388-50.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002388-50.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002392-87.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002392-87.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002424-62.2025.8.13.0309" data-sit="ACEITA" data-etapa="PENDENTE-PROPOSTA" data-cidade="Inhapim"><td class="cnj">5002424-62.2025.8.13.0309</td><td>Inhapim</td><td><span class="badge" style="background:#f97316">PENDENTE-PROPOSTA</span></td><td>Responder contestação (/contestar)</td><td>26/02/2026</td><td class="valor"></td><td style="text-align:center">50</td></tr>
+<tr data-cnj="5002456-97.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002456-97.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002526-60.2024.8.13.0005" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Açucena"><td class="cnj">5002526-60.2024.8.13.0005</td><td>Açucena</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>13/02/2026</td><td class="valor">R$ 612</td><td style="text-align:center">101</td></tr>
+<tr data-cnj="5002587-72.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002587-72.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002637-35.2024.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002637-35.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002670-46.2024.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5002670-46.2024.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>20/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002785-22.2019.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002785-22.2019.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002831-26.2023.8.13.0184" data-sit="SERVIÇO PRESTADO" data-etapa="COMPLETO" data-cidade="Conselheiro Pena"><td class="cnj">5002831-26.2023.8.13.0184</td><td>Conselheiro Pena</td><td><span class="badge" style="background:#22c55e">COMPLETO</span></td><td></td><td>18/08/2025</td><td class="valor">R$ 530</td><td style="text-align:center">80</td></tr>
+<tr data-cnj="5002966-13.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002966-13.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5002973-39.2024.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5002973-39.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003064-32.2024.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003064-32.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003087-41.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003087-41.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003107-57.2023.8.13.0184" data-sit="SERVIÇO PRESTADO" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Conselheiro Pena"><td class="cnj">5003107-57.2023.8.13.0184</td><td>Conselheiro Pena</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>09/09/2025</td><td class="valor">R$ 612</td><td style="text-align:center">74</td></tr>
+<tr data-cnj="5003133-79.2021.8.13.0231" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Ribeirão das Neves"><td class="cnj">5003133-79.2021.8.13.0231</td><td>Ribeirão das Neves</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>11/02/2026</td><td class="valor"></td><td style="text-align:center">68</td></tr>
+<tr data-cnj="5003154-06.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003154-06.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003178-68.2024.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003178-68.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003213-91.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003213-91.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003247-66.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003247-66.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003351-58.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003351-58.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003396-62.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003396-62.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003403-88.2024.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003403-88.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003575-85.2023.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5003575-85.2023.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>27/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003685-50.2024.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5003685-50.2024.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>04/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">39</td></tr>
+<tr data-cnj="5003730-96.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003730-96.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003799-23.2023.8.13.0680" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Taiobeiras"><td class="cnj">5003799-23.2023.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>10/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">37</td></tr>
+<tr data-cnj="5003806-23.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003806-23.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003853-94.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003853-94.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003873-85.2025.8.13.0396" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Mantena"><td class="cnj">5003873-85.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003880-69.2023.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5003880-69.2023.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>04/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">52</td></tr>
+<tr data-cnj="5003935-62.2024.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003935-62.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003988-09.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003988-09.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5003994-50.2024.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5003994-50.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004027-06.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004027-06.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004032-07.2025.8.13.0694" data-sit="PERDA DE PRAZO" data-etapa="PENDENTE-LAUDO" data-cidade="Três Pontas"><td class="cnj">5004032-07.2025.8.13.0694</td><td>Três Pontas</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>10/03/2026</td><td class="valor">R$ 364</td><td style="text-align:center">66</td></tr>
+<tr data-cnj="5004041-87.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004041-87.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004052-40.2025.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5004052-40.2025.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>27/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004143-12.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004143-12.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004205-10.2024.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5004205-10.2024.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>04/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">44</td></tr>
+<tr data-cnj="5004251-41.2025.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004251-41.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004266-44.2024.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004266-44.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004301-88.2025.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5004301-88.2025.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>04/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">21</td></tr>
+<tr data-cnj="5004401-56.2024.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004401-56.2024.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004407-29.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004407-29.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004462-81.2024.8.13.0309" data-sit="PERDA DE PRAZO" data-etapa="PENDENTE-LAUDO" data-cidade="Inhapim"><td class="cnj">5004462-81.2024.8.13.0309</td><td>Inhapim</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>05/09/2025</td><td class="valor">R$ 200</td><td style="text-align:center">43</td></tr>
+<tr data-cnj="5004580-53.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004580-53.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004594-92.2024.8.13.0680" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Taiobeiras"><td class="cnj">5004594-92.2024.8.13.0680</td><td>Taiobeiras</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>20/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004692-22.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004692-22.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004725-12.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004725-12.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004737-26.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004737-26.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004860-37.2024.8.13.0112" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Campo Belo"><td class="cnj">5004860-37.2024.8.13.0112</td><td>Campo Belo</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>24/03/2026</td><td class="valor">R$ 612</td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5004952-02.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5004952-02.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5005009-79.2025.8.13.0344" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Ituiutaba"><td class="cnj">5005009-79.2025.8.13.0344</td><td>Ituiutaba</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5005249-09.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5005249-09.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5005267-30.2025.8.13.0105" data-sit="" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5005267-30.2025.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td></td><td class="valor"></td><td style="text-align:center">40</td></tr>
+<tr data-cnj="5005297-65.2025.8.13.0396" data-sit="" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5005297-65.2025.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td></td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5005376-49.2022.8.13.0396" data-sit="ACEITA" data-etapa="PENDENTE-PDF" data-cidade="Mantena"><td class="cnj">5005376-49.2022.8.13.0396</td><td>Mantena</td><td><span class="badge" style="background:#f59e0b">PENDENTE-PDF</span></td><td>Colocar PDF do processo na pasta</td><td>14/02/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5005547-25.2025.8.13.0194" data-sit="RECUSADA" data-etapa="RECUSADO" data-cidade="Coronel Fabriciano"><td class="cnj">5005547-25.2025.8.13.0194</td><td>Coronel Fabriciano</td><td><span class="badge" style="background:#6b7280">RECUSADO</span></td><td></td><td>02/02/2026</td><td class="valor">R$ 612</td><td style="text-align:center">62</td></tr>
+<tr data-cnj="5007127-08.2021.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5007127-08.2021.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>10/12/2025</td><td class="valor"></td><td style="text-align:center">90</td></tr>
+<tr data-cnj="5007409-48.2020.8.13.0245" data-sit="PERDA DE PRAZO" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Santa Luzia"><td class="cnj">5007409-48.2020.8.13.0245</td><td>Santa Luzia</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>24/02/2026</td><td class="valor">R$ 612</td><td style="text-align:center">99</td></tr>
+<tr data-cnj="5008297-73.2025.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-ACEITE" data-cidade="Governador Valadares"><td class="cnj">5008297-73.2025.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#eab308">PENDENTE-ACEITE</span></td><td>Gerar petição de aceite (/aceite)</td><td>02/12/2025</td><td class="valor">R$ 600</td><td style="text-align:center">30</td></tr>
+<tr data-cnj="5008504-19.2018.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5008504-19.2018.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>26/01/2026</td><td class="valor">R$ 612</td><td style="text-align:center">179</td></tr>
+<tr data-cnj="5008789-02.2024.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5008789-02.2024.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>05/02/2026</td><td class="valor"></td><td style="text-align:center">53</td></tr>
+<tr data-cnj="5010234-65.2024.8.13.0134" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5010234-65.2024.8.13.0134</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>26/08/2025</td><td class="valor">R$ 612</td><td style="text-align:center">40</td></tr>
+<tr data-cnj="5011001-35.2020.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5011001-35.2020.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>10/12/2025</td><td class="valor">R$ 612</td><td style="text-align:center">139</td></tr>
+<tr data-cnj="5011972-13.2025.8.13.0471" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Pará de Minas"><td class="cnj">5011972-13.2025.8.13.0471</td><td>Pará de Minas</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>05/02/2026</td><td class="valor">R$ 612</td><td style="text-align:center">17</td></tr>
+<tr data-cnj="5013218-75.2025.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5013218-75.2025.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>15/10/2025</td><td class="valor"></td><td style="text-align:center">46</td></tr>
+<tr data-cnj="5014017-55.2024.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-ACEITE" data-cidade="Governador Valadares"><td class="cnj">5014017-55.2024.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#eab308">PENDENTE-ACEITE</span></td><td>Gerar petição de aceite (/aceite)</td><td>10/12/2025</td><td class="valor">R$ 612</td><td style="text-align:center">73</td></tr>
+<tr data-cnj="5015391-72.2025.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5015391-72.2025.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>17/12/2025</td><td class="valor"></td><td style="text-align:center">30</td></tr>
+<tr data-cnj="5016125-49.2023.8.13.0701" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Uberaba"><td class="cnj">5016125-49.2023.8.13.0701</td><td>Uberaba</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>27/03/2026</td><td class="valor"></td><td style="text-align:center">0</td></tr>
+<tr data-cnj="5016366-70.2020.8.13.0105" data-sit="" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5016366-70.2020.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td></td><td class="valor"></td><td style="text-align:center">190</td></tr>
+<tr data-cnj="5017700-42.2020.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Governador Valadares"><td class="cnj">5017700-42.2020.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>05/02/2026</td><td class="valor"></td><td style="text-align:center">95</td></tr>
+<tr data-cnj="5018356-57.2024.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Governador Valadares"><td class="cnj">5018356-57.2024.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>13/10/2025</td><td class="valor"></td><td style="text-align:center">101</td></tr>
+<tr data-cnj="5018431-96.2024.8.13.0105" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Governador Valadares"><td class="cnj">5018431-96.2024.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>03/09/2025</td><td class="valor">R$ 612</td><td style="text-align:center">69</td></tr>
+<tr data-cnj="5022941-21.2025.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5022941-21.2025.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>26/01/2026</td><td class="valor"></td><td style="text-align:center">35</td></tr>
+<tr data-cnj="5024581-59.2025.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5024581-59.2025.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>15/01/2026</td><td class="valor"></td><td style="text-align:center">17</td></tr>
+<tr data-cnj="5027170-29.2022.8.13.0105" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Governador Valadares"><td class="cnj">5027170-29.2022.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>26/08/2025</td><td class="valor">R$ 612</td><td style="text-align:center">65</td></tr>
+<tr data-cnj="5030880-86.2024.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5030880-86.2024.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>07/10/2025</td><td class="valor">R$ 612</td><td style="text-align:center">81</td></tr>
+<tr data-cnj="5034347-39.2025.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5034347-39.2025.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>15/10/2025</td><td class="valor"></td><td style="text-align:center">29</td></tr>
+<tr data-cnj="5035510-54.2025.8.13.0105" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Governador Valadares"><td class="cnj">5035510-54.2025.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>19/02/2026</td><td class="valor"></td><td style="text-align:center">28</td></tr>
+<tr data-cnj="5035541-11.2024.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Governador Valadares"><td class="cnj">5035541-11.2024.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>25/09/2025</td><td class="valor">R$ 1.254</td><td style="text-align:center">51</td></tr>
+<tr data-cnj="5039279-07.2024.8.13.0105" data-sit="ACEITA" data-etapa="PENDENTE-LAUDO" data-cidade="Governador Valadares"><td class="cnj">5039279-07.2024.8.13.0105</td><td>Governador Valadares</td><td><span class="badge" style="background:#ec4899">PENDENTE-LAUDO</span></td><td>Elaborar laudo pericial</td><td>19/09/2025</td><td class="valor">R$ 612</td><td style="text-align:center">58</td></tr>
+<tr data-cnj="5065815-44.2023.8.13.0702" data-sit="ACEITA" data-etapa="PENDENTE-AGENDAMENTO" data-cidade="Uberlândia"><td class="cnj">5065815-44.2023.8.13.0702</td><td>Uberlândia</td><td><span class="badge" style="background:#8b5cf6">PENDENTE-AGENDAMENTO</span></td><td>Gerar petição de agendamento (/agendar)</td><td>11/02/2026</td><td class="valor">R$ 612</td><td style="text-align:center">64</td></tr>
+<tr data-cnj="5202056-90.2021.8.13.0024" data-sit="ACEITA" data-etapa="VAZIO" data-cidade="Belo Horizonte"><td class="cnj">5202056-90.2021.8.13.0024</td><td>Belo Horizonte</td><td><span class="badge" style="background:#475569">VAZIO</span></td><td>Iniciar processamento — colocar PDF ou rodar /nome</td><td>02/03/2026</td><td class="valor">R$ 1.254</td><td style="text-align:center">171</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // Toggle tabela
+  window.toggleTable = function() {
+    var header = document.getElementById('tbl-toggle');
+    var body = document.getElementById('tbl-body');
+    header.classList.toggle('open');
+    body.classList.toggle('open');
+  };
+
+  // Filtros
+  var filterText = document.getElementById('filter-text');
+  var filterEtapa = document.getElementById('filter-etapa');
+  var filterCount = document.getElementById('filter-count');
+  var tbody = document.getElementById('proc-tbody');
+
+  function applyFilters() {
+    if (!tbody) return;
+    var text = (filterText ? filterText.value : '').toLowerCase();
+    var etapa = filterEtapa ? filterEtapa.value : '';
+    var rows = tbody.querySelectorAll('tr');
+    var visible = 0;
+    rows.forEach(function(row) {
+      var rowText = row.textContent.toLowerCase();
+      var rowEtapa = row.getAttribute('data-etapa') || '';
+      var show = true;
+      if (text && rowText.indexOf(text) === -1) show = false;
+      if (etapa && rowEtapa !== etapa) show = false;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    if (filterCount) {
+      filterCount.textContent = visible + ' de ' + rows.length + ' processos';
+    }
+  }
+
+  if (filterText) filterText.addEventListener('input', applyFilters);
+  if (filterEtapa) filterEtapa.addEventListener('change', applyFilters);
+
+  // Sorting
+  var procTable = document.getElementById('proc-table');
+  if (procTable) {
+    var headers = procTable.querySelectorAll('th[data-col]');
+    var sortCol = '', sortDir = 1;
+    headers.forEach(function(th) {
+      th.addEventListener('click', function() {
+        var col = this.getAttribute('data-col');
+        if (sortCol === col) { sortDir *= -1; } else { sortCol = col; sortDir = 1; }
+        headers.forEach(function(h) { h.classList.remove('sorted-asc', 'sorted-desc'); });
+        this.classList.add(sortDir === 1 ? 'sorted-asc' : 'sorted-desc');
+        var colIndex = Array.from(this.parentNode.children).indexOf(this);
+        var rowsArr = Array.from(tbody.querySelectorAll('tr'));
+        rowsArr.sort(function(a, b) {
+          var aVal = a.children[colIndex] ? a.children[colIndex].textContent.trim() : '';
+          var bVal = b.children[colIndex] ? b.children[colIndex].textContent.trim() : '';
+          var aNum = parseFloat(aVal.replace(/[R$\s.]/g, '').replace(',', '.'));
+          var bNum = parseFloat(bVal.replace(/[R$\s.]/g, '').replace(',', '.'));
+          if (!isNaN(aNum) && !isNaN(bNum)) return (aNum - bNum) * sortDir;
+          return aVal.localeCompare(bVal, 'pt-BR') * sortDir;
+        });
+        rowsArr.forEach(function(row) { tbody.appendChild(row); });
+      });
+    });
+  }
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,641 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=9">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Expires" content="0">    
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <link href="css/sistema_antigo.css" rel="stylesheet" type="text/css">
+        <title>TJMG - Pesquisa por Jurisprudência</title>
+        <script language="JavaScript" src="/js/tjmg_ui.js"></script>
+        <script language="JavaScript" src="/js/tjmg.js"></script>
+        <script language="JavaScript" src="js/valida_dv_nu.js"></script>
+        <script type="text/javascript" src="/jurisprudencia/js/ea_util.js"></script>
+                
+        <link title="geral" rel="stylesheet" type="text/css" href="/portaltjmg/css/screen.css" media="screen">        
+        <link title="alternativo" rel="stylesheet" type="text/css" href="/portaltjmg/css/alternativo.css" media="screen">   
+        
+    <style type="text/css" media="screen">
+            a:link.linkListaEspelhoAcordaos {color: #990000;}
+            a:visited.linkListaEspelhoAcordaos {color: #2F2F0F;}
+
+            .cabecalho
+            {
+                width: 99%;                   
+                border: solid #CCCCCC 1px;
+                background-color:#DFDFDF;                
+                color: #880000;
+                height: 18px;                    
+                font-family: Verdana, Arial, Helvetica, sans-serif;
+                font-size: 9pt;
+                font-weight: bold;
+                font-style: normal;                
+            }
+
+            .caixa_processo
+            {
+                    width: 99%;                   
+                    margin-top: 20px;
+                    -webkit-border-radius: 5px;
+                    -moz-border-radius: 5px;
+                    border-radius: 5px;
+                    border: solid #CCCCCC 1px;
+                    background-color:#DFDFDF;
+                    text-indent: 5px;
+                    padding: 5px;
+            }
+
+            .corpo 
+            {
+                color: #333333;
+            }           
+            
+        </style><style type="text/css" media="print">        
+        td.leftRight
+        {
+            margin: 0;                
+        }
+
+        span#tabelaEspelho
+        {
+            width: 100%;    
+            margin-right: 0;
+        }
+
+        body
+        {
+            margin: 0;
+        }
+
+        img#logoTJ
+        {
+            visibility: visible;
+        }
+
+        img#imgBotao1
+        {
+            visibility: visible;
+        }
+
+        table#tabelaInformacoesAcordaos
+        {
+            margin-left: 0;
+        }
+
+        td.rightTop
+        {
+            visibility: hidden;
+        }
+
+        img#AWMEL3_4
+        {
+            visibility: hidden;
+        }
+
+        div#menutop
+        {
+            visibility: hidden;
+        }
+
+        img
+        {
+            visibility: hidden;
+        }
+
+        div.tabbar
+        {
+            visibility: hidden;
+        }
+
+        div#caminho
+        {
+            visibility: hidden;
+        }            
+
+        div#botaoImprimirInteiroTeor
+        {
+            visibility: hidden;
+        } 
+
+        div#panel2
+        {
+            visibility: hidden;
+        }   
+
+        div#botoesEspelho
+        {
+            visibility: hidden;
+        }        
+
+        div#cabecalhoMenu
+        {
+            visibility: hidden;
+            display: none;
+        }
+
+        td#curvaBotton
+        {
+            visibility: hidden;
+        }
+
+        div.menuPortal
+        {
+            visibility: hidden;                    
+        }        
+    </style><script>
+    if (navigator.userAgent.toLowerCase().indexOf("msie 7") != -1)
+    {
+        //Comentado, pois alguns navegadores IE 8 estão emulando o IE 7
+        //alert("ATENÇÃO: A versão do seu navegador é Internet Explorer 7.\nA Consulta à Jurisprudência está homologada para Internet Explorer 8 ou versão superior. Favor atualizar a versão do seu navegador.");
+    }
+    </script></head>
+    
+                
+    
+    
+        
+    
+        
+        <body onload="if (document.getElementById('panel2').style.display == 'none' &amp;&amp; (document.getElementById('siglaLegislativa').value != '' || document.getElementById('observacoes').value != '')) mostrarOcultarPanel(2);" onkeydown="if (capturaCtrlP(event)) { return false;}" onkeyup="if (capturaCtrlP(event)) {imprimirEspelho(); return false;}">        
+        	
+            <div id="cabecalhoMenu"><style type="text/css">
+    header .wrapper-header
+    {
+        background: #7e1819;
+        color: white;
+        padding: 0px 0 0px 0;
+    }
+</style>
+
+<header role="banner">             
+    <div class="wrapper-header">
+        <a target="_blank" title="Link para Portal TJMG" aria-label="Logo do Tribunal de Justiça do Estado de Minas Gerais" class="brand-logo logo-tjmg" href="http://www.tjmg.jus.br">
+        <img src="imagens/logo_tjmg.png">
+        </a>
+    </div>
+</header>  </div>
+            
+            <br>
+            
+            <div id="sistema">
+                <div class="containerSis" style="width: 1200px">
+    
+                
+                <table align="center" width="90%" border="0" cellspacing="0" cellpadding="0">                       
+                      
+                <tbody><tr>
+                    <td colspan="4" align="left" valign="top" class="leftRight" bgcolor="#FFFFFF">
+
+                        
+                        <h1>
+                            Resultado da busca
+                        </h1>
+
+                        <div class="textoUmaColuna">
+                            <div class="tabbar" align="left">
+  <a href="formEspelhoAcordao.do" class="tabact">Acórdãos</a>
+  <a href="decisao.do">Decisões Monocráticas</a>
+  <a href="decisaoVice.do">Decisões da 1ª e 3ª Vice-Presidência</a>   
+  <a href="sumulas.do">Súmulas</a>
+  <a href="decisaoTurmaRecursal.do">Decisões de Turma Recursal</a>
+    <a href="decisaoTurmaRecursalPJe.do">Decisões de Turma Recursal - PJe</a>
+  <a href="sentenca.do">Sentenças</a>
+  <a href="ajuda.do">Ajuda</a>
+</div>
+
+<div class="tabbar" align="left">
+  <a href="" class="tabact">Lista de Resultados</a>
+</div>
+
+                        </div>
+                        <br>
+                        <div align="left"><div class="textoUmaColuna">
+
+
+
+
+
+
+
+
+  <p class="info">
+	
+		Foram encontrados 5 Espelhos de Acórdãos com os critérios utilizados
+		<br>
+	
+		Palavras: honorarios E periciais E medico E Muriae
+		<br>
+	
+		Utiliza termos relacionados: NÃO
+		<br>
+	
+  </p>
+
+
+
+
+
+
+
+
+<!-- Mensagem de erro geral do Struts (Validate por Ex) -->
+
+
+<!-- Mensagem geral do Struts  -->
+
+
+</div></div>
+
+                        
+
+
+
+
+
+ 
+	
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="dwr/engine.js"></script>
+<script type="text/javascript" src="dwr/util.js"></script>
+<script type="text/javascript" src="dwr/interface/ValidacaoCaptchaAction.js"></script>
+
+
+<table align="center">
+    <tbody><tr><td>
+            <div class="textoUmaColuna">
+
+                
+
+                
+
+                    <div align="center">
+                        <strong>Para acessar mais informações clique no número do acórdão.</strong>
+                    </div>
+
+                    
+
+                    <br>
+                    <div align="right"><input type="button" value="Nova pesquisa" name="novaPesquisa" onclick="document.location.href='formEspelhoAcordao.do'" class="botao_vinho"></div>
+
+
+                    
+                        
+                            
+                        
+                        
+                    
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=1&amp;totalLinhas=5&amp;paginaNumero=1&amp;linhasPorPagina=1&amp;palavras=honorarios periciais medico Muriae&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                1 - Processo: Apelação Cível <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.23.344389-4/002
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    5011180-29.2023.8.13.0439 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=23&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=344389&amp;procSequencial=2&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Maria Inês Souza</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            11/03/2026
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            14/03/2026
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>Ementa: DIREITO CONSTITUCIONAL E ADMINISTRATIVO. APELAÇÃO CÍVEL. AÇÃO ORDINÁRIA. DIREITO À SAÚDE. TRATAMENTO MULTIDISCIPLINAR. CRIANÇA COM TDAH E OBESIDADE INFANTIL. FORNECIMENTO PELO SUS. SOLIDARIEDADE DOS ENTES FEDERATIVOS. RESPONSABILIDADE COMPARTILHADA. REFORMA PARCIAL DA SENTENÇA. DETERMINAÇÃO DE APRESENTAÇÃO PERIÓDICA DE RECEITA MÉDICA. APELAÇÕES PREJUDICADAS.
+<br>      I. CASO EM EXAME
+<br>1. Ação ordinária ajuizada por menor, representado por sua mãe, pleiteando a condenação do Estado de Minas Gerais e do Município de <font color="#FF0000"><b>Muriaé</b></font> à disponibilização, no prazo de quinze dias, de tratamento multidisciplinar consistente em sessões semanais com psicólogo, terapeuta ocupacional, fonoaudiólogo e psicopedagogo, em razão do diagnóstico de Transtorno de Déficit de Atenção e Hiperatividade (TDAH) e Obesidade Infantil. A sentença julgou procedente o pedido, fixando obrigação solidária entre os entes públicos e <font color="#FF0000"><b>honorários</b></font> advocatícios. O Estado e o Município apelaram, arguindo, entre outros pontos, ilegitimidade passiva, respeito à fila do SUS e observância da reserva do possível.
+<br>      II. QUESTÃO EM DISCUSSÃO
+<br>2. Há duas questões em discussão: (i) definir se há responsabilidade solidária entre Estado e Município para o fornecimento do tratamento multidisciplinar pleiteado; e (ii) estabelecer se há necessidade de apresentação periódica de receita médica atualizada para continuidade do tratamento.
+<br>      III. RAZÕES DE DECIDIR
+<br>3. O direito à saúde é dever solidário dos entes federados (União, Estados e Municípios), conforme art. 23, II, da Constituição Federal, e legítima a presença conjunta ou isolada de qualquer deles no polo passivo das ações que visem ao fornecimento de tratamentos <font color="#FF0000"><b>médicos</b></font>.
+<br>4. A jurisprudência consolidada do Supremo Tribunal Federal (RE 855178, Tema 793) reconhece a responsabilidade solidária dos entes federativos para garantir o direito à saúde, permitindo ao Judiciário direcionar, caso a caso, o cumprimentoda obrigação de fazer conforme as regras de repartição de competências.
+<br>5. No caso concreto, comprovado por laudos <font color="#FF0000"><b>médicos</b></font> e prova <font color="#FF0000"><b>pericial</b></font> que o menor necessita, com urgência, de acompanhamento multidisciplinar específico, sob pena de agravamento de seu quadro clínico.
+<br>6. Embora o Município ofereça parte do tratamento por meio da APAE, a excessiva demora e a ausência de previsão para início das terapias essenciais configuram omissão na prestação do serviço de saúde, autorizando a atuação judicial.
+<br>7. O tratamento requisitado, por envolver múltiplas áreas e cuidados contínuos, insere-se na zona de interseção entre atenção básica e média complexidade, justificando a condenação solidária dos entes públicos estadual e municipal.
+<br>8. É razoável a exigência de apresentação trimestral de receita médica atualizada, com o objetivo de garantir a adequação e necessidade contínua do tratamento, otimizando a execução da obrigação judicial.
+<br>      IV. DISPOSITIVO E TESE
+<br>9. Sentença parcialmente reformada em remessa necessária. Apelações prejudicadas.
+<br>Tese de julgamento:
+<br>1. O direito à saúde impõe responsabilidade solidária entre os entes federativos, que podem figurar isoladamente ou em conjunto no polo passivo das demandas.
+<br>2. A morosidade excessiva na prestação de serviços de saúde justifica a atuação do Judiciário para garantir tratamento necessário e urgente.
+<br>3. A exigência de apresentação periódica de receita médica atualizada é compatível com a racionalidade e efetividade da prestação continuada de tratamento de saúde.
+<br>
+<br>Dispositivos relevantes citados: CF, arts. 6º, 23, II, 196; CPC, art. 496, I; ECA, art. 141, § 2º; Lei nº 8.080/1990, art. 7º, XI.
+<br>Jurisprudência relevante citada: STF, RE 855178 RG, Rel. Min. Luiz Fux, j. 05.03.2015; STF, RE 855178 ED, Rel. Min. Luiz Fux, red. p/ o acórdão Min. Edson Fachin, j. 23.05.2019.
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=2&amp;totalLinhas=5&amp;paginaNumero=2&amp;linhasPorPagina=1&amp;palavras=honorarios periciais medico Muriae&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                2 - Processo: Ap Cível/Rem Necessária <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0439.15.002374-5/003
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    0023745-91.2015.8.13.0439 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=15&amp;procCodigo=1&amp;procCodigoOrigem=439&amp;procNumero=2374&amp;procSequencial=3&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Pedro Bitencourt Marcondes</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            11/07/2017
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            19/07/2017
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: APELAÇÃO CÍVEL. REEXAME NECESSÁRIO. DIREITO À SAÚDE. FORNECIMENTO DE PROCEDIMENTO CIRÚRGICO. FALTA DE INTERESSE RECURSAL. CONFIGURAÇÃO. ORGANIZAÇÃO DO SISTEMA ÚNICO DE SAÚDE. SOLIDARIEDADE DOS ENTES FEDERADOS. ILEGITIMIDADE PASSIVA. REJEIÇÃO. CERCEAMENTO DE DEFESA. PROVA <font color="#FF0000"><b>PERICIAL</b></font>. DESNECESSIDADE. PACIENTE COM RISCO DE PERDA DA VISÃO. DEVER DE DISPONIBILIZAR O PROCEDIMENTO CIRÚRGICO PLEITEADO. VIOLAÇÃO AO PRINCÍPIO DA RESERVA DO POSSÍVEL E DA ISONOMIA. INOCORRÊNCIA. <font color="#FF0000"><b>HONORÁRIOS</b></font> DE SUCUMBÊNCIA. MAJORAÇÃO. RECURSO DE APELAÇÃO DE JOSÉ DE FÁTIMA ELEOTÉRIO CONHECIDO E PROVIDO. RECURSO DE APELAÇÃO DO MUNICÍPIO DE <font color="#FF0000"><b>MURIAÉ</b></font> CONHECIDO E NÃO PROVIDO. SENTENÇA CONFIRMADA EM REEXAME NECESSÁRIO. 
+<br>1. Falece interesse recursal ao apelante que postula exclusão da condenação ao pagamento de multa cominatória inexistente na sentença. 
+<br>2. Os entes federados possuem responsabilidade solidária na gestão da saúde como um todo, inclusive no fornecimento de medicamentos a pacientes necessitados e na realização de serviços de saúde em geral, conforme decisão do Supremo Tribunal Federal, quando do julgamento do Recurso Extraordinário nº 855.178/SE, sob o regime da repercussão geral. A responsabilidade solidária confere ao credor a faculdade de escolher quem irá ser requerido para satisfazer a obrigação: pode ser um ou outro obrigado ou, ainda, ambos.
+<br>3. De acordo com os arts. 130 e 131 do CPC/73, vigente à época de propositura da demanda, o magistrado deve assegurar a produção das provas que considera necessárias à instrução do processo, de ofício ou a requerimento das partes, bem como apreciá-las livremente para a formação de seu convencimento.
+<br>4. O indeferimento de produção de provas não implica cerceamento de defesa quando se mostrarem inaptas a formar o convencimento do magistrado, sendo desnecessárias à solução da lide.
+<br>5. O direito à saúde insere-se no rol dos direitos sociais - direitos fundamentais de segunda geração - apresentando uma dupla vertente: de um lado, consubstanciam-se em mandamentos de natureza negativa, impondo à coletividade o dever de abstenção de atos que frustrem sua efetivação; por outro, apresentam-se como exortação a um Estado prestacionista para fomentar a implementação de prestações positivas.
+<br>6. Especificamente, como forma de consecução da política pública de saúde, estabelece a Lei Federal nº. 8.080/90 a sua instituição de forma padronizada, de modo a atender a critérios de igualdade e racionalização da utilização dos recursos. Daí a formulação de listas de procedimentos <font color="#FF0000"><b>médicos</b></font> postos à disposição dos cidadãos e filas públicas de espera, a fim de orientar a prestação igualitária e universal da assistência médica.
+<br>7. Não se ignora que o Estado consiste em uma entidade finita de recursos, cuja política de saúde deve visar ao alcance universal, ou seja, do maior número de indivíduos possível, sem descuidar do direito de precedência daqueles que ocupam por mais tempo as filas públicas de espera, sob pena de ofensa à isonomia.
+<br>8. Todavia, não se devem desprestigiar os critérios técnicos, jurídicos e políticos do administrador, que orientaram a escolha de determinados procedimentos para serem disponibilizados à população e a ordenação das filas públicas de espera, salvo se, no caso concreto, existir prova da ineficácia da atuação estatal ou, a depender da ponderação dos princípios envolvidos - efetivação do direito à saúde, garantidor da dignidade da pessoa humana, versus racionalização orçamentária, denominada reserva do possível - houver relevantes razões para o deferimento do procedimento pleiteado.
+<br>9. A ausência de elementos suficientes nos autos a demonstrar a superveniência de prejuízos a terceiros diante da realização das intervenções indispensáveis, em se tratando de demanda urgente, que envolve risco à saúde de paciente, corresponde à própria negativa injustificada de acesso aos serviços de saúde, o que não deve ser tolerado.
+<br>10. Desse modo, se o requere
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=3&amp;totalLinhas=5&amp;paginaNumero=3&amp;linhasPorPagina=1&amp;palavras=honorarios periciais medico Muriae&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                3 - Processo: Ap Cível/Reex Necessário <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0439.12.011764-3/002
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    0117643-66.2012.8.13.0439 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=12&amp;procCodigo=1&amp;procCodigoOrigem=439&amp;procNumero=11764&amp;procSequencial=2&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Áurea Brasil</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            14/08/2014
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            20/08/2014
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: APELAÇÃO CÍVEL // REEXAME NECESSÁRIO - DIREITO CONSTITUCIONAL - SAÚDE - FORNECIMENTO DE TRATAMENTO <font color="#FF0000"><b>MÉDICO</b></font>.
+<br>
+<br>PRELIMINAR - CERCEAMENTO DE DEFESA - INOCORRÊNCIA - ILEGITIMIDADE PASSIVA AD CAUSAM - DIREITO À SAÚDE - DEVER CONSTITUCIONAL DE TODOS OS ENTES FEDERATIVOS, SOLIDARIAMENTE - ARTS. 196 E 198 DA CF/88.
+<br>1. O magistrado, como destinatário da prova, tem o poder-dever de indeferir diligências inúteis para o julgamento da demanda (CPC, art. 130).
+<br>2. Considerando que o ente político, em sua contestação, sequer questiona a providência médica prescrita ao paciente, não cuidando de demonstrar, documentalmente, a existência de outros tratamentos disponibilizados na rede pública que seriam indicados ao seu caso específico, desnecessária a realização do exame <font color="#FF0000"><b>pericial</b></font>. Inocorrência de cerceamento de defesa.
+<br>3. Nos termos dos arts. 196 e seguintes da Constituição da República, a saúde é direito de todos, e dever de qualquer dos entes federativos, conjunta e solidariamente.
+<br>4. Preliminares afastadas.
+<br>
+<br>MÉRITO - PROCEDIMENTO CIRÚRGICO - VITRECTOMIA POSTERIOR, RETIRADA DE ÓLEO DE SILICONE NO OLHO ESQUERDO E FACECTOMIA COM IMPLANTE DE LIO - NECESSIDADE ESPECÍFICA DO TRATAMENTO <font color="#FF0000"><b>MÉDICO</b></font> PRESCRITO - CIRURGIA OFERECIDA NA REDE PÚBLICA - <font color="#FF0000"><b>HONORÁRIOS</b></font> ADVOCATÍCIOS DE SUCUMBÊNCIA - ART. 20, § 4º, DO CPC - MANUTENÇÃO 
+<br>1. Comprovada a necessidade do paciente ao tratamento <font color="#FF0000"><b>médico</b></font> indicado pelo profissional que acompanha o seu caso, e sendo o procedimento cirúrgico disponibilizado pela própria rede pública de saúde, deve ser mantida a sentença que impôs o seu oferecimento compulsório e imediato.
+<br>2. Verba honorária sucumbencial fixada conforme critérios de razoabilidade e equidade (art. 20, §4º do CPC). Manutenção. 
+<br>3.  Sentença confirmada.
+<br>APELAÇÃO CÍVEL Nº 1.0439.12.011764-3/002 - COMARCA DE <font color="#FF0000"><b>MURIAÉ</b></font>  - APELANTE(S): MUNICÍPIO DE <font color="#FF0000"><b>MURIAÉ</b></font> - APELADO(A)(S): FRANCISCO DE ASSIS TEIXEIRA
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=4&amp;totalLinhas=5&amp;paginaNumero=4&amp;linhasPorPagina=1&amp;palavras=honorarios periciais medico Muriae&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                4 - Processo: Ap Cível/Reex Necessário <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0439.09.107435-1/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    1074351-19.2009.8.13.0439 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=9&amp;procCodigo=1&amp;procCodigoOrigem=439&amp;procNumero=107435&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Washington Ferreira</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            27/05/2014
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            30/05/2014
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: REEXAME NECESSÁRIO. APELAÇÃO CÍVEL. AÇÃO COMINATÓRIA. AGRAVO RETIDO. NÃO CONHECIMENTO. PROVA <font color="#FF0000"><b>PERICIAL</b></font>. CERCEAMENTO DE DEFESA. NÃO OCORRÊNCIA. PRECLUSÃO TEMPORAL. ILEGITIMIDADE PASSIVA. PRELIMINARES REJEITADAS. FORNECIMENTO E IMPLANTE DE ANEL DE FERRARA. TRATAMENTO DE DOENÇA OCULAR. MUNICÍPIO DE <font color="#FF0000"><b>MURIAÉ</b></font>. RESPONSABILIDADE SOLIDÁRIA. DEVER CONSTITUCIONAL. <font color="#FF0000"><b>HONORÁRIOS</b></font> ADVOCATÍCIOS DE SUCUMBÊNCIA. MANUTENÇÃO. 
+<br>I. Não se conhece do agravo retido interposto pela parte se descumprida a regra disposta no artigo 523, caput, do CPC;
+<br>II. Se a parte não interpõe recurso contra a decisão que indefere a produção de prova <font color="#FF0000"><b>pericial</b></font>, em tempo e modo devidos, não se pode, em sede de apelação, conhecer da matéria, em razão da preclusão temporal;
+<br>III. A saúde é direito de todos e dever do Estado, sendo certo que a responsabilidade pela prestação dos serviços é dos entes federados, que devem atuar conjuntamente em regime de colaboração e cooperação;
+<br>IV. Demonstrada a necessidade do tratamento <font color="#FF0000"><b>médico</b></font> recomendado é de se manter a sentença por meio da qual foi reconhecida a responsabilidade do Município de <font color="#FF0000"><b>Muriaé</b></font> em providenciá-lo.
+                        </div>                        
+                                         
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=5&amp;totalLinhas=5&amp;paginaNumero=5&amp;linhasPorPagina=1&amp;palavras=honorarios periciais medico Muriae&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                5 - Processo: Agravo Interno Cv <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0439.08.086182-6/003
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    0861826-23.2008.8.13.0439 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=8&amp;procCodigo=1&amp;procCodigoOrigem=439&amp;procNumero=86182&amp;procSequencial=3&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Corrêa Junior</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            08/10/2013
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            18/10/2013
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: AGRAVO INTERNO - DIREITO CONSTITUCIONAL - FORNECIMENTO DE MEDICAMENTO - RESPONSABILIDADE SOLIDÁRIA DOS ENTES PÚBLICOS - LEGITIMIDADE PASSIVA - MUNICÍPIO DE <font color="#FF0000"><b>MURIAÉ</b></font> - INÉPCIA DA INICIAL - INOCORRÊNCIA - MEDICAÇÃO MINISTRADA POR ESPECIALISTA NÃO INTEGRANTE DO SUS - LAUDO <font color="#FF0000"><b>MÉDICO</b></font> <font color="#FF0000"><b>PERICIAL</b></font> PRODUZIDO EM JUÍZO - ESSENCIALIDADE DA MEDICAÇÃO COMPROVADA - RETENÇÃO DA RECEITA - CABIMENTO -<font color="#FF0000"><b>HONORÁRIOS</b></font> DEVIDOS PELO MUNICÍPIO EM FAVOR DE PARTE REPRESENTADA PELA DEFENSORIA PÚBLICA ESTADUAL - CUSTAS PROCESSUAIS - ISENÇÃO - SENTENÇA PARCIALMENTE REFORMADA, NO REEXAME NECESSÁRIO, CONHECIDO DE OFÍCIO - RECURSO VOLUNTÁRIO PREJUDICADO - ARTIGO 557, CAPUT e §1º-A, DO C.P.C. - RECURSO NÃO PROVIDO.
+<br>1. Cumpridos pela petição de ingresso os requisitos insertos nos artigos 282 e 283, do Código de Processo Civil, rejeita-se a preliminar de inépcia da inicial.
+<br>2. A responsabilidade em relação ao fornecimento de medicamentos e o conseqüente implemento do direito à saúde, constitucionalmente previsto, são concorrentes entre a União, os Estados e os Municípios.
+<br>3. Demonstrada, mediante prova <font color="#FF0000"><b>pericial</b></font> produzida em juízo, a essencialidade da medicação de que necessita a demandante, o pleito exordial há de ser julgado procedente, máxime se a negativa ao fornecimento do fármaco fora pautada pelo réu exclusivamente na ausência de sua responsabilidade, e não na inveracidade das assertivas quanto à imprescindibilidade do tratamento.
+<br>4. A retenção da receita médica tem o escopo de assegurar o fornecimento do medicamento apenas durante o período necessário ao tratamento prescrito, visando impedir a perpetração de gastos públicos indevidos.
+<br>5. É cabível a fixação de <font color="#FF0000"><b>honorários</b></font> advocatícios em favor da Defensoria Pública Estadual em ação ordinária proposta em desfavor de ente municipal, ante a inexistência do instituto da confusão previsto no art. 381, do Código Civil, sendo inaplicável a Súmula n. 421, do STJ. 
+<br>6. De acordo com Lei Estadual nº 14.939/2003, é a Municipalidade isenta do pagamento das custas processuais.
+<br>7. Sentença parcialmente reformada, em reexame necessário, conhecido de ofício. Recurso voluntário prejudicado.
+<br>8. Incidência dos ditames do artigo 557, caput e §1º-A, do C.P.C.
+<br>9. Ausente do agravo interno fundamentos suficientes a ocasionar a retratação do julgado, mantém-se a decisão proferida com fundamento em jurisprudência dominante deste Tribunal de Justiça, bem como dos Tribunais Superiores.
+<br>10. Agravo interno improvido.
+                        </div>                        
+                                         
+
+                    
+
+                    
+                        
+                    
+
+                    <!-- PAGINADOR -->
+                    <br><br>
+                    
+                    
+
+                    
+                    <!-- FIM  PAGINADOR -->
+
+                
+                <br><br>
+                <div align="right"><input type="button" value="Nova pesquisa" name="novaPesquisa" onclick="document.location.href='formEspelhoAcordao.do'" class="botao_vinho"></div>
+            </div>
+        </td></tr>
+</tbody></table>
+
+
+
+                        
+
+                    </td>
+                </tr>
+
+            </tbody></table>
+            <br><br>
+            </div>
+            </div>
+                        
+            
+
+             
+
+
+
+
+
+        
+        
+
+        
+        
+        
+
+
+<div id="hintbox"></div></body></html>

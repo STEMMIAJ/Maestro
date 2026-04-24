@@ -1,0 +1,184 @@
+{
+  "name": "Stemmia - Aceite Simples",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "aceite-simples",
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "name": "Webhook Aceite",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        250,
+        300
+      ],
+      "webhookId": "aceite-simples-webhook-001"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst data = items[0].json.body || items[0].json;\n\nconst cnj = data.cnj;\nconst texto = data.texto_processo;\nconst genero = data.genero_juiz || 'M';\n\nif (!cnj || !texto) {\n  throw new Error('Campos obrigat\\u00f3rios: cnj, texto_processo');\n}\n\nconst textoTruncado = texto.length > 900000 ? texto.substring(0, 900000) : texto;\nconst vocativo = genero === 'F' ? 'Merit\\u00edssima Ju\\u00edza' : 'Merit\\u00edssimo Juiz';\n\nconst PROMPT_01 = '# PROMPT 01 \\u2014 S\\u00cdNTESE INICIAL DO PROCESSO\\n\\n## DADOS FIXOS DO PERITO\\nNome: Jesus Eduardo Noleto da Penha | CRM/MG: 92.148 | CPF: 127.858.856-60\\nCidade: Governador Valadares/MG | E-mail: contato@stemmia.com.br\\n\\n## INSTRU\\u00c7\\u00c3O\\n\\nVoc\\u00ea \\u00e9 um assistente de per\\u00edcia m\\u00e9dica judicial. Receber\\u00e1 o texto extra\\u00eddo de um processo judicial. Produza uma s\\u00edntese estruturada voltada EXCLUSIVAMENTE ao trabalho do perito m\\u00e9dico.\\n\\nOrganize a resposta em DUAS SE\\u00c7\\u00d5ES:\\n\\n---\\n\\n### SE\\u00c7\\u00c3O 1 \\u2014 RESUMO PARA ENTENDIMENTO R\\u00c1PIDO\\n\\n#### 1. IDENTIFICA\\u00c7\\u00c3O B\\u00c1SICA\\n\\n| Item | Dado |\\n|------|------|\\n| N\\u00famero do processo | [extrair] |\\n| Vara e comarca | [extrair] |\\n| Tipo de a\\u00e7\\u00e3o | [C\\u00edvel, Previdenci\\u00e1ria, Trabalhista, etc.] |\\n| Justi\\u00e7a | [Estadual, Federal ou do Trabalho] |\\n| Segredo de justi\\u00e7a | SIM / N\\u00c3O |\\n| Justi\\u00e7a gratuita | SIM / N\\u00c3O |\\n| Valor da causa | R$ [extrair] |\\n\\n**Partes:**\\n\\n| Polo | Nome | Qualifica\\u00e7\\u00e3o |\\n|------|------|-------------|\\n| AUTOR | [extrair] | [extrair] |\\n| Advogado do autor | [extrair] | OAB [extrair] |\\n| R\\u00c9U | [extrair] | [extrair] |\\n| Advogado do r\\u00e9u | [extrair] | OAB [extrair] |\\n| DENUNCIADO/LITISCONSORTE | [extrair ou N/A] | [extrair] |\\n| FISCAL DA LEI | [extrair ou N/A] | [extrair] |\\n\\n**Objeto principal:** [resumir em 2-3 linhas o que o ju\\u00edzo quer que o perito avalie]\\n\\n#### 2. CONTROV\\u00c9RSIA M\\u00c9DICO-PERICIAL\\n\\nQual \\u00e9 exatamente a d\\u00favida t\\u00e9cnica que o juiz quer que o perito responda? (exist\\u00eancia de incapacidade, nexo causal, agravamento, concausa, data de in\\u00edcio, consolida\\u00e7\\u00e3o de sequelas, etc.)\\nResumir em 4-5 linhas, linguagem direta.\\n\\n#### 3. HIST\\u00d3RICO F\\u00c1TICO RELEVANTE (CRONOL\\u00d3GICO)\\n\\nListar em ordem cronol\\u00f3gica apenas os principais marcos (m\\u00e1ximo 8-10 itens):\\n- In\\u00edcio dos sintomas\\n- Acidentes/eventos relevantes\\n- Afastamentos do trabalho\\n- Requerimentos administrativos (DER no INSS, etc.)\\n- Decis\\u00f5es importantes anteriores\\n\\n#### 4. HIST\\u00d3RICO M\\u00c9DICO RESUMIDO\\n\\n- Diagn\\u00f3sticos principais (CID se constar)\\n- Exames complementares relevantes (tipo + data + resultado em 1 linha)\\n- Tratamentos relevantes (medica\\u00e7\\u00f5es, cirurgias, terapias)\\n- Qualidade do conjunto documental: ESCASSO / RAZO\\u00c1VEL / ROBUSTO\\n\\n#### 5. SITUA\\u00c7\\u00c3O PROCESSUAL DA PER\\u00cdCIA\\n\\n- H\\u00e1 decis\\u00e3o deferindo per\\u00edcia m\\u00e9dica? Transcrever o essencial.\\n- J\\u00e1 houve per\\u00edcia anterior (administrativa ou judicial)? Resumir resultado em 2-3 linhas.\\n- Prazos fixados para a per\\u00edcia ou entrega de laudo.\\n\\n#### 6. QUESITOS DO JU\\u00cdZO E DAS PARTES\\n\\nResumir em blocos tem\\u00e1ticos (N\\u00c3O copiar literalmente todos):\\n\\n**a) Quesitos do ju\\u00edzo:** [sintetizar n\\u00facleo]\\n**b) Quesitos do autor:** [sintetizar n\\u00facleo]\\n**c) Quesitos do r\\u00e9u:** [sintetizar n\\u00facleo]\\n\\n| Origem | Quantidade |\\n|--------|-----------|\\n| Ju\\u00edzo | [contar] |\\n| Autor | [contar] |\\n| R\\u00e9u | [contar] |\\n| Denunciado/Litisconsorte | [contar ou N/A] |\\n| **TOTAL** | **[total]** |\\n\\nDestacar quesitos confusos, repetidos ou que extrapolam a \\u00e1rea m\\u00e9dica.\\n\\n#### 7. TRIAGEM SECURIT\\u00c1RIA\\n\\nSe houver componente securit\\u00e1rio (seguradora como parte, denuncia\\u00e7\\u00e3o \\u00e0 lide, ap\\u00f3lice nos autos):\\n\\n| Item | Dado |\\n|------|------|\\n| Componente securit\\u00e1rio | SIM / N\\u00c3O / N/A |\\n| Tipo de seguro | [Vida, Acidentes Pessoais, RC Geral, etc.] |\\n| Ramo SUSEP | [se identific\\u00e1vel] |\\n| Ap\\u00f3lice(s) | [n\\u00famero, vig\\u00eancia] |\\n| Coberturas contratadas | [listar com limites] |\\n| Exclus\\u00f5es expressas | [listar as que impactam a per\\u00edcia] |\\n| Assistente t\\u00e9cnico indicado | [nome ou N/A] |\\n\\n#### 8. LOG\\u00cdSTICA E LOCAL DA PER\\u00cdCIA\\n\\n- Cidade/comarca de resid\\u00eancia do autor\\n- Determina\\u00e7\\u00e3o de local espec\\u00edfico (f\\u00f3rum, cl\\u00ednica, domic\\u00edlio, teleper\\u00edcia, mutir\\u00e3o)\\n- Dificuldade de locomo\\u00e7\\u00e3o, interna\\u00e7\\u00e3o, acamamento\\n\\n#### 9. PONTOS DE ATEN\\u00c7\\u00c3O PARA O PERITO\\n\\n- Conflitos de vers\\u00e3o (datas divergentes, relatos diferentes)\\n- Lacunas documentais relevantes\\n- Poss\\u00edvel impedimento ou suspei\\u00e7\\u00e3o\\n- Outros pontos que exijam cuidado\\n\\n#### 10. AN\\u00c1LISE DA DECIS\\u00c3O SOBRE TIPO DE PER\\u00cdCIA\\n\\nLer decis\\u00f5es e despachos e responder:\\n\\n1) O juiz determinou expressamente per\\u00edcia indireta/documental? Copiar frase exata.\\n2) H\\u00e1 ordem expressa para exame cl\\u00ednico presencial ou teleper\\u00edcia? Transcrever.\\n3) A per\\u00edcia pode ser feita apenas por an\\u00e1lise documental? SIM/N\\u00c3O\\n4) O juiz exigiu exame direto? SIM/N\\u00c3O\\n5) **Conclus\\u00e3o pr\\u00e1tica para o perito:** per\\u00edcia DOCUMENTAL/INDIRETA, DIRETA (com exame), ou N\\u00c3O FICOU CLARO (recomendar peti\\u00e7\\u00e3o de esclarecimento).\\n\\n#### 11. PRAZOS E RISCOS DE URG\\u00caNCIA\\n\\n- Prazos atuais para a per\\u00edcia\\n- Audi\\u00eancias pr\\u00f3ximas\\n- Risco de preclus\\u00e3o\\n- Se n\\u00e3o identificados, informar expressamente\\n\\n---\\n\\n### SE\\u00c7\\u00c3O 2 \\u2014 CHECKLIST PR\\u00c1TICO PARA O PERITO\\n\\n#### 1. TIPO DE PER\\u00cdCIA MAIS ADEQUADO (T\\u00c9CNICO)\\n\\nCom base nos autos:\\na) Per\\u00edcia puramente documental/indireta parece suficiente? OU\\nb) Recomenda-se per\\u00edcia direta com exame cl\\u00ednico? OU\\nc) Per\\u00edcia mista (documental + exame direto)?\\nJustificar em 4-6 linhas.\\n\\n#### 2. O QUE LER PRIMEIRO NOS AUTOS\\n\\nListar em ordem de prioridade (m\\u00e1ximo 8 itens):\\n1. [documento mais importante]\\n2. [segundo mais importante]\\n...\\n\\n#### 3. PRINCIPAIS PERGUNTAS A RESPONDER NO LAUDO\\n\\nResumir em 3-7 bullets as quest\\u00f5es centrais:\\n- [pergunta 1]\\n- [pergunta 2]\\n...\\n\\n#### 4. ALERTAS R\\u00c1PIDOS\\n\\n- Prazo curto? [SIM/N\\u00c3O \\u2014 detalhar]\\n- Conflito de interesse poss\\u00edvel? [SIM/N\\u00c3O]\\n- Complementa\\u00e7\\u00e3o documental necess\\u00e1ria? [SIM/N\\u00c3O \\u2014 quais docs]\\n- Complexidade t\\u00e9cnica elevada? [SIM/N\\u00c3O \\u2014 por qu\\u00ea]\\n\\n#### 5. RECOMENDA\\u00c7\\u00c3O PRELIMINAR\\n\\n**ACEITAR / RECUSAR / ACEITAR COM RESSALVAS**\\n\\nJustificativa breve (2-3 linhas).\\n\\n---\\n\\n## REGRAS DE ESTILO\\n\\n- Tom de perito, N\\u00c3O de advogado\\n- \"o perito\" ou nome pr\\u00f3prio (nunca \"Este perito\")\\n- \"o Ju\\u00edzo\" (nunca \"Ilustr\\u00edssimo\" ou \"Excelent\\u00edssimo\")\\n- Sem latinismos desnecess\\u00e1rios\\n- Frases diretas, per\\u00edodos curtos\\n- Referenciar IDs de documentos do PJe quando dispon\\u00edveis\\n- Marcar [N\\u00c3O IDENTIFICADO] quando dado n\\u00e3o for encontrado\\n- N\\u00c3O inventar dados que n\\u00e3o estejam nos autos';\n\nreturn [{\n  json: {\n    cnj,\n    genero_juiz: genero,\n    vocativo,\n    texto_length: texto.length,\n    prompt_completo: PROMPT_01 + '\\n\\n---\\n\\nTEXTO DO PROCESSO:\\n\\n' + textoTruncado\n  }\n}];"
+      },
+      "id": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+      "name": "Validar Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        470,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// === GEMINI FALLBACK AUTOMÁTICO ===\n// Tenta modelos em ordem até um funcionar\n// Se todos falharem, lança erro com detalhes\n\nconst GEMINI_KEY = 'AIzaSyA9Gh9JYW4VEiKVlmCR0ziUD3umK9pJYWQ';\nconst MODELOS = [\"gemini-2.5-flash\", \"gemini-2.5-flash-lite\", \"gemini-2.5-pro\"];\nconst TELEGRAM_TOKEN = '8603024374:AAH81RHxIBwOsTaDI87nM7ap2DHcuE3xnxA';\nconst TELEGRAM_CHAT = '8397602236';\n\nconst promptCompleto = $json.prompt_completo;\nconst temperature = 0.2;\nconst maxTokens = 8192;\n\nasync function chamarGemini(modelo, prompt, temp, tokens) {\n  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${GEMINI_KEY}`;\n  const body = JSON.stringify({\n    contents: [{parts: [{text: prompt}]}],\n    generationConfig: {temperature: temp, maxOutputTokens: tokens}\n  });\n\n  const resp = await fetch(url, {\n    method: 'POST',\n    headers: {'Content-Type': 'application/json'},\n    body: body,\n    signal: AbortSignal.timeout(120000)\n  });\n\n  const data = await resp.json();\n\n  if (data.error) {\n    const code = data.error.code || resp.status;\n    throw new Error(`${code}: ${data.error.message}`);\n  }\n\n  if (!data.candidates || data.candidates.length === 0) {\n    throw new Error('Resposta vazia');\n  }\n\n  if (data.candidates[0].finishReason === 'SAFETY') {\n    throw new Error('Bloqueado por filtro de segurança');\n  }\n\n  return data;\n}\n\nasync function notificarTelegram(msg) {\n  try {\n    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {\n      method: 'POST',\n      headers: {'Content-Type': 'application/json'},\n      body: JSON.stringify({chat_id: TELEGRAM_CHAT, text: msg})\n    });\n  } catch(e) {}\n}\n\nlet resultado = null;\nlet modeloUsado = '';\nconst erros = [];\n\nfor (const modelo of MODELOS) {\n  try {\n    resultado = await chamarGemini(modelo, promptCompleto, temperature, maxTokens);\n    modeloUsado = modelo;\n    break;\n  } catch (e) {\n    erros.push(`${modelo}: ${e.message}`);\n    if (e.message.includes('429') || e.message.includes('RESOURCE_EXHAUSTED') || e.message.includes('quota')) {\n      await notificarTelegram(`⚠️ Gemini ${modelo} sem quota. Tentando próximo...`);\n      continue;\n    }\n    // Erro não relacionado a quota — tentar próximo mesmo assim\n    continue;\n  }\n}\n\nif (!resultado) {\n  await notificarTelegram(`❌ TODOS os modelos Gemini falharam:\\n${erros.join('\\n')}`);\n  throw new Error('Todos os modelos falharam: ' + erros.join(' | '));\n}\n\n// Se usou modelo diferente do primeiro, notificar\nif (modeloUsado !== MODELOS[0]) {\n  await notificarTelegram(`🔄 Modelo trocado: ${modeloUsado} (primário indisponível)`);\n}\n\nconst texto = resultado.candidates[0].content.parts[0].text;\n\nreturn [{\n  json: {\n    ...($input.all()[0].json),\n    gemini_response: resultado,\n    gemini_text: texto,\n    modelo_usado: modeloUsado,\n    fallback: modeloUsado !== MODELOS[0]\n  }\n}];",
+        "nodeVersion": 2
+      },
+      "id": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+      "name": "Gemini Sintese",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        690,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Texto já extraído pelo nó de fallback\nconst sintese = $input.all()[0].json.gemini_text;\nconst modeloUsado = $input.all()[0].json.modelo_usado || 'desconhecido';\n\n// Extrair dados b\\u00e1sicos via regex\nconst cnj = $('Validar Input').first().json.cnj;\nconst vocativo = $('Validar Input').first().json.vocativo;\nconst genero = $('Validar Input').first().json.genero_juiz;\n\n// Extrair vara e comarca\nconst varaMatch = sintese.match(/Vara\\s+e\\s+comarca\\s*\\|\\s*(.+?)(?:\\n|\\|)/i);\nconst vara = varaMatch ? varaMatch[1].trim() : '[VERIFICAR VARA]';\n\n// Extrair valor da causa\nconst valorMatch = sintese.match(/Valor\\s+da\\s+causa\\s*\\|\\s*R?\\$?\\s*([\\d.,]+)/i);\nconst valorCausa = valorMatch ? valorMatch[1].trim() : '[VERIFICAR]';\n\n// Extrair tipo de a\\u00e7\\u00e3o\nconst tipoMatch = sintese.match(/Tipo\\s+de\\s+a\\u00e7\\u00e3o\\s*\\|\\s*(.+?)(?:\\n|\\|)/i);\nconst tipoAcao = tipoMatch ? tipoMatch[1].trim() : '[VERIFICAR]';\n\n// Extrair quesitos total\nconst quesitosMatch = sintese.match(/\\*\\*TOTAL\\*\\*\\s*\\|\\s*\\*\\*(\\d+)\\*\\*/i);\nconst totalQuesitos = quesitosMatch ? quesitosMatch[1] : '[VERIFICAR]';\n\n// Data atual por extenso\nconst meses = ['janeiro','fevereiro','mar\\u00e7o','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];\nconst hoje = new Date();\nconst dataExtenso = hoje.getDate() + ' de ' + meses[hoje.getMonth()] + ' de ' + hoje.getFullYear();\n\n// Montar peti\\u00e7\\u00e3o de aceite\nconst peticao = 'AO JU\\u00cdZO DA ' + vara + ' \\u2013 MG\\n\\nProcesso n\\u00ba: **' + cnj + '**\\n\\n**MANIFESTA\\u00c7\\u00c3O \\u2013 ACEITE DE ENCARGO E HONOR\\u00c1RIOS**\\n\\n**' + vocativo + '**,\\n\\nEm aten\\u00e7\\u00e3o ao documento de **ID [VERIFICAR ID NO PJe]**, venho ratificar meu aceite dos encargos e honor\\u00e1rios periciais, j\\u00e1 fixados em R$ [VERIFICAR VALOR] ([VERIFICAR VALOR POR EXTENSO]).\\n\\nAguardo os tr\\u00e2mites necess\\u00e1rios para prosseguir com o agendamento da per\\u00edcia m\\u00e9dica, caso n\\u00e3o haja suspei\\u00e7\\u00e3o ou impedimento sobre minha atua\\u00e7\\u00e3o.\\n\\nTermos em que,\\nPede deferimento.\\n\\nDr. J\\u00e9sus Eduardo Nol\\u00eato da Penha\\nM\\u00e9dico \\u2013 Perito Judicial \\u2013 CRM-MG 92.148\\nMembro da ABMLPM \\u2013 Associa\\u00e7\\u00e3o Brasileira de Medicina Legal e Per\\u00edcia M\\u00e9dica\\n\\n' + dataExtenso + ',\\nGovernador Valadares \\u2013 MG.';\n\n// Campos pendentes\nconst camposPendentes = [];\nconst matches = peticao.match(/\\[VERIFICAR[^\\]]*\\]/g);\nif (matches) camposPendentes.push(...matches);\n\nreturn [{\n  json: {\n    cnj,\n    vara,\n    tipo_acao: tipoAcao,\n    valor_causa: valorCausa,\n    total_quesitos: totalQuesitos,\n    peticao_md: peticao,\n    sintese_completa: sintese,\n    campos_pendentes: camposPendentes,\n    data: dataExtenso\n  }\n}];"
+      },
+      "id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
+      "name": "Extrair e Montar Aceite",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        910,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot8603024374:AAH81RHxIBwOsTaDI87nM7ap2DHcuE3xnxA/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"8397602236\",\n  \"text\": \"\\u2705 ACEITE GERADO\\nProcesso: {{ $json.cnj }}\\nVara: {{ $json.vara }}\\nTipo: {{ $json.tipo_acao }}\\nQuesitos: {{ $json.total_quesitos }}\\n\\nCampos pendentes: {{ $json.campos_pendentes.length > 0 ? $json.campos_pendentes.join(', ') : 'Nenhum' }}\",\n  \"parse_mode\": \"HTML\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091",
+      "name": "Telegram Notificar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1130,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: true, cnj: $json.cnj, vara: $json.vara, tipo_acao: $json.tipo_acao, valor_causa: $json.valor_causa, total_quesitos: $json.total_quesitos, peticao_md: $json.peticao_md, sintese_completa: $json.sintese_completa, campos_pendentes: $json.campos_pendentes, data: $json.data } }}",
+        "options": {}
+      },
+      "id": "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f809102",
+      "name": "Respond Aceite",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1350,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Aceite": {
+      "main": [
+        [
+          {
+            "node": "Validar Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Input": {
+      "main": [
+        [
+          {
+            "node": "Gemini Sintese",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Sintese": {
+      "main": [
+        [
+          {
+            "node": "Extrair e Montar Aceite",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair e Montar Aceite": {
+      "main": [
+        [
+          {
+            "node": "Telegram Notificar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Notificar": {
+      "main": [
+        [
+          {
+            "node": "Respond Aceite",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Sao_Paulo",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "stemmia-aceite-simples-001"
+  },
+  "tags": [
+    {
+      "name": "Stemmia",
+      "id": "1"
+    },
+    {
+      "name": "Pericia",
+      "id": "2"
+    }
+  ]
+}

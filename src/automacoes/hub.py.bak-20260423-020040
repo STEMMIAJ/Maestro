@@ -1,0 +1,535 @@
+#!/usr/bin/env python3
+"""
+Hub de Automações — Orquestrador Único.
+
+Consolida TODAS as automações de monitoramento judicial em uma execução:
+  Fase 1: Descoberta (DJe TJMG + PJe Consulta + DataJud enriquecimento)
+  Fase 2: Status (movimentações via DataJud)
+  Fase 3: Consolidação (merge todas as fontes)
+  Fase 4: Saída (estado_hub.json + dashboard HTML + FTP + Telegram)
+
+Uso:
+  python3 hub.py                    # Execução completa
+  python3 hub.py --discovery-only   # Só descoberta
+  python3 hub.py --status-only      # Só status de processos conhecidos
+  python3 hub.py --dashboard-only   # Só regenerar dashboard
+  python3 hub.py --dry-run          # Executar sem salvar/notificar
+  python3 hub.py --no-telegram      # Sem notificação Telegram
+  python3 hub.py --no-ftp           # Sem upload FTP
+"""
+
+import argparse
+import json
+import logging
+import os
+import subprocess
+import sys
+import time
+import traceback
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
+from pathlib import Path
+
+# ============================================================
+# PATHS E IMPORTS
+# ============================================================
+
+PROJECT_ROOT = Path.home() / "stemmia-forense"
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from automacoes.config_hub import (
+    AUTOMACOES_DIR, ESTADO_PATH, DASHBOARD_PATH, LOGS_DIR,
+    CONSOLIDADO_JSON, DATA_DIR, FONTES,
+    DJE_DIAS_PADRAO, DATAJUD_DIAS_MOVIMENTACAO, HISTORICO_MAX_DIAS,
+    FTP_HOST, FTP_USER, FTP_REMOTE_DIR, FTP_DASHBOARD_FILENAME,
+    CLASSES_EXCLUIR_PJE,
+)
+
+try:
+    from src.pipeline.descobrir_processos import (
+        fonte_dje_tjmg,
+        fonte_pje_consulta_publica,
+        fonte_datajud_enriquecer,
+        reconciliar,
+        carregar_cnjs_conhecidos,
+    )
+    _HAS_DESCOBRIR = True
+except ImportError as e:
+    _HAS_DESCOBRIR = False
+    _DESCOBRIR_ERR = str(e)
+
+try:
+    from src.pje.datajud_client import (
+        consultar_processo,
+        buscar_movimentacoes,
+    )
+    _HAS_DATAJUD = True
+except ImportError as e:
+    _HAS_DATAJUD = False
+    _DATAJUD_ERR = str(e)
+
+try:
+    from src.pipeline.consolidar_processos import (
+        consolidar_tudo,
+        estatisticas,
+        salvar_consolidado,
+    )
+    _HAS_CONSOLIDAR = True
+except ImportError as e:
+    _HAS_CONSOLIDAR = False
+    _CONSOLIDAR_ERR = str(e)
+
+try:
+    from src.utilidades.notificar_telegram import enviar as telegram_enviar
+    _HAS_TELEGRAM = True
+except ImportError:
+    _HAS_TELEGRAM = False
+
+
+# ============================================================
+# LOGGING
+# ============================================================
+
+def setup_logging():
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    log_file = LOGS_DIR / f"{datetime.now().strftime('%Y-%m-%d')}.log"
+    logging.basicConfig(
+        level=logging.INFO,
+        format="[%(asctime)s] %(levelname)s: %(message)s",
+        datefmt="%H:%M:%S",
+        handlers=[
+            logging.FileHandler(log_file, encoding="utf-8"),
+            logging.StreamHandler(sys.stderr),
+        ],
+    )
+    return logging.getLogger("hub")
+
+
+# ============================================================
+# FASE 1: DESCOBERTA
+# ============================================================
+
+def fase_descoberta(estado, logger, dias_dje=DJE_DIAS_PADRAO):
+    logger.info("=== FASE 1: DESCOBERTA ===")
+
+    if not _HAS_DESCOBRIR:
+        logger.error(f"descobrir_processos indisponível: {_DESCOBRIR_ERR}")
+        for f_id in ["dje_tjmg", "pje_consulta", "datajud"]:
+            estado["fontes"][f_id] = {
+                "status": "erro", "resultados": 0,
+                "ultima_execucao": datetime.now().isoformat(),
+                "erro": f"Import falhou: {_DESCOBRIR_ERR}",
+            }
+        return
+
+    resultados_fontes = []
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        futures = {}
+        fonte_dje = next((f for f in FONTES if f["id"] == "dje_tjmg"), None)
+        if fonte_dje and fonte_dje["ativa"]:
+            futures[executor.submit(fonte_dje_tjmg, dias_dje)] = "dje_tjmg"
+
+        fonte_pje = next((f for f in FONTES if f["id"] == "pje_consulta"), None)
+        if fonte_pje and fonte_pje["ativa"]:
+            futures[executor.submit(fonte_pje_consulta_publica)] = "pje_consulta"
+
+        for future in as_completed(futures):
+            fonte_id = futures[future]
+            try:
+                resultado = future.result(timeout=120)
+                resultados_fontes.append(resultado)
+                estado["fontes"][fonte_id] = {
+                    "status": "ok" if not resultado.get("erro") else "erro",
+                    "resultados": len(resultado.get("cnjs", [])),
+                    "ultima_execucao": datetime.now().isoformat(),
+                    "erro": resultado.get("erro"),
+                }
+                logger.info(f"  {fonte_id}: {len(resultado.get('cnjs', []))} CNJs")
+            except Exception as e:
+                logger.error(f"  {fonte_id}: {e}")
+                estado["fontes"][fonte_id] = {
+                    "status": "erro", "resultados": 0,
+                    "ultima_execucao": datetime.now().isoformat(),
+                    "erro": str(e),
+                }
+
+    # DataJud enriquecimento
+    todos_cnjs_novos = set()
+    for r in resultados_fontes:
+        todos_cnjs_novos.update(r.get("cnjs", []))
+
+    cnjs_conhecidos = carregar_cnjs_conhecidos()
+    novos_cnjs = todos_cnjs_novos - cnjs_conhecidos
+
+    datajud_dados = {}
+    if novos_cnjs and _HAS_DATAJUD:
+        try:
+            datajud_dados = fonte_datajud_enriquecer(list(novos_cnjs))
+            estado["fontes"]["datajud"] = {
+                "status": "ok",
+                "resultados": len(datajud_dados),
+                "ultima_execucao": datetime.now().isoformat(),
+                "erro": None,
+            }
+        except Exception as e:
+            logger.error(f"  DataJud enriquecimento: {e}")
+            estado["fontes"]["datajud"] = {
+                "status": "erro", "resultados": 0,
+                "ultima_execucao": datetime.now().isoformat(),
+                "erro": str(e),
+            }
+    elif not novos_cnjs:
+        estado["fontes"]["datajud"] = {
+            "status": "ok", "resultados": 0,
+            "ultima_execucao": datetime.now().isoformat(),
+            "erro": None,
+        }
+
+    # Reconciliar
+    try:
+        consolidado = reconciliar(resultados_fontes, datajud_dados, cnjs_conhecidos)
+        estado["descobertas_novas"] = [
+            {
+                "cnj": cnj,
+                "fontes": [r["fonte"] for r in resultados_fontes if cnj in r.get("cnjs", [])],
+                "classe": datajud_dados.get(cnj, {}).get("classe", ""),
+                "orgao_julgador": datajud_dados.get(cnj, {}).get("orgaoJulgador", ""),
+                "data_descoberta": datetime.now().strftime("%Y-%m-%d"),
+            }
+            for cnj in consolidado.get("novos_cnjs", [])
+        ]
+        logger.info(f"  Reconciliado: {consolidado['total']} total, {consolidado['novos']} novos")
+    except Exception as e:
+        logger.error(f"  Reconciliação: {e}")
+
+    # Comunica PJe
+    fonte_comunica = next((f for f in FONTES if f["id"] == "comunica_pje"), None)
+    if fonte_comunica and fonte_comunica.get("ativa"):
+        try:
+            import importlib.util
+            _spec = importlib.util.spec_from_file_location(
+                "comunica_pje",
+                str(PROJECT_ROOT / "src" / "pje" / "monitor-publicacoes" / "comunica_pje.py"),
+            )
+            _mod = importlib.util.module_from_spec(_spec)
+            _spec.loader.exec_module(_mod)
+            executar_para_hub = _mod.executar_para_hub
+            resultado_comunica = executar_para_hub()
+            estado["fontes"]["comunica_pje"] = resultado_comunica
+            logger.info(f"  Comunica PJe: {resultado_comunica.get('confirmados', 0)} confirmados, {resultado_comunica.get('possiveis', 0)} possíveis")
+        except Exception as e:
+            logger.error(f"  Comunica PJe: {e}")
+            estado["fontes"]["comunica_pje"] = {
+                "status": "erro", "resultados": 0,
+                "ultima_execucao": datetime.now().isoformat(),
+                "erro": str(e),
+            }
+    elif fonte_comunica:
+        estado["fontes"]["comunica_pje"] = {
+            "status": "desativada", "resultados": 0,
+            "ultima_execucao": None,
+            "erro": fonte_comunica.get("motivo_inativa"),
+        }
+
+
+# ============================================================
+# FASE 2: STATUS
+# ============================================================
+
+def fase_status(estado, logger):
+    logger.info("=== FASE 2: STATUS ===")
+
+    if not _HAS_DATAJUD:
+        logger.error(f"datajud_client indisponível: {_DATAJUD_ERR}")
+        return
+
+    processos_ativos = []
+    if CONSOLIDADO_JSON.exists():
+        try:
+            with open(CONSOLIDADO_JSON, encoding="utf-8") as f:
+                dados = json.load(f)
+            lista = dados.get("processos", dados) if isinstance(dados, dict) else dados
+            processos_ativos = [
+                p for p in lista if isinstance(p, dict)
+                and p.get("etapa_pipeline") not in ("EXPIRADO", "CANCELADO", "RECUSADO")
+            ]
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    if not processos_ativos:
+        logger.info("  Nenhum processo ativo para verificar")
+        return
+
+    # Estado anterior
+    estado_anterior = {}
+    if ESTADO_PATH.exists():
+        try:
+            with open(ESTADO_PATH, encoding="utf-8") as f:
+                old = json.load(f)
+            for m in old.get("movimentacoes_novas", []):
+                estado_anterior[m["cnj"]] = m.get("total_movimentos", 0)
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    movimentacoes_novas = []
+    cnjs_verificados = 0
+
+    for proc in processos_ativos:
+        cnj = proc.get("cnj", "")
+        if not cnj:
+            continue
+        try:
+            movs = buscar_movimentacoes(cnj, dias=DATAJUD_DIAS_MOVIMENTACAO)
+            cnjs_verificados += 1
+            if movs:
+                ultima = movs[0]
+                total_anterior = estado_anterior.get(cnj, 0)
+                total_atual = len(movs)
+                if total_atual > total_anterior or total_anterior == 0:
+                    movimentacoes_novas.append({
+                        "cnj": cnj,
+                        "cidade": proc.get("cidade", ""),
+                        "vara": proc.get("vara", proc.get("orgao_julgador", "")),
+                        "ultima_movimentacao": ultima.get("nome", ""),
+                        "data_movimentacao": ultima.get("data", ""),
+                        "total_movimentos": total_atual,
+                        "delta": total_atual - total_anterior if total_anterior > 0 else 0,
+                    })
+            time.sleep(0.3)
+        except Exception as e:
+            logger.warning(f"  Erro {cnj}: {e}")
+
+    estado["movimentacoes_novas"] = movimentacoes_novas
+
+    if "datajud" not in estado["fontes"]:
+        estado["fontes"]["datajud"] = {}
+    estado["fontes"]["datajud"].update({
+        "status": "ok", "resultados": cnjs_verificados,
+        "ultima_execucao": datetime.now().isoformat(), "erro": None,
+    })
+
+    logger.info(f"  Verificados: {cnjs_verificados} | Novidades: {len(movimentacoes_novas)}")
+
+
+# ============================================================
+# FASE 3: CONSOLIDAÇÃO
+# ============================================================
+
+def fase_consolidacao(estado, logger):
+    logger.info("=== FASE 3: CONSOLIDAÇÃO ===")
+
+    if not _HAS_CONSOLIDAR:
+        logger.error(f"consolidar_processos indisponível: {_CONSOLIDAR_ERR}")
+        return
+
+    try:
+        processos = consolidar_tudo()
+        stats = estatisticas(processos)
+        salvar_consolidado(processos, stats)
+        estado["processos"] = {
+            "total": stats.get("total", 0),
+            "por_situacao": stats.get("por_situacao", {}),
+            "por_etapa": stats.get("por_etapa", {}),
+            "por_cidade": stats.get("por_cidade", {}),
+            "alertas": stats.get("alertas", []),
+        }
+        logger.info(f"  Consolidado: {stats.get('total', 0)} processos")
+    except Exception as e:
+        logger.error(f"  Consolidação: {e}")
+        traceback.print_exc()
+
+
+# ============================================================
+# FASE 4: SAÍDA
+# ============================================================
+
+def fase_saida(estado, args, logger, inicio):
+    logger.info("=== FASE 4: SAÍDA ===")
+
+    duracao = time.time() - inicio
+    estado["duracao_segundos"] = round(duracao, 1)
+    _atualizar_historico(estado)
+
+    if args.dry_run:
+        logger.info("  [DRY RUN] Estado não salvo")
+        print(json.dumps(estado, ensure_ascii=False, indent=2))
+        return
+
+    # Salvar estado
+    AUTOMACOES_DIR.mkdir(parents=True, exist_ok=True)
+    with open(ESTADO_PATH, "w", encoding="utf-8") as f:
+        json.dump(estado, f, ensure_ascii=False, indent=2)
+    logger.info(f"  Estado salvo: {ESTADO_PATH}")
+
+    # Gerar dashboard
+    try:
+        gerar_script = AUTOMACOES_DIR / "gerar_dashboard_hub.py"
+        if gerar_script.exists():
+            subprocess.run(
+                [sys.executable, str(gerar_script)],
+                cwd=str(AUTOMACOES_DIR), timeout=60, check=True,
+            )
+            logger.info(f"  Dashboard gerado: {DASHBOARD_PATH}")
+        else:
+            logger.warning("  gerar_dashboard_hub.py não encontrado")
+    except subprocess.CalledProcessError as e:
+        logger.error(f"  Dashboard: {e}")
+
+    # FTP
+    if not args.no_ftp:
+        _upload_ftp(logger)
+
+    # Telegram
+    if not args.no_telegram:
+        _enviar_telegram(estado, logger)
+
+
+def _atualizar_historico(estado):
+    historico = []
+    if ESTADO_PATH.exists():
+        try:
+            with open(ESTADO_PATH, encoding="utf-8") as f:
+                old = json.load(f)
+            historico = old.get("historico", [])
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    hoje = datetime.now().strftime("%Y-%m-%d")
+    entrada = {
+        "data": hoje,
+        "novos": len(estado.get("descobertas_novas", [])),
+        "movimentacoes": len(estado.get("movimentacoes_novas", [])),
+        "alertas": len(estado.get("processos", {}).get("alertas", [])),
+        "fontes_ok": sum(1 for f in estado.get("fontes", {}).values() if f.get("status") == "ok"),
+        "fontes_total": len(estado.get("fontes", {})),
+        "status": "ok" if all(
+            f.get("status") in ("ok", "desativada") for f in estado.get("fontes", {}).values()
+        ) else "parcial",
+    }
+    historico = [h for h in historico if h.get("data") != hoje]
+    historico.insert(0, entrada)
+    estado["historico"] = historico[:HISTORICO_MAX_DIAS]
+
+
+def _upload_ftp(logger):
+    if not DASHBOARD_PATH.exists():
+        logger.warning("  Dashboard inexistente, pulando FTP")
+        return
+    try:
+        ftp_pass = os.environ.get("FTP_PASSWORD", "")
+        if not ftp_pass:
+            token_path = Path.home() / ".ftp-password"
+            if token_path.exists():
+                ftp_pass = token_path.read_text(encoding="utf-8").strip()
+        if not ftp_pass:
+            logger.warning("  Senha FTP não configurada")
+            return
+        import ftplib
+        ftp = ftplib.FTP()
+        ftp.connect(FTP_HOST, 21, timeout=30)
+        ftp.login(FTP_USER, ftp_pass)
+        ftp.cwd(FTP_REMOTE_DIR)
+        with open(DASHBOARD_PATH, "rb") as f:
+            ftp.storbinary(f"STOR {FTP_DASHBOARD_FILENAME}", f)
+        ftp.quit()
+        logger.info(f"  FTP OK: {FTP_DASHBOARD_FILENAME}")
+    except Exception as e:
+        logger.error(f"  FTP: {e}")
+
+
+def _enviar_telegram(estado, logger):
+    if not _HAS_TELEGRAM:
+        logger.warning("  Telegram indisponível")
+        return
+
+    fontes = estado.get("fontes", {})
+    fontes_str = " | ".join(
+        f"{f['nome']} {'✓' if fontes.get(f['id'], {}).get('status') == 'ok' else '—' if fontes.get(f['id'], {}).get('status') == 'desativada' else '✗'}"
+        for f in FONTES
+    )
+    novos = len(estado.get("descobertas_novas", []))
+    movs = len(estado.get("movimentacoes_novas", []))
+    alertas = len(estado.get("processos", {}).get("alertas", []))
+
+    linhas = [
+        f"*HUB AUTOMAÇÃO — {datetime.now().strftime('%d/%m %H:%M')}*",
+        f"Fontes: {fontes_str}",
+        f"Novos: {novos} | Movimentações: {movs} | Alertas: {alertas}",
+    ]
+    for m in estado.get("movimentacoes_novas", [])[:5]:
+        cnj_short = m["cnj"][-9:]
+        linhas.append(f"  `{cnj_short}`: {m['ultima_movimentacao'][:40]} ({m['data_movimentacao']})")
+
+    linhas.append(f"\n[Dashboard](https://stemmia.com.br/webdev/teste/{FTP_DASHBOARD_FILENAME})")
+    try:
+        telegram_enviar("\n".join(linhas))
+        logger.info("  Telegram enviado")
+    except Exception as e:
+        logger.error(f"  Telegram: {e}")
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Hub de Automações — Stemmia Forense")
+    parser.add_argument("--discovery-only", action="store_true")
+    parser.add_argument("--status-only", action="store_true")
+    parser.add_argument("--dashboard-only", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--no-telegram", action="store_true")
+    parser.add_argument("--no-ftp", action="store_true")
+    parser.add_argument("--dias-dje", type=int, default=DJE_DIAS_PADRAO)
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    logger = setup_logging()
+    inicio = time.time()
+
+    logger.info("=" * 44)
+    logger.info("  HUB DE AUTOMAÇÕES — STEMMIA")
+    logger.info(f"  {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
+    logger.info("=" * 44)
+
+    estado = {
+        "timestamp": datetime.now().isoformat(),
+        "fontes": {},
+        "descobertas_novas": [],
+        "movimentacoes_novas": [],
+        "processos": {},
+        "historico": [],
+    }
+
+    try:
+        if args.dashboard_only:
+            if ESTADO_PATH.exists():
+                with open(ESTADO_PATH, encoding="utf-8") as f:
+                    estado = json.load(f)
+            fase_saida(estado, args, logger, inicio)
+            return
+
+        if not args.status_only:
+            fase_descoberta(estado, logger, dias_dje=args.dias_dje)
+
+        if not args.discovery_only:
+            fase_status(estado, logger)
+
+        if not args.discovery_only and not args.status_only:
+            fase_consolidacao(estado, logger)
+
+        fase_saida(estado, args, logger, inicio)
+
+    except Exception as e:
+        logger.error(f"Erro fatal: {e}")
+        traceback.print_exc()
+        sys.exit(1)
+
+    logger.info(f"Concluído em {time.time() - inicio:.1f}s")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stemmia — Comandos Rápidos</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+h1 {
+    color: #00d2ff;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+.sub { color: #666; font-size: 13px; margin-bottom: 30px; }
+h2 {
+    color: #fff;
+    font-size: 16px;
+    margin: 20px 0 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: inline-block;
+}
+.cat-briefing { background: #d35400; }
+.cat-radar { background: #2980b9; }
+.cat-pericia { background: #c0392b; }
+.cat-agenda { background: #27ae60; }
+.cat-busca { background: #8e44ad; }
+.cat-lembrete { background: #f39c12; }
+.cat-saude { background: #1abc9c; }
+.cat-sistema { background: #7f8c8d; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #2a2a4a;
+    font-size: 14px;
+}
+td:first-child {
+    font-weight: 600;
+    color: #00d2ff;
+    white-space: nowrap;
+    width: 40%;
+}
+td:last-child { color: #aaa; }
+tr:hover td { background: #16213e; }
+.nota {
+    background: #16213e;
+    border-left: 3px solid #f39c12;
+    padding: 12px 15px;
+    margin: 20px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    color: #ccc;
+}
+.terminal {
+    background: #0d1117;
+    border: 1px solid #2a2a4a;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 13px;
+    color: #7ee787;
+}
+.terminal span { color: #666; }
+</style>
+</head>
+<body>
+
+<h1>Stemmia — Comandos Rápidos</h1>
+<p class="sub">Diga qualquer um destes no Telegram para a Stemmia executar</p>
+
+<div class="nota">
+    Estes comandos funcionam no Telegram (bot Stemmia via OpenClaw).<br>
+    No terminal, use os aliases: <code>radar</code>, <code>radar-semana</code>, <code>radar-mes</code>
+</div>
+
+<h2 class="cat-briefing">Briefing</h2>
+<table>
+<tr><td>manhã / bom dia / briefing</td><td>Agenda + alertas + radar do dia anterior</td></tr>
+<tr><td>noite / boa noite</td><td>Resumo do dia + pendências</td></tr>
+<tr><td>resumo</td><td>Visão completa: agenda + alertas + radar + sites + inbox</td></tr>
+<tr><td>foco</td><td>Próxima ação mais urgente</td></tr>
+<tr><td>como estou / progresso</td><td>Arquivos criados + tarefas feitas</td></tr>
+</table>
+
+<h2 class="cat-radar">Radar</h2>
+<table>
+<tr><td>relatório / radar</td><td>O que criei/modifiquei hoje</td></tr>
+<tr><td>radar semana</td><td>Resumo semanal</td></tr>
+<tr><td>radar mês</td><td>Resumo mensal</td></tr>
+<tr><td>criados hoje / novos hoje</td><td>Lista completa com caminhos</td></tr>
+<tr><td>scan / escanear</td><td>Forçar scan imediato</td></tr>
+</table>
+
+<h2 class="cat-pericia">Perícia</h2>
+<table>
+<tr><td>prazos</td><td>Prazos periciais</td></tr>
+<tr><td>alertas</td><td>Alertas ativos</td></tr>
+<tr><td>status</td><td>Status dos processos</td></tr>
+<tr><td>processos</td><td>Listar todos</td></tr>
+<tr><td>inbox</td><td>Arquivos na INBOX</td></tr>
+<tr><td>workflow</td><td>Status do workflow</td></tr>
+<tr><td>pendências</td><td>Pendências do workflow</td></tr>
+</table>
+
+<h2 class="cat-agenda">Agenda</h2>
+<table>
+<tr><td>hoje / agenda</td><td>Agenda do dia</td></tr>
+<tr><td>urgentes</td><td>Tarefas urgentes</td></tr>
+<tr><td>atrasadas</td><td>Tarefas vencidas</td></tr>
+<tr><td>semana</td><td>Próximos 7 dias</td></tr>
+<tr><td>meds / medicamentos</td><td>Medicamentos contínuos</td></tr>
+<tr><td>blocos</td><td>Resumo por bloco</td></tr>
+</table>
+
+<h2 class="cat-busca">Busca</h2>
+<table>
+<tr><td>onde está [NOME]</td><td>Buscar arquivo por nome</td></tr>
+<tr><td>recentes / últimos</td><td>15 arquivos mais recentes</td></tr>
+<tr><td>projetos</td><td>Listar pastas de projeto</td></tr>
+</table>
+
+<h2 class="cat-lembrete">Lembrete</h2>
+<table>
+<tr><td>lembre [TEXTO]</td><td>Anotar algo no planner</td></tr>
+<tr><td>anota [TEXTO]</td><td>Mesma coisa</td></tr>
+<tr><td>lembretes</td><td>Ver anotações pendentes</td></tr>
+</table>
+
+<h2 class="cat-saude">Saúde</h2>
+<table>
+<tr><td>pausa</td><td>Notificação de descanso (15 min)</td></tr>
+<tr><td>água</td><td>Lembrete de hidratação</td></tr>
+</table>
+
+<h2 class="cat-sistema">Sistema</h2>
+<table>
+<tr><td>sessões abertas</td><td>Processos Claude/Cowork ativos</td></tr>
+<tr><td>disco / espaço</td><td>Espaço em disco</td></tr>
+<tr><td>backup</td><td>Salvar CLAUDE.md + settings.json</td></tr>
+<tr><td>sites</td><td>Verificar os 7 sites</td></tr>
+<tr><td>nomeações</td><td>Nomeações do AJ</td></tr>
+<tr><td>comandos / ajuda</td><td>Esta lista de comandos</td></tr>
+</table>
+
+<div class="terminal">
+<span># No terminal:</span><br>
+$ radar<span>          # scan + abre HTML do dia</span><br>
+$ radar-semana<span>   # relatório semanal</span><br>
+$ radar-mes<span>      # relatório mensal</span><br>
+$ radar-agora<span>    # resumo rápido no terminal</span><br>
+</div>
+
+</body>
+</html>

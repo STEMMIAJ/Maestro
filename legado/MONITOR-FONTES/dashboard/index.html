@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>MONITOR-FONTES — 0 processos</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header>
+  <h1>MONITOR-FONTES</h1>
+  <p class="sub">0 processos unicos · atualizado 17/04/2026 03:09</p>
+</header>
+
+<section class="cards"><div class="card" style="border-color:#3b82f6"><div class="card-num">0</div><div class="card-lbl">AJ TJMG</div></div><div class="card" style="border-color:#8b5cf6"><div class="card-num">0</div><div class="card-lbl">AJG</div></div><div class="card" style="border-color:#10b981"><div class="card-num">0</div><div class="card-lbl">DJEN</div></div><div class="card" style="border-color:#ef4444"><div class="card-num">0</div><div class="card-lbl">Domicilio</div></div><div class="card" style="border-color:#f59e0b"><div class="card-num">0</div><div class="card-lbl">DataJud</div></div></section>
+
+<section class="filtros">
+  <span>Filtrar:</span>
+  <button class="filtro ativo" data-f="todos">Todos</button>
+  <button class="filtro" data-f="aj" style="border-color:#3b82f6">AJ TJMG</button><button class="filtro" data-f="ajg" style="border-color:#8b5cf6">AJG</button><button class="filtro" data-f="djen" style="border-color:#10b981">DJEN</button><button class="filtro" data-f="domicilio" style="border-color:#ef4444">Domicilio</button><button class="filtro" data-f="datajud" style="border-color:#f59e0b">DataJud</button>
+</section>
+
+<section>
+<table id="tab">
+<thead><tr>
+  <th>CNJ</th><th>Data</th><th>Fontes</th><th>Classe</th><th>Orgao</th><th>Intimacoes</th>
+</tr></thead>
+<tbody>
+
+</tbody>
+</table>
+</section>
+
+<script>
+document.querySelectorAll(".filtro").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".filtro").forEach(b => b.classList.remove("ativo"));
+    btn.classList.add("ativo");
+    const f = btn.dataset.f;
+    document.querySelectorAll("#tab tbody tr").forEach(tr => {
+      const fontes = tr.dataset.fontes.split("+");
+      tr.style.display = (f === "todos" || fontes.includes(f)) ? "" : "none";
+    });
+  };
+});
+</script>
+</body>
+</html>

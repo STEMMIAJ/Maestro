@@ -1,0 +1,1105 @@
+#!/usr/bin/env python3
+"""
+Orquestrador Noturno — Stemmia Forense
+Sincroniza AJ + AJG + PJe + DataJud em 8 etapas sequenciais.
+
+Uso:
+  python3 orquestrador_noturno.py                 # Tudo
+  python3 orquestrador_noturno.py --diagnostico    # Só verifica pré-requisitos
+  python3 orquestrador_noturno.py --dry-run        # Simula sem baixar
+  python3 orquestrador_noturno.py --so-consultar   # Só AJ+AJG (sem baixar)
+  python3 orquestrador_noturno.py --so-baixar      # Só download PJe
+  python3 orquestrador_noturno.py --so-atualizar   # Só processos desatualizados
+  python3 orquestrador_noturno.py --max N          # Limita downloads a N
+  python3 orquestrador_noturno.py --json           # Saída JSON (para bot)
+  python3 orquestrador_noturno.py --importar       # Importa PDFs de _downloads_temp (baixados pelo Windows)
+  python3 orquestrador_noturno.py --exportar-pendentes  # Salva CNJs sem PDF para pipeline Windows
+"""
+
+import argparse
+import hashlib
+import importlib.util
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import time
+from datetime import datetime, timedelta
+from pathlib import Path
+
+# ─── Caminhos ────────────────────────────────────────────────────────────────
+
+BASE_DIR = Path(os.path.expanduser("~/Desktop/ANALISADOR FINAL"))
+SCRIPTS_DIR = BASE_DIR / "scripts"
+PROCESSOS_DIR = BASE_DIR / "processos"
+STATUS_JSON = BASE_DIR / "STATUS-PROCESSOS.json"
+
+CONSULTAR_AJ = SCRIPTS_DIR / "consultar_aj.py"
+CONSULTAR_AJG = SCRIPTS_DIR / "consultar_ajg.py"
+SINCRONIZAR = SCRIPTS_DIR / "sincronizar_aj_pje.py"
+BAIXAR_PJE = Path(os.path.expanduser(
+    "~/Desktop/Projetos - Plan Mode/processos-pje/baixar_pje.py"
+))
+BAIXAR_PJE_LOCAL = SCRIPTS_DIR / "processos-pje" / "baixar_pje.py"
+SCANNER = SCRIPTS_DIR / "scanner_processos.py"
+DEADLINE = SCRIPTS_DIR / "deadline_monitor.py"
+COMPARAR = SCRIPTS_DIR / "comparar_versoes.py"
+
+LOG_FILE = SCRIPTS_DIR / "orquestrador_noturno.log"
+RELATORIO_JSON = SCRIPTS_DIR / "_relatorio_noturno.json"
+PENDENTES_JSON = SCRIPTS_DIR / "_pendentes_download.json"
+DOWNLOADS_TEMP = SCRIPTS_DIR / "_downloads_temp"
+DOWNLOAD_FLAG = BASE_DIR / "_download_concluido.flag"
+
+# Portas CDP
+PORTA_AJ = 9223      # Chrome AJ/AJG no Mac
+PORTA_PJE_WIN = 9222  # Chrome PJe no Windows (Parallels)
+PORTA_PJE_MAC = 9224  # Chrome PJe no Mac
+
+# ─── Utilitários ─────────────────────────────────────────────────────────────
+
+def log(msg, nivel="INFO"):
+    """Loga no terminal e no arquivo."""
+    ts = datetime.now().strftime("%H:%M:%S")
+    linha = f"[{ts}] [{nivel}] {msg}"
+    print(linha)
+    try:
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(f"[{datetime.now().isoformat()}] [{nivel}] {msg}\n")
+    except Exception:
+        pass
+
+
+def rodar(cmd, timeout=300, capturar=True):
+    """Roda comando externo, retorna (sucesso, stdout)."""
+    try:
+        r = subprocess.run(
+            cmd, capture_output=capturar, text=True, timeout=timeout,
+            cwd=str(SCRIPTS_DIR)
+        )
+        return r.returncode == 0, r.stdout if capturar else ""
+    except subprocess.TimeoutExpired:
+        return False, f"TIMEOUT ({timeout}s)"
+    except Exception as e:
+        return False, str(e)
+
+
+def checar_porta(porta):
+    """Verifica se Chrome CDP está respondendo na porta."""
+    ok, out = rodar(
+        ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
+         f"http://localhost:{porta}/json/version"],
+        timeout=5
+    )
+    return ok and out.strip() == "200"
+
+
+def checar_parallels():
+    """Verifica se Parallels está rodando com Windows."""
+    ok, out = rodar(["prlctl", "list", "-f"], timeout=5)
+    if ok and "running" in out.lower():
+        # Tenta extrair IP
+        match = re.search(r"(10\.\d+\.\d+\.\d+)", out)
+        ip = match.group(1) if match else "10.211.55.3"
+        return True, ip
+    return False, None
+
+
+def extrair_cnj(texto):
+    """Extrai número CNJ de um texto."""
+    m = re.search(r"\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}", texto)
+    return m.group(0) if m else None
+
+
+def md5_arquivo(caminho):
+    """Calcula MD5 de um arquivo."""
+    h = hashlib.md5()
+    with open(caminho, "rb") as f:
+        for bloco in iter(lambda: f.read(8192), b""):
+            h.update(bloco)
+    return h.hexdigest()
+
+
+def ler_ficha(pasta):
+    """Lê FICHA.json de uma pasta de processo."""
+    ficha_path = Path(pasta) / "FICHA.json"
+    if ficha_path.exists():
+        try:
+            return json.loads(ficha_path.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {}
+
+
+def salvar_ficha(pasta, ficha):
+    """Salva FICHA.json."""
+    ficha_path = Path(pasta) / "FICHA.json"
+    ficha_path.write_text(
+        json.dumps(ficha, indent=2, ensure_ascii=False),
+        encoding="utf-8"
+    )
+
+
+# ─── Importar PDFs do Windows (_downloads_temp) ─────────────────────────────
+
+def importar_downloads_temp():
+    """Importa PDFs baixados pelo Windows de _downloads_temp para processos/."""
+    log("═══ IMPORTAR PDFs DE _downloads_temp ═══")
+
+    if not DOWNLOADS_TEMP.is_dir():
+        log("  Pasta _downloads_temp/ não existe — nada a importar")
+        return []
+
+    importados = []
+    for subpasta in sorted(DOWNLOADS_TEMP.iterdir()):
+        if not subpasta.is_dir():
+            continue
+        pdf = subpasta / "autos-completos.pdf"
+        if not pdf.exists():
+            continue
+
+        cnj = extrair_cnj(subpasta.name) or subpasta.name
+        pasta_dest = PROCESSOS_DIR / cnj
+        pasta_dest.mkdir(parents=True, exist_ok=True)
+
+        pdf_destino = pasta_dest / "autos-completos.pdf"
+
+        # Backup se já existir
+        if pdf_destino.exists():
+            hash_atual = md5_arquivo(str(pdf_destino))
+            hash_novo = md5_arquivo(str(pdf))
+            if hash_atual == hash_novo:
+                log(f"  = {cnj}: PDF idêntico, pulando")
+                continue
+            data_backup = datetime.now().strftime("%Y-%m-%d")
+            backup = pasta_dest / f"autos-completos-{data_backup}.pdf"
+            shutil.move(str(pdf_destino), str(backup))
+            log(f"  ↻ {cnj}: versão anterior salva como {backup.name}")
+
+        shutil.move(str(pdf), str(pdf_destino))
+        log(f"  → {cnj}: PDF importado")
+
+        # Extrair texto
+        txt = pasta_dest / "TEXTO-EXTRAIDO.txt"
+        ok, _ = rodar(["pdftotext", "-layout", str(pdf_destino), str(txt)], timeout=120)
+        if ok and txt.exists():
+            log(f"    Texto extraído ({txt.stat().st_size // 1024} KB)")
+
+        # Atualizar FICHA.json
+        ficha = ler_ficha(pasta_dest)
+        ficha["data_download"] = datetime.now().isoformat()
+        ficha["hash_pdf"] = md5_arquivo(str(pdf_destino))
+        ficha["tamanho_pdf_mb"] = round(pdf_destino.stat().st_size / 1048576, 1)
+        salvar_ficha(pasta_dest, ficha)
+
+        importados.append({
+            "cnj": cnj,
+            "pasta": str(pasta_dest),
+            "tamanho_mb": round(pdf_destino.stat().st_size / 1048576, 1),
+        })
+
+        # Limpar subpasta temp
+        shutil.rmtree(subpasta, ignore_errors=True)
+
+    # Limpar pasta temp se vazia
+    if DOWNLOADS_TEMP.exists() and not any(DOWNLOADS_TEMP.iterdir()):
+        DOWNLOADS_TEMP.rmdir()
+
+    log(f"  {len(importados)} processos importados de _downloads_temp")
+    return importados
+
+
+def exportar_pendentes():
+    """Salva lista de CNJs sem PDF em _pendentes_download.json para pipeline Windows."""
+    log("═══ EXPORTAR PENDENTES PARA WINDOWS ═══")
+
+    cnjs_sem_pdf = []
+    if PROCESSOS_DIR.is_dir():
+        for pasta in sorted(PROCESSOS_DIR.iterdir()):
+            if not pasta.is_dir() or pasta.name.startswith("."):
+                continue
+            cnj = extrair_cnj(pasta.name)
+            if not cnj:
+                continue
+            tem_pdf = any(pasta.glob("*.pdf"))
+            if not tem_pdf:
+                cnjs_sem_pdf.append(cnj)
+
+    PENDENTES_JSON.write_text(
+        json.dumps(cnjs_sem_pdf, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+    log(f"  {len(cnjs_sem_pdf)} processos sem PDF exportados para {PENDENTES_JSON.name}")
+    log("  Agora rode sincronizar-pje-windows.cmd no Windows para baixar.")
+    log("  Depois rode: python3 orquestrador_noturno.py --importar")
+    return cnjs_sem_pdf
+
+
+def diagnostico_detalhado(diag):
+    """Diagnóstico expandido: pendentes, downloads temp, flag, ferramentas."""
+    log("─── DIAGNÓSTICO DETALHADO ───")
+
+    # Pendentes JSON
+    if PENDENTES_JSON.exists():
+        try:
+            pendentes = json.loads(PENDENTES_JSON.read_text(encoding="utf-8"))
+            if pendentes:
+                log(f"  ✓ Pendentes JSON: {len(pendentes)} processos")
+            else:
+                log("  ⚠ Pendentes JSON: vazio (rode --exportar-pendentes)")
+        except Exception:
+            log("  ✗ Pendentes JSON: arquivo inválido")
+    else:
+        log("  ⚠ Pendentes JSON: não existe (rode --exportar-pendentes)")
+
+    # Downloads temp
+    if DOWNLOADS_TEMP.exists():
+        pdfs = list(DOWNLOADS_TEMP.glob("*/autos-completos.pdf"))
+        if pdfs:
+            log(f"  ✓ Downloads temp: {len(pdfs)} PDFs prontos (rode --importar)")
+        else:
+            log("  · Downloads temp: pasta existe mas sem PDFs")
+    else:
+        log("  · Downloads temp: não existe")
+
+    # Flag de conclusão
+    if DOWNLOAD_FLAG.exists():
+        conteudo = DOWNLOAD_FLAG.read_text(encoding="utf-8", errors="ignore").strip()
+        log(f"  ✓ Flag de conclusão: {conteudo}")
+    else:
+        log("  · Flag de conclusão: não existe")
+
+    # Processos com/sem PDF
+    total = com_pdf = sem_pdf = 0
+    if PROCESSOS_DIR.is_dir():
+        for item in PROCESSOS_DIR.iterdir():
+            if not item.is_dir() or item.name.startswith(".") or item.name.startswith("Perícia"):
+                continue
+            total += 1
+            resolved = item.resolve()
+            if any((resolved / n).exists() for n in ["autos-completos.pdf", "PROCESSO-ORIGINAL.pdf"]):
+                com_pdf += 1
+            else:
+                sem_pdf += 1
+
+    log(f"  Processos: {total} total, {com_pdf} com PDF, {sem_pdf} sem PDF")
+
+    # Ferramentas
+    for cmd in ["pdftotext", "pdfinfo"]:
+        path = shutil.which(cmd)
+        if path:
+            log(f"  ✓ {cmd}: {path}")
+        else:
+            log(f"  ✗ {cmd}: NÃO encontrado (brew install poppler)")
+
+    diag["pendentes_json"] = PENDENTES_JSON.exists()
+    diag["downloads_temp_pdfs"] = len(list(DOWNLOADS_TEMP.glob("*/autos-completos.pdf"))) if DOWNLOADS_TEMP.exists() else 0
+    diag["processos_com_pdf"] = com_pdf
+    diag["processos_sem_pdf"] = sem_pdf
+
+
+# ─── ETAPA 1: Diagnóstico ───────────────────────────────────────────────────
+
+def etapa_diagnostico():
+    """Verifica pré-requisitos e retorna estado do ambiente."""
+    log("═══ ETAPA 1: DIAGNÓSTICO ═══")
+
+    diag = {
+        "chrome_aj": checar_porta(PORTA_AJ),
+        "chrome_pje_mac": checar_porta(PORTA_PJE_MAC),
+        "chrome_pje_win": False,
+        "parallels": False,
+        "parallels_ip": None,
+        "pdftotext": shutil.which("pdftotext") is not None,
+        "processos_dir": PROCESSOS_DIR.is_dir(),
+        "total_processos": 0,
+        "scripts_presentes": {
+            "consultar_aj": CONSULTAR_AJ.exists(),
+            "consultar_ajg": CONSULTAR_AJG.exists(),
+            "baixar_pje": BAIXAR_PJE.exists() or BAIXAR_PJE_LOCAL.exists(),
+            "scanner": SCANNER.exists(),
+            "deadline": DEADLINE.exists(),
+        }
+    }
+
+    # Parallels + Windows
+    diag["parallels"], diag["parallels_ip"] = checar_parallels()
+    if diag["parallels"] and diag["parallels_ip"]:
+        ok, _ = rodar(
+            ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
+             f"http://{diag['parallels_ip']}:{PORTA_PJE_WIN}/json/version"],
+            timeout=5
+        )
+        diag["chrome_pje_win"] = ok
+
+    # Contagem de processos
+    if PROCESSOS_DIR.is_dir():
+        diag["total_processos"] = len([
+            d for d in PROCESSOS_DIR.iterdir()
+            if d.is_dir() and not d.name.startswith(".")
+        ])
+
+    # Resumo
+    disponivel = []
+    if diag["chrome_aj"]:
+        disponivel.append("AJ/AJG (porta 9223)")
+    if diag["chrome_pje_mac"]:
+        disponivel.append("PJe Mac (porta 9224)")
+    if diag["chrome_pje_win"]:
+        disponivel.append(f"PJe Windows ({diag['parallels_ip']}:9222)")
+
+    diag["disponivel"] = disponivel
+    diag["pode_consultar"] = diag["chrome_aj"]
+    diag["pode_baixar"] = diag["chrome_pje_mac"] or diag["chrome_pje_win"]
+
+    for k, v in diag.items():
+        if k not in ("parallels_ip", "disponivel", "scripts_presentes"):
+            status = "✓" if v else "✗"
+            log(f"  {status} {k}: {v}")
+
+    if disponivel:
+        log(f"  Disponível: {', '.join(disponivel)}")
+    else:
+        log("  ⚠ Nenhum Chrome CDP detectado", "WARN")
+
+    return diag
+
+
+# ─── ETAPA 2: Consultar AJ TJMG ─────────────────────────────────────────────
+
+def etapa_consultar_aj():
+    """Consulta nomeações pendentes no AJ TJMG."""
+    log("═══ ETAPA 2: CONSULTAR AJ TJMG ═══")
+
+    ok, out = rodar(
+        ["python3", str(CONSULTAR_AJ), "--pendentes", "--json"],
+        timeout=60
+    )
+    if not ok:
+        log(f"Erro ao consultar AJ: {out[:200]}", "ERROR")
+        return []
+
+    try:
+        nomeacoes = json.loads(out)
+        if isinstance(nomeacoes, dict):
+            nomeacoes = nomeacoes.get("nomeacoes", [])
+    except json.JSONDecodeError:
+        log("Resposta do AJ não é JSON válido", "ERROR")
+        return []
+
+    log(f"  AJ: {len(nomeacoes)} nomeações pendentes")
+
+    # Criar pastas para novas nomeações
+    for nom in nomeacoes:
+        cnj = nom.get("numero_processo_cnj", "")
+        if not cnj:
+            continue
+        pasta = PROCESSOS_DIR / cnj
+        if not pasta.exists():
+            pasta.mkdir(parents=True, exist_ok=True)
+            ficha = {
+                "cnj": cnj,
+                "origem": "AJ",
+                "sistema": "AJ-TJMG",
+                "nomeacao": nom.get("numero_nomeacao", ""),
+                "unidade": nom.get("unidade", ""),
+                "data_nomeacao": nom.get("data_nomeacao", ""),
+                "valor_honorario": nom.get("valor_honorario", ""),
+                "situacao": nom.get("situacao", ""),
+                "data_criacao": datetime.now().isoformat(),
+                "criado_por": "orquestrador_noturno"
+            }
+            salvar_ficha(pasta, ficha)
+            log(f"  + Nova pasta: {cnj}")
+        nom["_origem"] = "AJ"
+
+    # Salvar JSON intermediário
+    saida = SCRIPTS_DIR / "_nomeacoes_aj.json"
+    saida.write_text(json.dumps(nomeacoes, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    return nomeacoes
+
+
+# ─── ETAPA 3: Consultar AJG Federal ─────────────────────────────────────────
+
+def etapa_consultar_ajg():
+    """Consulta nomeações pendentes no AJG Federal."""
+    log("═══ ETAPA 3: CONSULTAR AJG FEDERAL ═══")
+
+    ok, out = rodar(
+        ["python3", str(CONSULTAR_AJG), "--pendentes", "--json"],
+        timeout=60
+    )
+    if not ok:
+        log(f"Erro ao consultar AJG: {out[:200]}", "ERROR")
+        return []
+
+    try:
+        nomeacoes = json.loads(out)
+        if isinstance(nomeacoes, dict):
+            nomeacoes = nomeacoes.get("nomeacoes", [])
+    except json.JSONDecodeError:
+        log("Resposta do AJG não é JSON válido", "ERROR")
+        return []
+
+    log(f"  AJG: {len(nomeacoes)} nomeações pendentes")
+
+    for nom in nomeacoes:
+        cnj = nom.get("numero_processo_cnj", "")
+        if not cnj:
+            continue
+        pasta = PROCESSOS_DIR / cnj
+        if not pasta.exists():
+            pasta.mkdir(parents=True, exist_ok=True)
+            ficha = {
+                "cnj": cnj,
+                "origem": "AJG",
+                "sistema": "AJG-CJF",
+                "tribunal": nom.get("tribunal", ""),
+                "nomeacao": nom.get("numero_nomeacao", ""),
+                "unidade": nom.get("unidade", ""),
+                "data_nomeacao": nom.get("data_nomeacao", ""),
+                "situacao": nom.get("situacao", ""),
+                "data_criacao": datetime.now().isoformat(),
+                "criado_por": "orquestrador_noturno"
+            }
+            salvar_ficha(pasta, ficha)
+            log(f"  + Nova pasta: {cnj}")
+        nom["_origem"] = "AJG"
+
+    saida = SCRIPTS_DIR / "_nomeacoes_ajg.json"
+    saida.write_text(json.dumps(nomeacoes, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    return nomeacoes
+
+
+# ─── ETAPA 3.5: Descoberta de novos processos (DJe + PJe) ───────────────────
+
+def etapa_descoberta():
+    """Roda descobrir_processos.py --sem-browser para achar processos novos."""
+    log("═══ ETAPA 3.5: DESCOBERTA DE NOVOS PROCESSOS ═══")
+
+    script = SCRIPTS_DIR / "descobrir_processos.py"
+    if not script.exists():
+        log("descobrir_processos.py não encontrado — pulando", "WARN")
+        return []
+
+    try:
+        result = rodar(
+            f"python3 {script} --sem-browser --dias 3 --json --salvar",
+            timeout=120,
+        )
+        if result["ok"] and result["stdout"].strip():
+            data = json.loads(result["stdout"])
+            novos_cnjs = data.get("novos_cnjs", [])
+            total = data.get("total", 0)
+            log(f"Descoberta: {total} únicos, {len(novos_cnjs)} novos", "OK")
+            return novos_cnjs
+        else:
+            log(f"Sem resultados: {result.get('stderr', '')[:200]}", "WARN")
+    except Exception as e:
+        log(f"Erro na descoberta: {e}", "ERRO")
+
+    return []
+
+
+# ─── ETAPA 4: Verificar movimentações (DataJud) ─────────────────────────────
+
+def etapa_verificar_movimentacoes():
+    """Compara movimentações via DataJud com PDFs locais."""
+    log("═══ ETAPA 4: VERIFICAR MOVIMENTAÇÕES ═══")
+
+    desatualizados = []
+
+    if not PROCESSOS_DIR.is_dir():
+        log("  Pasta processos/ não encontrada", "WARN")
+        return desatualizados
+
+    for pasta in sorted(PROCESSOS_DIR.iterdir()):
+        if not pasta.is_dir() or pasta.name.startswith("."):
+            continue
+
+        ficha = ler_ficha(pasta)
+        cnj = ficha.get("cnj") or extrair_cnj(pasta.name)
+        if not cnj:
+            continue
+
+        # Só verifica processos que já têm PDF
+        pdfs = list(pasta.glob("*.pdf"))
+        if not pdfs:
+            continue
+
+        # Data do PDF mais recente
+        pdf_mais_recente = max(pdfs, key=lambda p: p.stat().st_mtime)
+        data_pdf = datetime.fromtimestamp(pdf_mais_recente.stat().st_mtime)
+
+        # Consultar DataJud (API pública, sem browser)
+        try:
+            cnj_limpo = re.sub(r"[^\d]", "", cnj)
+            _datajud_key = os.getenv("DATAJUD_API_KEY", "")
+            if not _datajud_key:
+                raise RuntimeError(
+                    "DATAJUD_API_KEY não setada. Execute: "
+                    'export DATAJUD_API_KEY="<chave>" '
+                    "(ver https://datajud-wiki.cnj.jus.br/api-publica/acesso)"
+                )
+            ok, out = rodar(
+                ["curl", "-s", "-f",
+                 f"https://api-publica.datajud.cnj.jus.br/api_publica_tjmg/_search",
+                 "-H", "Content-Type: application/json",
+                 "-H", f"Authorization: APIKey {_datajud_key}",
+                 "-d", json.dumps({
+                     "query": {"match": {"numeroProcesso": cnj_limpo}},
+                     "size": 1,
+                     "sort": [{"dataHoraUltimaAtualizacao": {"order": "desc"}}]
+                 })],
+                timeout=15
+            )
+            if ok and out.strip():
+                resp = json.loads(out)
+                hits = resp.get("hits", {}).get("hits", [])
+                if hits:
+                    src = hits[0].get("_source", {})
+                    ultima_mov = src.get("dataHoraUltimaAtualizacao", "")
+                    if ultima_mov:
+                        # Formato ISO ou YYYY-MM-DD...
+                        data_mov = datetime.fromisoformat(
+                            ultima_mov.replace("Z", "+00:00").split("+")[0]
+                        )
+                        if data_mov > data_pdf + timedelta(hours=1):
+                            ficha["_desatualizado"] = True
+                            ficha["_ultima_movimentacao_datajud"] = ultima_mov
+                            ficha["_data_pdf_local"] = data_pdf.isoformat()
+                            salvar_ficha(pasta, ficha)
+                            desatualizados.append({
+                                "cnj": cnj,
+                                "pasta": str(pasta),
+                                "data_pdf": data_pdf.isoformat(),
+                                "data_movimentacao": ultima_mov
+                            })
+                            log(f"  ↻ Desatualizado: {cnj}")
+        except Exception as e:
+            # DataJud falha silenciosa — não é crítico
+            pass
+
+    log(f"  {len(desatualizados)} processos desatualizados")
+
+    saida = SCRIPTS_DIR / "_processos_desatualizados.json"
+    saida.write_text(json.dumps(desatualizados, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    return desatualizados
+
+
+# ─── ETAPA 5: Gerar lista de downloads pendentes ────────────────────────────
+
+def etapa_pendentes(nomeacoes_aj, nomeacoes_ajg, desatualizados):
+    """Gera lista unificada de CNJs que precisam de download."""
+    log("═══ ETAPA 5: PENDENTES DE DOWNLOAD ═══")
+
+    cnjs = {}
+
+    # CNJs de nomeações sem PDF
+    for nom in nomeacoes_aj + nomeacoes_ajg:
+        cnj = nom.get("numero_processo_cnj", "")
+        if not cnj:
+            continue
+        pasta = PROCESSOS_DIR / cnj
+        tem_pdf = any(pasta.glob("*.pdf")) if pasta.exists() else False
+        if not tem_pdf:
+            cnjs[cnj] = {"motivo": "PENDENTE-PDF", "origem": nom.get("_origem", "?")}
+
+    # CNJs desatualizados
+    for d in desatualizados:
+        cnj = d["cnj"]
+        if cnj not in cnjs:
+            cnjs[cnj] = {"motivo": "DESATUALIZADO", "origem": "DataJud"}
+
+    # Processos existentes sem PDF (varredura geral)
+    if PROCESSOS_DIR.is_dir():
+        for pasta in PROCESSOS_DIR.iterdir():
+            if not pasta.is_dir() or pasta.name.startswith("."):
+                continue
+            cnj = extrair_cnj(pasta.name)
+            if not cnj:
+                continue
+            tem_pdf = any(pasta.glob("*.pdf"))
+            if not tem_pdf and cnj not in cnjs:
+                cnjs[cnj] = {"motivo": "PENDENTE-PDF", "origem": "local"}
+
+    pendentes = [{"cnj": k, **v} for k, v in cnjs.items()]
+    log(f"  {len(pendentes)} downloads pendentes")
+
+    saida = SCRIPTS_DIR / "_pendentes_download.json"
+    saida.write_text(json.dumps(pendentes, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    return pendentes
+
+
+# ─── ETAPA 6: Baixar PDFs do PJe ────────────────────────────────────────────
+
+def etapa_baixar(pendentes, diag, max_downloads=None, dry_run=False):
+    """Baixa PDFs do PJe via CDP."""
+    log("═══ ETAPA 6: BAIXAR PDFs DO PJe ═══")
+
+    if not pendentes:
+        log("  Nenhum download pendente")
+        return []
+
+    if dry_run:
+        log(f"  [DRY-RUN] Baixaria {len(pendentes)} processos")
+        return [{"cnj": p["cnj"], "status": "dry-run"} for p in pendentes]
+
+    if not diag.get("pode_baixar"):
+        log("  ⚠ Nenhum Chrome PJe disponível — pulando downloads", "WARN")
+        return []
+
+    # Determinar porta e IP
+    if diag.get("chrome_pje_win"):
+        ip = diag.get("parallels_ip", "10.211.55.3")
+        porta = PORTA_PJE_WIN
+        log(f"  Usando Chrome Windows ({ip}:{porta})")
+    else:
+        ip = "localhost"
+        porta = PORTA_PJE_MAC
+        log(f"  Usando Chrome Mac (localhost:{porta})")
+
+    # Limitar downloads
+    lista = pendentes[:max_downloads] if max_downloads else pendentes
+    cnjs = [p["cnj"] for p in lista]
+    log(f"  Baixando {len(cnjs)} processos...")
+
+    # Encontrar baixar_pje.py
+    script_pje = str(BAIXAR_PJE if BAIXAR_PJE.exists() else BAIXAR_PJE_LOCAL)
+
+    resultados = []
+    for i, cnj in enumerate(cnjs, 1):
+        log(f"  [{i}/{len(cnjs)}] {cnj}")
+        ok, out = rodar(
+            ["python3", script_pje,
+             "--ip", ip,
+             "--porta", str(porta),
+             "--processos", cnj,
+             "--retomar",
+             "--saida", str(SCRIPTS_DIR / "_downloads_temp")],
+            timeout=300  # 5 min por processo
+        )
+        resultados.append({
+            "cnj": cnj,
+            "status": "ok" if ok else "erro",
+            "detalhe": out[:200] if not ok else ""
+        })
+        if ok:
+            log(f"    ✓ Baixado")
+        else:
+            log(f"    ✗ Falha: {out[:100]}", "ERROR")
+
+    return resultados
+
+
+# ─── ETAPA 7: Importar + Processar ──────────────────────────────────────────
+
+def etapa_importar(resultados_download, dry_run=False):
+    """Move PDFs para processos/, extrai texto, renomeia pastas."""
+    log("═══ ETAPA 7: IMPORTAR + PROCESSAR ═══")
+
+    downloads_dir = SCRIPTS_DIR / "_downloads_temp"
+    importados = []
+
+    if dry_run:
+        log("  [DRY-RUN] Pulando importação")
+        return importados
+
+    if not downloads_dir.is_dir():
+        log("  Pasta _downloads_temp/ não existe — nada a importar")
+        return importados
+
+    for item in sorted(downloads_dir.iterdir()):
+        if not item.is_dir():
+            continue
+
+        cnj = extrair_cnj(item.name) or item.name
+        pasta_dest = PROCESSOS_DIR / cnj
+
+        # Criar pasta se não existe
+        pasta_dest.mkdir(parents=True, exist_ok=True)
+
+        # Mover PDFs
+        for pdf in item.glob("*.pdf"):
+            destino = pasta_dest / "autos-completos.pdf"
+
+            # Versionamento: se já existe, comparar hash
+            if destino.exists():
+                hash_atual = md5_arquivo(str(destino))
+                hash_novo = md5_arquivo(str(pdf))
+                if hash_atual == hash_novo:
+                    log(f"  = {cnj}: PDF idêntico, pulando")
+                    continue
+                # Versionar o antigo
+                data_antigo = datetime.fromtimestamp(destino.stat().st_mtime)
+                backup = pasta_dest / f"autos-completos-{data_antigo.strftime('%Y-%m-%d')}.pdf"
+                shutil.move(str(destino), str(backup))
+                log(f"  ↻ {cnj}: versão anterior salva como {backup.name}")
+
+                # Registrar versão na FICHA
+                ficha = ler_ficha(pasta_dest)
+                versoes = ficha.get("versoes", [])
+                versoes.append({
+                    "data": data_antigo.isoformat(),
+                    "hash": hash_atual,
+                    "tamanho_mb": round(backup.stat().st_size / 1048576, 1),
+                    "arquivo": backup.name
+                })
+                ficha["versoes"] = versoes
+                salvar_ficha(pasta_dest, ficha)
+
+            shutil.move(str(pdf), str(destino))
+            log(f"  → {cnj}: PDF importado")
+
+            # Extrair texto
+            txt = pasta_dest / "TEXTO-EXTRAIDO.txt"
+            ok, _ = rodar(
+                ["pdftotext", "-layout", str(destino), str(txt)],
+                timeout=60
+            )
+            if ok:
+                log(f"    Texto extraído ({txt.stat().st_size // 1024} KB)")
+
+            # Atualizar FICHA.json
+            ficha = ler_ficha(pasta_dest)
+            ficha["data_download"] = datetime.now().isoformat()
+            ficha["hash_pdf"] = md5_arquivo(str(destino))
+            ficha["tamanho_pdf_mb"] = round(destino.stat().st_size / 1048576, 1)
+            salvar_ficha(pasta_dest, ficha)
+
+            importados.append({
+                "cnj": cnj,
+                "pasta": str(pasta_dest),
+                "pdf": str(destino),
+                "texto": txt.exists()
+            })
+
+        # Limpar pasta temp vazia
+        if not any(item.iterdir()):
+            item.rmdir()
+
+    # Auto-renomear pastas (Perícia NN - Cidade - Vara)
+    _renomear_pastas(importados)
+
+    log(f"  {len(importados)} processos importados")
+    return importados
+
+
+def _renomear_pastas(importados):
+    """Renomeia pastas de CNJ puro para Perícia NN - Cidade - Vara."""
+    for imp in importados:
+        pasta = Path(imp["pasta"])
+        ficha = ler_ficha(pasta)
+
+        # Só renomeia se o nome atual é um CNJ puro
+        if not re.match(r"^\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$", pasta.name):
+            continue
+
+        unidade = ficha.get("unidade", "")
+        cnj = ficha.get("cnj", pasta.name)
+
+        if not unidade:
+            continue
+
+        # Extrair cidade da unidade (ex: "1ª Vara Cível de Belo Horizonte")
+        cidade_match = re.search(r"(?:de|da|do)\s+(.+?)(?:\s*[-/]|$)", unidade, re.IGNORECASE)
+        cidade = cidade_match.group(1).strip() if cidade_match else ""
+
+        # Extrair vara
+        vara_match = re.search(r"(\d+ª?\s*Vara[^-]*)", unidade, re.IGNORECASE)
+        vara = vara_match.group(1).strip() if vara_match else unidade[:40]
+
+        # Contar perícias existentes para numeração
+        existentes = [
+            d.name for d in PROCESSOS_DIR.iterdir()
+            if d.is_dir() and d.name.startswith("Perícia ")
+        ]
+        numeros = []
+        for nome in existentes:
+            m = re.match(r"Perícia\s+(\d+)", nome)
+            if m:
+                numeros.append(int(m.group(1)))
+        proximo = max(numeros, default=0) + 1
+
+        # Montar novo nome
+        if cidade:
+            novo_nome = f"Perícia {proximo:02d} - {cidade} - {vara}"
+        else:
+            novo_nome = f"Perícia {proximo:02d} - {vara}"
+
+        # Limitar tamanho
+        if len(novo_nome) > 80:
+            novo_nome = novo_nome[:77] + "..."
+
+        novo_caminho = PROCESSOS_DIR / novo_nome
+        if novo_caminho.exists():
+            continue
+
+        try:
+            pasta.rename(novo_caminho)
+            # Criar symlink CNJ → pasta renomeada
+            symlink = PROCESSOS_DIR / cnj
+            if not symlink.exists():
+                symlink.symlink_to(novo_caminho)
+            log(f"  📁 {cnj} → {novo_nome}")
+            imp["pasta"] = str(novo_caminho)
+            imp["renomeado"] = novo_nome
+        except Exception as e:
+            log(f"  ⚠ Falha ao renomear {cnj}: {e}", "WARN")
+
+
+# ─── ETAPA 8: Relatório + Notificação ───────────────────────────────────────
+
+def etapa_relatorio(diag, nomeacoes_aj, nomeacoes_ajg, desatualizados,
+                    pendentes, resultados_download, importados, tempo_inicio):
+    """Gera relatório final, atualiza status, notifica."""
+    log("═══ ETAPA 8: RELATÓRIO + NOTIFICAÇÃO ═══")
+
+    # Rodar scanner
+    log("  Atualizando STATUS-PROCESSOS.json...")
+    rodar(["python3", str(SCANNER), "--json-only"], timeout=60)
+
+    # Rodar deadline monitor
+    log("  Verificando prazos...")
+    ok_dl, out_dl = rodar(["python3", str(DEADLINE), "--json"], timeout=30)
+    alertas = []
+    if ok_dl:
+        try:
+            dl_data = json.loads(out_dl)
+            alertas = dl_data.get("alertas", [])
+        except Exception:
+            pass
+
+    # Montar relatório
+    tempo_total = time.time() - tempo_inicio
+    relatorio = {
+        "data": datetime.now().isoformat(),
+        "tempo_total_seg": round(tempo_total, 1),
+        "diagnostico": {
+            "chrome_aj": diag.get("chrome_aj", False),
+            "chrome_pje": diag.get("pode_baixar", False),
+        },
+        "nomeacoes_aj": len(nomeacoes_aj),
+        "nomeacoes_ajg": len(nomeacoes_ajg),
+        "desatualizados": len(desatualizados),
+        "pendentes_download": len(pendentes),
+        "downloads": {
+            "tentados": len(resultados_download),
+            "sucesso": sum(1 for r in resultados_download if r.get("status") == "ok"),
+            "falha": sum(1 for r in resultados_download if r.get("status") == "erro"),
+        },
+        "importados": len(importados),
+        "alertas_prazo": len(alertas),
+        "alertas_criticos": sum(1 for a in alertas if a.get("nivel") == "CRITICAL"),
+        "resultados_download": resultados_download,
+        "importados_detalhe": importados,
+    }
+
+    # Salvar relatório
+    RELATORIO_JSON.write_text(
+        json.dumps(relatorio, indent=2, ensure_ascii=False),
+        encoding="utf-8"
+    )
+    log(f"  Relatório salvo: {RELATORIO_JSON}")
+
+    # Resumo no terminal
+    log("─── RESUMO ───")
+    log(f"  Tempo total: {tempo_total:.0f}s")
+    log(f"  Nomeações: AJ={len(nomeacoes_aj)} | AJG={len(nomeacoes_ajg)}")
+    log(f"  Desatualizados: {len(desatualizados)}")
+    log(f"  Downloads: {relatorio['downloads']['sucesso']}/{relatorio['downloads']['tentados']}")
+    log(f"  Importados: {len(importados)}")
+    if alertas:
+        criticos = [a for a in alertas if a.get("nivel") == "CRITICAL"]
+        if criticos:
+            log(f"  ⚠ {len(criticos)} PRAZOS CRÍTICOS!", "WARN")
+
+    # Notificação macOS
+    try:
+        msg_notif = (
+            f"AJ:{len(nomeacoes_aj)} AJG:{len(nomeacoes_ajg)} "
+            f"Downloads:{relatorio['downloads']['sucesso']} "
+            f"Alertas:{len(alertas)}"
+        )
+        subprocess.run([
+            "osascript", "-e",
+            f'display notification "{msg_notif}" '
+            f'with title "Orquestrador Noturno" '
+            f'subtitle "Concluído em {tempo_total:.0f}s"'
+        ], timeout=5)
+    except Exception:
+        pass
+
+    # Som
+    try:
+        subprocess.run(
+            ["afplay", "/System/Library/Sounds/Glass.aiff"],
+            timeout=5
+        )
+    except Exception:
+        pass
+
+    # Notificação Telegram
+    try:
+        from notificar_telegram import enviar_relatorio_noturno
+        enviar_relatorio_noturno(relatorio)
+        log("  Telegram notificado", "OK")
+    except Exception as e:
+        log(f"  Telegram falhou: {e}", "WARN")
+
+    return relatorio
+
+
+# ─── Formatação Telegram ─────────────────────────────────────────────────────
+
+def formatar_telegram(relatorio):
+    """Formata relatório para envio via Telegram."""
+    r = relatorio
+    dl = r["downloads"]
+
+    linhas = [
+        "*ORQUESTRADOR NOTURNO*",
+        f"_{datetime.now().strftime('%d/%m %H:%M')}_",
+        "",
+        f"*NOMEAÇÕES:* AJ={r['nomeacoes_aj']} | AJG={r['nomeacoes_ajg']}",
+        f"*DESATUALIZADOS:* {r['desatualizados']}",
+        f"*DOWNLOADS:* {dl['sucesso']}/{dl['tentados']}"
+        + (f" ({dl['falha']} falhas)" if dl['falha'] else ""),
+        f"*IMPORTADOS:* {r['importados']}",
+    ]
+
+    if r["alertas_criticos"]:
+        linhas.append(f"🔴 *{r['alertas_criticos']} PRAZOS CRÍTICOS*")
+
+    linhas.append(f"\n_Tempo: {r['tempo_total_seg']:.0f}s_")
+
+    return "\n".join(linhas)
+
+
+# ─── Main ────────────────────────────────────────────────────────────────────
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Orquestrador Noturno — Stemmia Forense"
+    )
+    parser.add_argument("--diagnostico", action="store_true",
+                        help="Só verifica pré-requisitos")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Simula sem baixar/mover")
+    parser.add_argument("--so-consultar", action="store_true",
+                        help="Só AJ+AJG (sem baixar)")
+    parser.add_argument("--so-baixar", action="store_true",
+                        help="Só download PJe")
+    parser.add_argument("--so-atualizar", action="store_true",
+                        help="Só processos desatualizados")
+    parser.add_argument("--max", type=int, default=None,
+                        help="Limita downloads a N")
+    parser.add_argument("--json", action="store_true",
+                        help="Saída JSON (para bot)")
+    parser.add_argument("--importar", action="store_true",
+                        help="Importa PDFs de _downloads_temp (pipeline Windows)")
+    parser.add_argument("--exportar-pendentes", action="store_true",
+                        help="Salva CNJs sem PDF para pipeline Windows")
+
+    args = parser.parse_args()
+    tempo_inicio = time.time()
+
+    log("╔═══════════════════════════════════════════╗")
+    log("║   ORQUESTRADOR NOTURNO — Stemmia Forense  ║")
+    log("╚═══════════════════════════════════════════╝")
+    log(f"  Modo: {'dry-run' if args.dry_run else 'produção'}")
+    log(f"  Início: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+    # ETAPA 1: Diagnóstico (sempre roda)
+    diag = etapa_diagnostico()
+
+    if args.diagnostico:
+        diagnostico_detalhado(diag)
+        if args.json:
+            print(json.dumps(diag, indent=2, ensure_ascii=False))
+        return
+
+    # Modo --importar: importa PDFs baixados pelo Windows e sai
+    if args.importar:
+        resultado = importar_downloads_temp()
+        if args.json:
+            print(json.dumps(resultado, indent=2, ensure_ascii=False))
+        return
+
+    # Modo --exportar-pendentes: salva CNJs sem PDF e sai
+    if args.exportar_pendentes:
+        resultado = exportar_pendentes()
+        if args.json:
+            print(json.dumps(resultado, indent=2, ensure_ascii=False))
+        return
+
+    # Inicializar listas
+    nomeacoes_aj = []
+    nomeacoes_ajg = []
+    desatualizados = []
+    pendentes = []
+    resultados_download = []
+    importados = []
+
+    # ETAPA 2+3: Consultar AJ e AJG
+    if not args.so_baixar:
+        if diag["pode_consultar"]:
+            nomeacoes_aj = etapa_consultar_aj()
+            nomeacoes_ajg = etapa_consultar_ajg()
+        else:
+            log("⚠ Chrome AJ não disponível — pulando consulta", "WARN")
+
+    # ETAPA 3.5: Descoberta de novos processos (DJe + PJe Consulta Pública)
+    novos_descobertos = []
+    if not args.so_baixar and not args.so_consultar:
+        novos_descobertos = etapa_descoberta()
+
+    # ETAPA 4: Verificar movimentações
+    if not args.so_consultar and not args.so_baixar:
+        desatualizados = etapa_verificar_movimentacoes()
+
+    # ETAPA 5: Pendentes
+    if args.so_baixar:
+        # Ler pendentes existentes
+        pend_file = SCRIPTS_DIR / "_pendentes_download.json"
+        if pend_file.exists():
+            pendentes = json.loads(pend_file.read_text(encoding="utf-8"))
+    elif args.so_atualizar:
+        # Só desatualizados
+        desatualizados = etapa_verificar_movimentacoes()
+        pendentes = [{"cnj": d["cnj"], "motivo": "DESATUALIZADO"} for d in desatualizados]
+    elif not args.so_consultar:
+        pendentes = etapa_pendentes(nomeacoes_aj, nomeacoes_ajg, desatualizados)
+
+    # ETAPA 6: Baixar
+    if not args.so_consultar:
+        resultados_download = etapa_baixar(
+            pendentes, diag,
+            max_downloads=args.max,
+            dry_run=args.dry_run
+        )
+
+    # ETAPA 7: Importar
+    if not args.so_consultar:
+        importados = etapa_importar(resultados_download, dry_run=args.dry_run)
+
+    # ETAPA 8: Relatório
+    relatorio = etapa_relatorio(
+        diag, nomeacoes_aj, nomeacoes_ajg, desatualizados,
+        pendentes, resultados_download, importados, tempo_inicio
+    )
+
+    if args.json:
+        print(json.dumps(relatorio, indent=2, ensure_ascii=False))
+
+    log("═══ ORQUESTRADOR NOTURNO FINALIZADO ═══")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,119 @@
+{
+  "timestamp": "2026-04-22T06:30:05.663155",
+  "fontes": {
+    "dje_tjmg": {
+      "status": "erro",
+      "resultados": 0,
+      "ultima_execucao": "2026-04-22T06:30:05.663477",
+      "erro": "No module named 'dje_tjmg'"
+    },
+    "pje_consulta": {
+      "status": "ok",
+      "resultados": 8,
+      "ultima_execucao": "2026-04-22T06:30:09.593256",
+      "erro": null
+    },
+    "datajud": {
+      "status": "ok",
+      "resultados": 137,
+      "ultima_execucao": "2026-04-22T06:33:33.692350",
+      "erro": null
+    },
+    "comunica_pje": {
+      "status": "ok",
+      "resultados": 0,
+      "novos": 0,
+      "confirmados": 0,
+      "possiveis": 0,
+      "ultima_execucao": "2026-04-22T06:30:10.107602",
+      "erro": null
+    }
+  },
+  "descobertas_novas": [],
+  "movimentacoes_novas": [],
+  "processos": {},
+  "historico": [
+    {
+      "data": "2026-04-22",
+      "novos": 0,
+      "movimentacoes": 0,
+      "alertas": 0,
+      "fontes_ok": 3,
+      "fontes_total": 4,
+      "status": "parcial"
+    },
+    {
+      "data": "2026-04-21",
+      "novos": 0,
+      "movimentacoes": 39,
+      "alertas": 0,
+      "fontes_ok": 3,
+      "fontes_total": 4,
+      "status": "parcial"
+    },
+    {
+      "data": "2026-04-20",
+      "novos": 0,
+      "movimentacoes": 0,
+      "alertas": 0,
+      "fontes_ok": 2,
+      "fontes_total": 4,
+      "status": "parcial"
+    },
+    {
+      "data": "2026-04-19",
+      "novos": 0,
+      "movimentacoes": 43,
+      "alertas": 0,
+      "fontes_ok": 3,
+      "fontes_total": 4,
+      "status": "parcial"
+    },
+    {
+      "data": "2026-04-18",
+      "novos": 0,
+      "movimentacoes": 0,
+      "alertas": 0,
+      "fontes_ok": 2,
+      "fontes_total": 4,
+      "status": "parcial"
+    },
+    {
+      "data": "2026-04-17",
+      "novos": 0,
+      "movimentacoes": 1,
+      "alertas": 0,
+      "fontes_ok": 2,
+      "fontes_total": 4,
+      "status": "parcial"
+    },
+    {
+      "data": "2026-04-16",
+      "novos": 0,
+      "movimentacoes": 54,
+      "alertas": 0,
+      "fontes_ok": 3,
+      "fontes_total": 4,
+      "status": "parcial"
+    },
+    {
+      "data": "2026-04-15",
+      "novos": 0,
+      "movimentacoes": 0,
+      "alertas": 0,
+      "fontes_ok": 2,
+      "fontes_total": 4,
+      "status": "parcial"
+    },
+    {
+      "data": "2026-04-14",
+      "novos": 0,
+      "movimentacoes": 57,
+      "alertas": 0,
+      "fontes_ok": 3,
+      "fontes_total": 4,
+      "status": "parcial"
+    }
+  ],
+  "duracao_segundos": 208.1
+}

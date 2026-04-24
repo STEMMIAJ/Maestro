@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STEMMIA Dexter - Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --bg-deep: #0a0a1a;
+    --bg-sidebar: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-card: #0f3460;
+    --bg-card-hover: #1a4a7a;
+    --bg-main: #0e1525;
+    --accent: #4fc3f7;
+    --accent-dim: #2196f3;
+    --accent-glow: rgba(79, 195, 247, 0.15);
+    --text-primary: #e8eaf6;
+    --text-secondary: #90a4ae;
+    --text-muted: #546e7a;
+    --border: rgba(79, 195, 247, 0.12);
+    --success: #66bb6a;
+    --warning: #ffa726;
+    --error: #ef5350;
+    --purple: #7c4dff;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ============================================
+     SIDEBAR
+     ============================================ */
+  .sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-text .brand {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-primary);
+  }
+
+  .logo-text .sub {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 16px 12px 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .nav-item:hover {
+    background: rgba(79, 195, 247, 0.08);
+    color: var(--text-primary);
+  }
+
+  .nav-item.active {
+    background: var(--accent-glow);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .nav-item.active .nav-icon {
+    color: var(--accent);
+  }
+
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .sidebar-footer .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ============================================
+     MOBILE MENU TOGGLE
+     ============================================ */
+  .mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 200;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-size: 22px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ============================================
+     MAIN CONTENT
+     ============================================ */
+  .main {
+    flex: 1;
+    margin-left: 260px;
+    min-height: 100vh;
+    background: var(--bg-main);
+  }
+
+  .main-header {
+    padding: 28px 40px 20px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10, 10, 26, 0.5);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .main-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .main-header .header-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  .content {
+    padding: 32px 40px 60px;
+    max-width: 1280px;
+  }
+
+  /* ============================================
+     SECTION TITLES
+     ============================================ */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  /* ============================================
+     STATUS CARDS (KPI)
+     ============================================ */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .kpi-card:nth-child(1)::before { background: var(--accent); }
+  .kpi-card:nth-child(2)::before { background: var(--success); }
+  .kpi-card:nth-child(3)::before { background: var(--purple); }
+  .kpi-card:nth-child(4)::before { background: var(--warning); }
+
+  .kpi-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(79, 195, 247, 0.25);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .kpi-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .kpi-value {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .kpi-card:nth-child(1) .kpi-value { color: var(--accent); }
+  .kpi-card:nth-child(2) .kpi-value { color: var(--success); }
+  .kpi-card:nth-child(3) .kpi-value { color: var(--purple); }
+  .kpi-card:nth-child(4) .kpi-value { color: var(--warning); }
+
+  .kpi-detail {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .kpi-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 28px;
+    opacity: 0.15;
+  }
+
+  /* ============================================
+     STRUCTURE GRID
+     ============================================ */
+  .structure-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .structure-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.2s ease;
+  }
+
+  .structure-card:hover {
+    border-color: var(--accent);
+    background: rgba(15, 52, 96, 0.4);
+  }
+
+  .structure-card .folder-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .structure-card .folder-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .folder-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(79, 195, 247, 0.1);
+    color: var(--accent);
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ============================================
+     FLOWS LIST
+     ============================================ */
+  .flows-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .flow-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    transition: all 0.2s ease;
+  }
+
+  .flow-item:hover {
+    border-color: var(--accent);
+    background: rgba(15, 52, 96, 0.35);
+  }
+
+  .flow-letter {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .flow-item:nth-child(1) .flow-letter { background: rgba(79, 195, 247, 0.15); color: var(--accent); }
+  .flow-item:nth-child(2) .flow-letter { background: rgba(102, 187, 106, 0.15); color: var(--success); }
+  .flow-item:nth-child(3) .flow-letter { background: rgba(124, 77, 255, 0.15); color: var(--purple); }
+  .flow-item:nth-child(4) .flow-letter { background: rgba(255, 167, 38, 0.15); color: var(--warning); }
+  .flow-item:nth-child(5) .flow-letter { background: rgba(239, 83, 80, 0.15); color: var(--error); }
+  .flow-item:nth-child(6) .flow-letter { background: rgba(79, 195, 247, 0.15); color: var(--accent); }
+  .flow-item:nth-child(7) .flow-letter { background: rgba(102, 187, 106, 0.15); color: var(--success); }
+
+  .flow-info {
+    flex: 1;
+  }
+
+  .flow-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+  }
+
+  .flow-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .flow-status {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+
+  .flow-status.operational {
+    background: rgba(102, 187, 106, 0.12);
+    color: var(--success);
+  }
+
+  .flow-status.partial {
+    background: rgba(255, 167, 38, 0.12);
+    color: var(--warning);
+  }
+
+  /* ============================================
+     QUICK LINKS
+     ============================================ */
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .link-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    padding: 24px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.25s ease;
+  }
+
+  .link-card:hover {
+    border-color: var(--accent);
+    background: var(--bg-card);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .link-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .link-card:nth-child(1) .link-icon { background: rgba(79, 195, 247, 0.12); color: var(--accent); }
+  .link-card:nth-child(2) .link-icon { background: rgba(102, 187, 106, 0.12); color: var(--success); }
+  .link-card:nth-child(3) .link-icon { background: rgba(124, 77, 255, 0.12); color: var(--purple); }
+  .link-card:nth-child(4) .link-icon { background: rgba(255, 167, 38, 0.12); color: var(--warning); }
+
+  .link-label {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .link-url {
+    font-size: 11px;
+    color: var(--text-muted);
+    word-break: break-all;
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 1100px) {
+    .kpi-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .structure-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .links-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .mobile-toggle {
+      display: flex;
+    }
+
+    .main {
+      margin-left: 0;
+    }
+
+    .main-header {
+      padding: 24px 20px 16px;
+      padding-left: 72px;
+    }
+
+    .content {
+      padding: 24px 20px 48px;
+    }
+
+    .kpi-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .kpi-card {
+      padding: 18px;
+    }
+
+    .kpi-value {
+      font-size: 28px;
+    }
+
+    .structure-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .links-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .kpi-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .links-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ============================================
+     OVERLAY (mobile)
+     ============================================ */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 90;
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  /* ============================================
+     SCROLLBAR
+     ============================================ */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-deep);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+  }
+
+  /* Notificações */
+  .notif-filter {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--text-muted);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .notif-filter.active {
+    background: var(--accent);
+    color: var(--bg-deep);
+    border-color: var(--accent);
+  }
+  .notif-item {
+    background: var(--bg-card);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-left: 3px solid var(--accent);
+    transition: opacity 0.2s;
+  }
+  .notif-item.lida {
+    opacity: 0.5;
+    border-left-color: var(--text-muted);
+  }
+  .notif-emoji { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+  .notif-body { flex: 1; min-width: 0; }
+  .notif-titulo { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
+  .notif-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+  .notif-processo { font-size: 0.8rem; color: var(--accent); font-family: monospace; }
+  .notif-orgao { font-size: 0.75rem; color: var(--text-secondary); font-style: italic; }
+  .notif-btn {
+    background: none;
+    border: 1px solid var(--text-muted);
+    color: var(--text-secondary);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .notif-btn:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- Mobile menu toggle -->
+<button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ==========================================
+     SIDEBAR
+     ========================================== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="logo-icon">S</div>
+      <div class="logo-text">
+        <span class="brand">STEMMIA</span>
+        <span class="sub">Dexter</span>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Principal</div>
+
+    <a class="nav-item active" href="#inicio">
+      <span class="nav-icon">&#9673;</span>
+      <span>Inicio</span>
+    </a>
+    <a class="nav-item" href="#processos">
+      <span class="nav-icon">&#9744;</span>
+      <span>Processos</span>
+    </a>
+    <a class="nav-item" href="#pipeline">
+      <span class="nav-icon">&#9654;</span>
+      <span>Pipeline</span>
+    </a>
+    <a class="nav-item" href="#peticoes">
+      <span class="nav-icon">&#9998;</span>
+      <span>Peticoes</span>
+    </a>
+
+    <div class="nav-section-label">Financeiro</div>
+
+    <a class="nav-item" href="#honorarios">
+      <span class="nav-icon">&#36;</span>
+      <span>Honorarios</span>
+    </a>
+
+    <div class="nav-section-label">Pesquisa</div>
+
+    <a class="nav-item" href="#jurisprudencia">
+      <span class="nav-icon">&#9878;</span>
+      <span>Jurisprudencia</span>
+    </a>
+
+    <div class="nav-section-label">Sistema</div>
+
+    <a class="nav-item" href="#ferramentas">
+      <span class="nav-icon">&#9881;</span>
+      <span>Ferramentas</span>
+    </a>
+    <a class="nav-item" href="#memoria">
+      <span class="nav-icon">&#9733;</span>
+      <span>Memoria</span>
+    </a>
+    <a class="nav-item" href="#docs">
+      <span class="nav-icon">&#9776;</span>
+      <span>Docs</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      Sistema operacional
+    </div>
+  </div>
+</aside>
+
+<!-- ==========================================
+     MAIN CONTENT
+     ========================================== -->
+<main class="main">
+  <header class="main-header">
+    <h1>Painel de Controle</h1>
+    <div class="header-sub">STEMMIA Dexter &mdash; Sistema de Pericia Medica Judicial</div>
+  </header>
+
+  <div class="content">
+
+    <!-- ====== NOTIFICAÇÕES ====== -->
+    <section class="section" id="notificacoes">
+      <div class="section-title" style="display:flex;align-items:center;gap:12px;">
+        Notificacoes
+        <span id="badge-novas" style="
+          background: var(--accent);
+          color: var(--bg-deep);
+          font-size: 0.75rem;
+          font-weight: 700;
+          padding: 2px 8px;
+          border-radius: 12px;
+          display: none;
+        ">0</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <button class="notif-filter active" data-filter="nao-lidas" onclick="filtrarNotif('nao-lidas')">Nao lidas</button>
+        <button class="notif-filter" data-filter="todas" onclick="filtrarNotif('todas')">Todas</button>
+        <select id="filtro-tribunal" onchange="filtrarNotif()" style="
+          background: var(--bg-secondary);
+          color: var(--text-primary);
+          border: 1px solid var(--text-muted);
+          border-radius: 6px;
+          padding: 4px 8px;
+          font-size: 0.8rem;
+        ">
+          <option value="todos">Todos tribunais</option>
+          <option value="TJMG">TJMG</option>
+          <option value="TRF6">TRF6</option>
+        </select>
+      </div>
+      <div id="notif-vazio" style="color:var(--text-muted);font-size:0.85rem;padding:16px 0;display:none;">
+        Nenhuma notificacao encontrada.
+      </div>
+      <ul id="lista-notificacoes" style="list-style:none;display:flex;flex-direction:column;gap:8px;"></ul>
+    </section>
+
+    <!-- ====== STATUS RAPIDO ====== -->
+    <section class="section" id="inicio">
+      <div class="section-title">Status Rapido</div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">&#9744;</div>
+          <div class="kpi-label">Processos ativos</div>
+          <div class="kpi-value">74+</div>
+          <div class="kpi-detail">TJMG &middot; Pericia judicial</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">&#9654;</div>
+          <div class="kpi-label">Scripts funcionais</div>
+          <div class="kpi-value">52+</div>
+          <div class="kpi-detail">Python, Bash, Node.js</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">&#9733;</div>
+          <div class="kpi-label">Agentes Claude</div>
+          <div class="kpi-value">85</div>
+          <div class="kpi-detail">Organizados por cluster</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">&#9881;</div>
+          <div class="kpi-label">MCPs conectados</div>
+          <div class="kpi-value">15</div>
+          <div class="kpi-detail">Juridico, PJe, busca, N8N</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== ESTRUTURA DO SISTEMA ====== -->
+    <section class="section" id="estrutura">
+      <div class="section-title">Estrutura do Sistema</div>
+      <div class="structure-grid">
+        <div class="structure-card">
+          <div class="folder-name">
+            <span>&#128193;</span> src/
+          </div>
+          <div class="folder-desc">Codigo fonte: pipeline de analise, gerador de peticoes, calculadora de honorarios, integracao PJe</div>
+          <span class="folder-tag">CORE</span>
+        </div>
+        <div class="structure-card">
+          <div class="folder-name">
+            <span>&#128193;</span> memoria/
+          </div>
+          <div class="folder-desc">Sistema de memoria persistente para continuidade entre sessoes e agentes</div>
+          <span class="folder-tag">PERSISTENCIA</span>
+        </div>
+        <div class="structure-card">
+          <div class="folder-name">
+            <span>&#128193;</span> agents/
+          </div>
+          <div class="folder-desc">85 agentes organizados por cluster: pericial, juridico, pesquisa, automacao</div>
+          <span class="folder-tag">85 AGENTES</span>
+        </div>
+        <div class="structure-card">
+          <div class="folder-name">
+            <span>&#128193;</span> templates/
+          </div>
+          <div class="folder-desc">Modelos de laudo pericial, peticoes, roteiros de exame, relatorios</div>
+          <span class="folder-tag">MODELOS</span>
+        </div>
+        <div class="structure-card">
+          <div class="folder-name">
+            <span>&#128193;</span> referencias/
+          </div>
+          <div class="folder-desc">Base pericial: escalas funcionais, protocolos medicos, tabelas, CID/CIF</div>
+          <span class="folder-tag">BASE PERICIAL</span>
+        </div>
+        <div class="structure-card">
+          <div class="folder-name">
+            <span>&#128193;</span> data/
+          </div>
+          <div class="folder-desc">Dados de processos judiciais. Nao versionado (gitignore). Arquivos locais.</div>
+          <span class="folder-tag">NAO VERSIONADO</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== FLUXOS OPERACIONAIS ====== -->
+    <section class="section" id="pipeline">
+      <div class="section-title">Fluxos Operacionais</div>
+      <div class="flows-list">
+        <div class="flow-item">
+          <div class="flow-letter">A</div>
+          <div class="flow-info">
+            <div class="flow-name">Nomeacao &rarr; Download &rarr; Extracao</div>
+            <div class="flow-desc">Recebe nomeacao, baixa autos do PJe, extrai documentos e organiza por tipo</div>
+          </div>
+          <span class="flow-status operational">Operacional</span>
+        </div>
+        <div class="flow-item">
+          <div class="flow-letter">B</div>
+          <div class="flow-info">
+            <div class="flow-name">Pipeline de Analise (7 etapas)</div>
+            <div class="flow-desc">Triagem &rarr; Extracao clinica &rarr; Correlacao &rarr; Nexo &rarr; Incapacidade &rarr; Consolidacao &rarr; Laudo</div>
+          </div>
+          <span class="flow-status operational">Operacional</span>
+        </div>
+        <div class="flow-item">
+          <div class="flow-letter">C</div>
+          <div class="flow-info">
+            <div class="flow-name">Geracao de Peticoes</div>
+            <div class="flow-desc">Gera peticoes intermediarias, quesitos complementares, impugnacoes</div>
+          </div>
+          <span class="flow-status operational">Operacional</span>
+        </div>
+        <div class="flow-item">
+          <div class="flow-letter">D</div>
+          <div class="flow-info">
+            <div class="flow-name">Calculo de Honorarios</div>
+            <div class="flow-desc">Calcula honorarios periciais conforme tabela TJMG e complexidade</div>
+          </div>
+          <span class="flow-status operational">Operacional</span>
+        </div>
+        <div class="flow-item">
+          <div class="flow-letter">E</div>
+          <div class="flow-info">
+            <div class="flow-name">Pesquisa Jurisprudencia</div>
+            <div class="flow-desc">Busca paralela em 3 fontes: TJMG, STJ, TRFs. Filtra por relevancia pericial</div>
+          </div>
+          <span class="flow-status partial">Parcial</span>
+        </div>
+        <div class="flow-item">
+          <div class="flow-letter">F</div>
+          <div class="flow-info">
+            <div class="flow-name">Roteiro Pericial</div>
+            <div class="flow-desc">Gera roteiro de exame pericial personalizado por patologia e quesitos</div>
+          </div>
+          <span class="flow-status operational">Operacional</span>
+        </div>
+        <div class="flow-item">
+          <div class="flow-letter">G</div>
+          <div class="flow-info">
+            <div class="flow-name">Monitoramento</div>
+            <div class="flow-desc">Monitora publicacoes DJe, movimentacoes PJe, prazos e intimacoes</div>
+          </div>
+          <span class="flow-status partial">Parcial</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== LINKS RAPIDOS ====== -->
+    <section class="section" id="links">
+      <div class="section-title">Links Rapidos</div>
+      <div class="links-grid">
+        <a class="link-card" href="https://stemmiapericia.com" target="_blank" rel="noopener">
+          <div class="link-icon">&#127760;</div>
+          <div class="link-label">Site STEMMIA</div>
+          <div class="link-url">stemmiapericia.com</div>
+        </a>
+        <a class="link-card" href="https://n8n.srv19105.nvhm.cloud" target="_blank" rel="noopener">
+          <div class="link-icon">&#9881;</div>
+          <div class="link-label">N8N Server</div>
+          <div class="link-url">n8n.srv19105.nvhm.cloud</div>
+        </a>
+        <a class="link-card" href="https://pje.tjmg.jus.br" target="_blank" rel="noopener">
+          <div class="link-icon">&#9878;</div>
+          <div class="link-label">PJe TJMG</div>
+          <div class="link-url">pje.tjmg.jus.br</div>
+        </a>
+        <a class="link-card" href="https://www.tjmg.jus.br/portal-tjmg/" target="_blank" rel="noopener">
+          <div class="link-icon">&#9879;</div>
+          <div class="link-label">AJ TJMG</div>
+          <div class="link-url">tjmg.jus.br</div>
+        </a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ==========================================
+     MINIMAL JS (sidebar toggle only)
+     ========================================== -->
+<script>
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('active');
+  }
+
+  // ====== NOTIFICAÇÕES ======
+  let _notifs = [];
+  let _filtroAtual = 'nao-lidas';
+
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.textContent;
+  }
+
+  function getLidas() {
+    try { return new Set(JSON.parse(localStorage.getItem('notif_lidas') || '[]')); }
+    catch { return new Set(); }
+  }
+
+  function setLida(id) {
+    const lidas = getLidas();
+    lidas.add(id);
+    localStorage.setItem('notif_lidas', JSON.stringify([...lidas]));
+    renderNotifs();
+  }
+
+  function filtrarNotif(tipo) {
+    if (tipo) _filtroAtual = tipo;
+    document.querySelectorAll('.notif-filter').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.filter === _filtroAtual);
+    });
+    renderNotifs();
+  }
+
+  function criarNotifItem(n, isLida) {
+    var li = document.createElement('li');
+    li.className = 'notif-item' + (isLida ? ' lida' : '');
+
+    var emojiMap = {movimentacao: '\u{1F4CB}', descoberta: '\u{1F195}', publicacao: '\u{1F4F0}'};
+    var emoji = emojiMap[n.tipo] || '\u{1F4CC}';
+
+    var emojiDiv = document.createElement('div');
+    emojiDiv.className = 'notif-emoji';
+    emojiDiv.textContent = emoji;
+    li.appendChild(emojiDiv);
+
+    var body = document.createElement('div');
+    body.className = 'notif-body';
+
+    var titulo = document.createElement('div');
+    titulo.className = 'notif-titulo';
+    titulo.textContent = n.titulo || 'Notificacao';
+    body.appendChild(titulo);
+
+    var proc = document.createElement('div');
+    proc.className = 'notif-processo';
+    proc.textContent = (n.processo || '?') + ' (' + (n.tribunal || '?') + ')';
+    body.appendChild(proc);
+
+    if (n.orgao) {
+      var orgao = document.createElement('div');
+      orgao.className = 'notif-orgao';
+      orgao.textContent = n.orgao;
+      body.appendChild(orgao);
+    }
+
+    var meta = document.createElement('div');
+    meta.className = 'notif-meta';
+    meta.textContent = (n.data_movimentacao || '?') + ' \u00B7 ' + (n.fonte || '?');
+    body.appendChild(meta);
+
+    li.appendChild(body);
+
+    if (!isLida) {
+      var btn = document.createElement('button');
+      btn.className = 'notif-btn';
+      btn.textContent = 'marcar lida';
+      btn.addEventListener('click', function() { setLida(n.id); });
+      li.appendChild(btn);
+    }
+
+    return li;
+  }
+
+  function renderNotifs() {
+    var lista = document.getElementById('lista-notificacoes');
+    var badge = document.getElementById('badge-novas');
+    var vazio = document.getElementById('notif-vazio');
+    var tribFiltro = document.getElementById('filtro-tribunal').value;
+    var lidas = getLidas();
+
+    var naoLidas = _notifs.filter(function(n) { return !lidas.has(n.id); }).length;
+    badge.textContent = naoLidas;
+    badge.style.display = naoLidas > 0 ? 'inline' : 'none';
+
+    var filtradas = _notifs.slice();
+    if (_filtroAtual === 'nao-lidas') filtradas = filtradas.filter(function(n) { return !lidas.has(n.id); });
+    if (tribFiltro !== 'todos') filtradas = filtradas.filter(function(n) { return n.tribunal === tribFiltro; });
+
+    filtradas.sort(function(a, b) { return (b.data_movimentacao || '').localeCompare(a.data_movimentacao || ''); });
+
+    lista.replaceChildren();
+
+    if (filtradas.length === 0) {
+      vazio.style.display = 'block';
+      return;
+    }
+    vazio.style.display = 'none';
+
+    filtradas.forEach(function(n) {
+      lista.appendChild(criarNotifItem(n, lidas.has(n.id)));
+    });
+  }
+
+  fetch('../data/notificacoes.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) { _notifs = data; renderNotifs(); })
+    .catch(function() {
+      document.getElementById('notif-vazio').textContent = 'Erro ao carregar. Rode cron_monitor.py primeiro.';
+      document.getElementById('notif-vazio').style.display = 'block';
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=9">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Expires" content="0">    
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <link href="css/sistema_antigo.css" rel="stylesheet" type="text/css">
+        <title>TJMG - Pesquisa por Jurisprudência</title>
+        <script language="JavaScript" src="/js/tjmg_ui.js"></script>
+        <script language="JavaScript" src="/js/tjmg.js"></script>
+        <script language="JavaScript" src="js/valida_dv_nu.js"></script>
+        <script type="text/javascript" src="/jurisprudencia/js/ea_util.js"></script>
+                
+        <link title="geral" rel="stylesheet" type="text/css" href="/portaltjmg/css/screen.css" media="screen">        
+        <link title="alternativo" rel="stylesheet" type="text/css" href="/portaltjmg/css/alternativo.css" media="screen">   
+        
+    <style type="text/css" media="screen">
+            a:link.linkListaEspelhoAcordaos {color: #990000;}
+            a:visited.linkListaEspelhoAcordaos {color: #2F2F0F;}
+
+            .cabecalho
+            {
+                width: 99%;                   
+                border: solid #CCCCCC 1px;
+                background-color:#DFDFDF;                
+                color: #880000;
+                height: 18px;                    
+                font-family: Verdana, Arial, Helvetica, sans-serif;
+                font-size: 9pt;
+                font-weight: bold;
+                font-style: normal;                
+            }
+
+            .caixa_processo
+            {
+                    width: 99%;                   
+                    margin-top: 20px;
+                    -webkit-border-radius: 5px;
+                    -moz-border-radius: 5px;
+                    border-radius: 5px;
+                    border: solid #CCCCCC 1px;
+                    background-color:#DFDFDF;
+                    text-indent: 5px;
+                    padding: 5px;
+            }
+
+            .corpo 
+            {
+                color: #333333;
+            }           
+            
+        </style><style type="text/css" media="print">        
+        td.leftRight
+        {
+            margin: 0;                
+        }
+
+        span#tabelaEspelho
+        {
+            width: 100%;    
+            margin-right: 0;
+        }
+
+        body
+        {
+            margin: 0;
+        }
+
+        img#logoTJ
+        {
+            visibility: visible;
+        }
+
+        img#imgBotao1
+        {
+            visibility: visible;
+        }
+
+        table#tabelaInformacoesAcordaos
+        {
+            margin-left: 0;
+        }
+
+        td.rightTop
+        {
+            visibility: hidden;
+        }
+
+        img#AWMEL3_4
+        {
+            visibility: hidden;
+        }
+
+        div#menutop
+        {
+            visibility: hidden;
+        }
+
+        img
+        {
+            visibility: hidden;
+        }
+
+        div.tabbar
+        {
+            visibility: hidden;
+        }
+
+        div#caminho
+        {
+            visibility: hidden;
+        }            
+
+        div#botaoImprimirInteiroTeor
+        {
+            visibility: hidden;
+        } 
+
+        div#panel2
+        {
+            visibility: hidden;
+        }   
+
+        div#botoesEspelho
+        {
+            visibility: hidden;
+        }        
+
+        div#cabecalhoMenu
+        {
+            visibility: hidden;
+            display: none;
+        }
+
+        td#curvaBotton
+        {
+            visibility: hidden;
+        }
+
+        div.menuPortal
+        {
+            visibility: hidden;                    
+        }        
+    </style><script>
+    if (navigator.userAgent.toLowerCase().indexOf("msie 7") != -1)
+    {
+        //Comentado, pois alguns navegadores IE 8 estão emulando o IE 7
+        //alert("ATENÇÃO: A versão do seu navegador é Internet Explorer 7.\nA Consulta à Jurisprudência está homologada para Internet Explorer 8 ou versão superior. Favor atualizar a versão do seu navegador.");
+    }
+    </script></head>
+    
+                
+    
+    
+        
+    
+        
+        <body onload="if (document.getElementById('panel2').style.display == 'none' &amp;&amp; (document.getElementById('siglaLegislativa').value != '' || document.getElementById('observacoes').value != '')) mostrarOcultarPanel(2);" onkeydown="if (capturaCtrlP(event)) { return false;}" onkeyup="if (capturaCtrlP(event)) {imprimirEspelho(); return false;}">        
+        	
+            <div id="cabecalhoMenu"><style type="text/css">
+    header .wrapper-header
+    {
+        background: #7e1819;
+        color: white;
+        padding: 0px 0 0px 0;
+    }
+</style>
+
+<header role="banner">             
+    <div class="wrapper-header">
+        <a target="_blank" title="Link para Portal TJMG" aria-label="Logo do Tribunal de Justiça do Estado de Minas Gerais" class="brand-logo logo-tjmg" href="http://www.tjmg.jus.br">
+        <img src="imagens/logo_tjmg.png">
+        </a>
+    </div>
+</header>  </div>
+            
+            <br>
+            
+            <div id="sistema">
+                <div class="containerSis" style="width: 1200px">
+    
+                
+                <table align="center" width="90%" border="0" cellspacing="0" cellpadding="0">                       
+                      
+                <tbody><tr>
+                    <td colspan="4" align="left" valign="top" class="leftRight" bgcolor="#FFFFFF">
+
+                        
+                        <h1>
+                            Resultado da busca
+                        </h1>
+
+                        <div class="textoUmaColuna">
+                            <div class="tabbar" align="left">
+  <a href="formEspelhoAcordao.do" class="tabact">Acórdãos</a>
+  <a href="decisao.do">Decisões Monocráticas</a>
+  <a href="decisaoVice.do">Decisões da 1ª e 3ª Vice-Presidência</a>   
+  <a href="sumulas.do">Súmulas</a>
+  <a href="decisaoTurmaRecursal.do">Decisões de Turma Recursal</a>
+    <a href="decisaoTurmaRecursalPJe.do">Decisões de Turma Recursal - PJe</a>
+  <a href="sentenca.do">Sentenças</a>
+  <a href="ajuda.do">Ajuda</a>
+</div>
+
+<div class="tabbar" align="left">
+  <a href="" class="tabact">Lista de Resultados</a>
+</div>
+
+                        </div>
+                        <br>
+                        <div align="left"><div class="textoUmaColuna">
+
+
+
+
+
+
+
+
+  <p class="info">
+	
+		Foram encontrados 1 Espelhos de Acórdãos com os critérios utilizados
+		<br>
+	
+		Palavras: honorarios E periciais E medico E Montes E Claros
+		<br>
+	
+		Utiliza termos relacionados: NÃO
+		<br>
+	
+  </p>
+
+
+
+
+
+
+
+
+<!-- Mensagem de erro geral do Struts (Validate por Ex) -->
+
+
+<!-- Mensagem geral do Struts  -->
+
+
+</div></div>
+
+                        
+
+
+
+
+
+ 
+	
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="dwr/engine.js"></script>
+<script type="text/javascript" src="dwr/util.js"></script>
+<script type="text/javascript" src="dwr/interface/ValidacaoCaptchaAction.js"></script>
+
+
+<table align="center">
+    <tbody><tr><td>
+            <div class="textoUmaColuna">
+
+                
+
+                
+
+                    <div align="center">
+                        <strong>Para acessar mais informações clique no número do acórdão.</strong>
+                    </div>
+
+                    
+
+                    <br>
+                    <div align="right"><input type="button" value="Nova pesquisa" name="novaPesquisa" onclick="document.location.href='formEspelhoAcordao.do'" class="botao_vinho"></div>
+
+
+                    
+                        
+                            
+                        
+                        
+                    
+
+                    
+                        
+                        <br>
+
+                        <!-- o atributo height foi setado in-line em funcao de outros sistemas usarem o mesmo CSS -->
+                        <div class="caixa_processo" style="height:35px;">
+                            <a href="pesquisaPalavrasEspelhoAcordao.do?&amp;numeroRegistro=1&amp;totalLinhas=1&amp;paginaNumero=1&amp;linhasPorPagina=1&amp;palavras=honorarios periciais medico Montes Claros&amp;pesquisarPor=ementa&amp;orderByData=2&amp;referenciaLegislativa=Clique na lupa para pesquisar as referências cadastradas...&amp;pesquisaPalavras=Pesquisar&amp;" title="Abrir Espelho do Acórdão" class="linkListaEspelhoAcordaos" onclick="return validaPesquisa();">
+                                1 - Processo: Ap Cível/Rem Necessária <br>
+                                <div style="position: relative; float: left; padding-left: 10px;">
+                                    1.0000.25.057863-0/001
+                                </div>
+                                <div style="position:relative; float: right; padding-right: 10px">
+                                    5035164-60.2023.8.13.0433 (1)
+                                </div>
+                                <!-- REMOVER O POSITION RELATIVE PARA NAO COMPROMETER O LAYOUT -->
+                                <div style="clear: both;"></div>
+                            </a>                                
+                                
+                        </div>
+
+                        <div style="position: relative; text-align: right;">
+                            <input type="button" class="botao_vinho" value="Ementa sem formatação" onclick="abrirJanelaCentralizada('ementaSemFormatacao.do?procAno=25&amp;procCodigo=1&amp;procCodigoOrigem=0&amp;procNumero=57863&amp;procSequencial=1&amp;procSeqAcordao=0', 'ementaSemFormatacao', '800', '500', 'yes', 'no');">
+                        </div>
+
+                        <table cellspacing="0" cellpadding="0"><tbody><tr><td nowrap="" class="corpo"><strong>Relator(a):</strong> Des.(a) Raimundo Messias Júnior</td></tr></tbody></table>
+
+                        <div class="corpo"><strong>Data de Julgamento:</strong>
+                            29/07/2025
+                        </div>
+
+                        <div class="corpo"><strong>Data da publicação da súmula:</strong>
+                            05/08/2025
+                            
+                        </div>
+
+                        <div style="text-align: justify;" class="corpo"><strong>Ementa:</strong>
+                            
+
+
+
+
+
+
+
+<br>EMENTA: DIREITO ADMINISTRATIVO. APELAÇÃO CÍVEL E REMESSA NECESSÁRIA. CONCURSO PÚBLICO. POLÍCIA MILITAR DE MINAS GERAIS. EDITAL DHR/CRS N.º 11/2022. EXCLUSÃO DE CANDIDATO EM EXAME <font color="#FF0000"><b>MÉDICO</b></font>. CIRURGIA PREGRESSA. INEXISTÊNCIA DE SEQUELAS FUNCIONAIS. ATO ADMINISTRATIVO SEM MOTIVAÇÃO IDÔNEA. CONTROLE JUDICIAL DA LEGALIDADE. REMESSA NECESSÁRIA NÃO CONHECIDA, DE OFÍCIO. RECURSO VOLUNTÁRIO NÃO PROVIDO.
+<br>I. CASO EM EXAME
+<br>1. Remessa necessária e apelação cível interpostas contra sentença da 2ª Vara Empresarial e de Fazenda Pública da Comarca de <font color="#FF0000"><b>Montes</b></font> <font color="#FF0000"><b>Claros</b></font> que, julgou procedente o pedido deduzido nos autos da ação declaratória de nulidade do ato administrativo  para reconhecer a aptidão física do autor e assegurar o prosseguimento nas etapas do concurso regido pelo Edital DRH/CRS nº 11/2022 da Polícia Militar de Minas Gerais, incluindo nomeação, formatura e posse, desde que atendidos os critérios de notas e frequência. A sentença ainda condenou o réu ao pagamento de <font color="#FF0000"><b>honorários</b></font> advocatícios de 10% sobre o valor da causa.
+<br>II. QUESTÃO EM DISCUSSÃO
+<br>2. Há duas questões em discussão: (i) definir se é cabível a remessa necessária em razão do valor atribuído à causa; (ii) estabelecer se é válida a exclusão do autor do concurso público com fundamento em realização de cirurgia prévia no cotovelo.
+<br>III. RAZÕES DE DECIDIR
+<br>3. A remessa necessária não se aplica quando o valor da causa for inferior ao limite legal de 500 salários mínimos, conforme art. 496, § 3º, II, do CPC/2015, interpretação respaldada pela jurisprudência do STJ.
+<br>4. A Administração Pública possui discricionariedade técnica para estabelecer critérios de saúde em concursos públicos, desde que tais critérios estejam previstos de forma clara e objetiva no edital, e baseiem-se em exigências compatíveis com as atribuições do cargo.
+<br>5. O Poder Judiciário pode exercer controle de legalidade sobre atos administrativos excludentes, exigindo que estejam motivados de forma concreta e individualizada, sendo vedada eliminação baseada em juízos abstratos.
+<br>6. O laudo <font color="#FF0000"><b>pericial</b></font> judicial, bem ainda os laudos <font color="#FF0000"><b>médicos</b></font> particulares anexados à inicial confirmaram que a cirurgia realizada pelo autor não compromete a funcionalidade do cotovelo nem sua aptidão para o exercício do cargo, não se enquadrando na hipótese de inaptidão prevista no edital.
+<br>7. A exclusão do candidato baseou-se apenas em presunção genérica de inaptidão decorrente de cirurgia anterior, sem análise específica do caso concreto, configurando falta de motivação idônea.
+<br>8. O reconhecimento judicial da aptidão física do autor não configura violação ao princípio da isonomia, por decorrer de avaliação individualizada e respaldada por prova técnica judicial.
+<br>9. Não há necessidade de reabertura da instrução processual, uma vez que a perícia produzida nos autos foi clara, conclusiva e submetida ao contraditório.
+<br>IV. DISPOSITIVO E TESE
+<br>10. Remessa necessária não conhecida. Recurso voluntário não provido.
+<br>Tese de julgamento: 1) A remessa necessária não é cabível quando o valor da causa for inferior a 500 salários mínimos, nos termos do art. 496, § 3º, II, do CPC/2015. 2) O Poder Judiciário pode declarar nulo ato administrativo de exclusão de candidato em concurso público quando não houver motivação idônea e individualizada que justifique a inaptidão. 3) A constatação de aptidão física plena, mediante prova técnica, obsta a exclusão do candidato do certame e não representa tratamento privilegiado, mas, sim, aplicação do princípio da legalidade.
+<br>Dispositivos relevantes citados: CF/1988, art. 37, caput; CPC/2015, art. 496, § 3º; Lei Estadual nº 5.301/1969, art. 5º, IX e § 8º; Lei Estadual nº 14.939/2003, art. 10, I.
+<br>Jurisprudência relevante citada: STJ, AgRg no REsp 1103025/SP, Rel. Min. Laurita Vaz, Quinta Turma, j. 29.04.2009; STJ, AgRg no REsp 660010/RS, Rel. Min. Hamilton Carvalhido, Sexta Turma, j. 21.08.2007;STJ, RMS 37.936/SC, Rel. Min. Mauro Campbell Marques, Segunda Turma, j. 11.
+                        </div>                        
+                                         
+
+                    
+
+                    
+                        
+                    
+
+                    <!-- PAGINADOR -->
+                    <br><br>
+                    
+                    
+
+                    
+                    <!-- FIM  PAGINADOR -->
+
+                
+                <br><br>
+                <div align="right"><input type="button" value="Nova pesquisa" name="novaPesquisa" onclick="document.location.href='formEspelhoAcordao.do'" class="botao_vinho"></div>
+            </div>
+        </td></tr>
+</tbody></table>
+
+
+
+                        
+
+                    </td>
+                </tr>
+
+            </tbody></table>
+            <br><br>
+            </div>
+            </div>
+                        
+            
+
+             
+
+
+
+
+
+        
+        
+
+        
+        
+        
+
+
+<div id="hintbox"></div></body></html>

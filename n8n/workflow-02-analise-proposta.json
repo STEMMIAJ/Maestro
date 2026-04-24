@@ -1,0 +1,403 @@
+{
+  "name": "Stemmia - Analise + Proposta",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "analise-proposta",
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "w2-a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c01",
+      "name": "Webhook Proposta",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        250,
+        300
+      ],
+      "webhookId": "analise-proposta-webhook-002"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst data = items[0].json.body || items[0].json;\n\nconst cnj = data.cnj;\nconst texto = data.texto_processo;\nconst genero = data.genero_juiz || 'M';\nconst valorHonorarios = data.valor_honorarios || null;\n\nif (!cnj || !texto) {\n  throw new Error('Campos obrigat\\u00f3rios: cnj, texto_processo');\n}\n\nconst textoTruncado = texto.length > 900000 ? texto.substring(0, 900000) : texto;\nconst vocativo = genero === 'F' ? 'Merit\\u00edssima Ju\\u00edza' : 'Merit\\u00edssimo Juiz';\n\nreturn [{\n  json: {\n    cnj,\n    texto_processo: textoTruncado,\n    genero_juiz: genero,\n    vocativo,\n    valor_honorarios: valorHonorarios,\n    texto_length: texto.length\n  }\n}];"
+      },
+      "id": "w2-b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d02",
+      "name": "Validar Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        470,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.all()[0].json;\n\nconst PROMPT_01 = '# PROMPT 01 \\u2014 S\\u00cdNTESE INICIAL DO PROCESSO\\n\\n## DADOS FIXOS DO PERITO\\nNome: Jesus Eduardo Noleto da Penha | CRM/MG: 92.148 | CPF: 127.858.856-60\\nCidade: Governador Valadares/MG | E-mail: contato@stemmia.com.br\\n\\n## INSTRU\\u00c7\\u00c3O\\n\\nVoc\\u00ea \\u00e9 um assistente de per\\u00edcia m\\u00e9dica judicial. Receber\\u00e1 o texto extra\\u00eddo de um processo judicial. Produza uma s\\u00edntese estruturada voltada EXCLUSIVAMENTE ao trabalho do perito m\\u00e9dico.\\n\\nOrganize a resposta em DUAS SE\\u00c7\\u00d5ES:\\n\\n---\\n\\n### SE\\u00c7\\u00c3O 1 \\u2014 RESUMO PARA ENTENDIMENTO R\\u00c1PIDO\\n\\n#### 1. IDENTIFICA\\u00c7\\u00c3O B\\u00c1SICA\\n\\n| Item | Dado |\\n|------|------|\\n| N\\u00famero do processo | [extrair] |\\n| Vara e comarca | [extrair] |\\n| Tipo de a\\u00e7\\u00e3o | [C\\u00edvel, Previdenci\\u00e1ria, Trabalhista, etc.] |\\n| Justi\\u00e7a | [Estadual, Federal ou do Trabalho] |\\n| Segredo de justi\\u00e7a | SIM / N\\u00c3O |\\n| Justi\\u00e7a gratuita | SIM / N\\u00c3O |\\n| Valor da causa | R$ [extrair] |\\n\\n**Partes:**\\n\\n| Polo | Nome | Qualifica\\u00e7\\u00e3o |\\n|------|------|-------------|\\n| AUTOR | [extrair] | [extrair] |\\n| Advogado do autor | [extrair] | OAB [extrair] |\\n| R\\u00c9U | [extrair] | [extrair] |\\n| Advogado do r\\u00e9u | [extrair] | OAB [extrair] |\\n| DENUNCIADO/LITISCONSORTE | [extrair ou N/A] | [extrair] |\\n| FISCAL DA LEI | [extrair ou N/A] | [extrair] |\\n\\n**Objeto principal:** [resumir em 2-3 linhas o que o ju\\u00edzo quer que o perito avalie]\\n\\n#### 2. CONTROV\\u00c9RSIA M\\u00c9DICO-PERICIAL\\n\\nQual \\u00e9 exatamente a d\\u00favida t\\u00e9cnica que o juiz quer que o perito responda? (exist\\u00eancia de incapacidade, nexo causal, agravamento, concausa, data de in\\u00edcio, consolida\\u00e7\\u00e3o de sequelas, etc.)\\nResumir em 4-5 linhas, linguagem direta.\\n\\n#### 3. HIST\\u00d3RICO F\\u00c1TICO RELEVANTE (CRONOL\\u00d3GICO)\\n\\nListar em ordem cronol\\u00f3gica apenas os principais marcos (m\\u00e1ximo 8-10 itens):\\n- In\\u00edcio dos sintomas\\n- Acidentes/eventos relevantes\\n- Afastamentos do trabalho\\n- Requerimentos administrativos (DER no INSS, etc.)\\n- Decis\\u00f5es importantes anteriores\\n\\n#### 4. HIST\\u00d3RICO M\\u00c9DICO RESUMIDO\\n\\n- Diagn\\u00f3sticos principais (CID se constar)\\n- Exames complementares relevantes (tipo + data + resultado em 1 linha)\\n- Tratamentos relevantes (medica\\u00e7\\u00f5es, cirurgias, terapias)\\n- Qualidade do conjunto documental: ESCASSO / RAZO\\u00c1VEL / ROBUSTO\\n\\n#### 5. SITUA\\u00c7\\u00c3O PROCESSUAL DA PER\\u00cdCIA\\n\\n- H\\u00e1 decis\\u00e3o deferindo per\\u00edcia m\\u00e9dica? Transcrever o essencial.\\n- J\\u00e1 houve per\\u00edcia anterior (administrativa ou judicial)? Resumir resultado em 2-3 linhas.\\n- Prazos fixados para a per\\u00edcia ou entrega de laudo.\\n\\n#### 6. QUESITOS DO JU\\u00cdZO E DAS PARTES\\n\\nResumir em blocos tem\\u00e1ticos (N\\u00c3O copiar literalmente todos):\\n\\n**a) Quesitos do ju\\u00edzo:** [sintetizar n\\u00facleo]\\n**b) Quesitos do autor:** [sintetizar n\\u00facleo]\\n**c) Quesitos do r\\u00e9u:** [sintetizar n\\u00facleo]\\n\\n| Origem | Quantidade |\\n|--------|-----------|\\n| Ju\\u00edzo | [contar] |\\n| Autor | [contar] |\\n| R\\u00e9u | [contar] |\\n| Denunciado/Litisconsorte | [contar ou N/A] |\\n| **TOTAL** | **[total]** |\\n\\nDestacar quesitos confusos, repetidos ou que extrapolam a \\u00e1rea m\\u00e9dica.\\n\\n#### 7. TRIAGEM SECURIT\\u00c1RIA\\n\\nSe houver componente securit\\u00e1rio (seguradora como parte, denuncia\\u00e7\\u00e3o \\u00e0 lide, ap\\u00f3lice nos autos):\\n\\n| Item | Dado |\\n|------|------|\\n| Componente securit\\u00e1rio | SIM / N\\u00c3O / N/A |\\n| Tipo de seguro | [Vida, Acidentes Pessoais, RC Geral, etc.] |\\n| Ramo SUSEP | [se identific\\u00e1vel] |\\n| Ap\\u00f3lice(s) | [n\\u00famero, vig\\u00eancia] |\\n| Coberturas contratadas | [listar com limites] |\\n| Exclus\\u00f5es expressas | [listar as que impactam a per\\u00edcia] |\\n| Assistente t\\u00e9cnico indicado | [nome ou N/A] |\\n\\n#### 8. LOG\\u00cdSTICA E LOCAL DA PER\\u00cdCIA\\n\\n- Cidade/comarca de resid\\u00eancia do autor\\n- Determina\\u00e7\\u00e3o de local espec\\u00edfico (f\\u00f3rum, cl\\u00ednica, domic\\u00edlio, teleper\\u00edcia, mutir\\u00e3o)\\n- Dificuldade de locomo\\u00e7\\u00e3o, interna\\u00e7\\u00e3o, acamamento\\n\\n#### 9. PONTOS DE ATEN\\u00c7\\u00c3O PARA O PERITO\\n\\n- Conflitos de vers\\u00e3o (datas divergentes, relatos diferentes)\\n- Lacunas documentais relevantes\\n- Poss\\u00edvel impedimento ou suspei\\u00e7\\u00e3o\\n- Outros pontos que exijam cuidado\\n\\n#### 10. AN\\u00c1LISE DA DECIS\\u00c3O SOBRE TIPO DE PER\\u00cdCIA\\n\\nLer decis\\u00f5es e despachos e responder:\\n\\n1) O juiz determinou expressamente per\\u00edcia indireta/documental? Copiar frase exata.\\n2) H\\u00e1 ordem expressa para exame cl\\u00ednico presencial ou teleper\\u00edcia? Transcrever.\\n3) A per\\u00edcia pode ser feita apenas por an\\u00e1lise documental? SIM/N\\u00c3O\\n4) O juiz exigiu exame direto? SIM/N\\u00c3O\\n5) **Conclus\\u00e3o pr\\u00e1tica para o perito:** per\\u00edcia DOCUMENTAL/INDIRETA, DIRETA (com exame), ou N\\u00c3O FICOU CLARO (recomendar peti\\u00e7\\u00e3o de esclarecimento).\\n\\n#### 11. PRAZOS E RISCOS DE URG\\u00caNCIA\\n\\n- Prazos atuais para a per\\u00edcia\\n- Audi\\u00eancias pr\\u00f3ximas\\n- Risco de preclus\\u00e3o\\n- Se n\\u00e3o identificados, informar expressamente\\n\\n---\\n\\n### SE\\u00c7\\u00c3O 2 \\u2014 CHECKLIST PR\\u00c1TICO PARA O PERITO\\n\\n#### 1. TIPO DE PER\\u00cdCIA MAIS ADEQUADO (T\\u00c9CNICO)\\n\\nCom base nos autos:\\na) Per\\u00edcia puramente documental/indireta parece suficiente? OU\\nb) Recomenda-se per\\u00edcia direta com exame cl\\u00ednico? OU\\nc) Per\\u00edcia mista (documental + exame direto)?\\nJustificar em 4-6 linhas.\\n\\n#### 2. O QUE LER PRIMEIRO NOS AUTOS\\n\\nListar em ordem de prioridade (m\\u00e1ximo 8 itens):\\n1. [documento mais importante]\\n2. [segundo mais importante]\\n...\\n\\n#### 3. PRINCIPAIS PERGUNTAS A RESPONDER NO LAUDO\\n\\nResumir em 3-7 bullets as quest\\u00f5es centrais:\\n- [pergunta 1]\\n- [pergunta 2]\\n...\\n\\n#### 4. ALERTAS R\\u00c1PIDOS\\n\\n- Prazo curto? [SIM/N\\u00c3O \\u2014 detalhar]\\n- Conflito de interesse poss\\u00edvel? [SIM/N\\u00c3O]\\n- Complementa\\u00e7\\u00e3o documental necess\\u00e1ria? [SIM/N\\u00c3O \\u2014 quais docs]\\n- Complexidade t\\u00e9cnica elevada? [SIM/N\\u00c3O \\u2014 por qu\\u00ea]\\n\\n#### 5. RECOMENDA\\u00c7\\u00c3O PRELIMINAR\\n\\n**ACEITAR / RECUSAR / ACEITAR COM RESSALVAS**\\n\\nJustificativa breve (2-3 linhas).\\n\\n---\\n\\n## REGRAS DE ESTILO\\n\\n- Tom de perito, N\\u00c3O de advogado\\n- \"o perito\" ou nome pr\\u00f3prio (nunca \"Este perito\")\\n- \"o Ju\\u00edzo\" (nunca \"Ilustr\\u00edssimo\" ou \"Excelent\\u00edssimo\")\\n- Sem latinismos desnecess\\u00e1rios\\n- Frases diretas, per\\u00edodos curtos\\n- Referenciar IDs de documentos do PJe quando dispon\\u00edveis\\n- Marcar [N\\u00c3O IDENTIFICADO] quando dado n\\u00e3o for encontrado\\n- N\\u00c3O inventar dados que n\\u00e3o estejam nos autos';\n\nreturn [{\n  json: {\n    ...data,\n    prompt_completo: PROMPT_01 + '\\n\\n---\\n\\nTEXTO DO PROCESSO:\\n\\n' + data.texto_processo\n  }\n}];"
+      },
+      "id": "w2-c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e03",
+      "name": "Preparar P01",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        690,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// === GEMINI FALLBACK AUTOMÁTICO ===\n// Tenta modelos em ordem até um funcionar\n// Se todos falharem, lança erro com detalhes\n\nconst GEMINI_KEY = 'AIzaSyA9Gh9JYW4VEiKVlmCR0ziUD3umK9pJYWQ';\nconst MODELOS = [\"gemini-2.5-flash\", \"gemini-2.5-flash-lite\", \"gemini-2.5-pro\"];\nconst TELEGRAM_TOKEN = '8603024374:AAH81RHxIBwOsTaDI87nM7ap2DHcuE3xnxA';\nconst TELEGRAM_CHAT = '8397602236';\n\nconst promptCompleto = $json.prompt_completo;\nconst temperature = 0.2;\nconst maxTokens = 8192;\n\nasync function chamarGemini(modelo, prompt, temp, tokens) {\n  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${GEMINI_KEY}`;\n  const body = JSON.stringify({\n    contents: [{parts: [{text: prompt}]}],\n    generationConfig: {temperature: temp, maxOutputTokens: tokens}\n  });\n\n  const resp = await fetch(url, {\n    method: 'POST',\n    headers: {'Content-Type': 'application/json'},\n    body: body,\n    signal: AbortSignal.timeout(120000)\n  });\n\n  const data = await resp.json();\n\n  if (data.error) {\n    const code = data.error.code || resp.status;\n    throw new Error(`${code}: ${data.error.message}`);\n  }\n\n  if (!data.candidates || data.candidates.length === 0) {\n    throw new Error('Resposta vazia');\n  }\n\n  if (data.candidates[0].finishReason === 'SAFETY') {\n    throw new Error('Bloqueado por filtro de segurança');\n  }\n\n  return data;\n}\n\nasync function notificarTelegram(msg) {\n  try {\n    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {\n      method: 'POST',\n      headers: {'Content-Type': 'application/json'},\n      body: JSON.stringify({chat_id: TELEGRAM_CHAT, text: msg})\n    });\n  } catch(e) {}\n}\n\nlet resultado = null;\nlet modeloUsado = '';\nconst erros = [];\n\nfor (const modelo of MODELOS) {\n  try {\n    resultado = await chamarGemini(modelo, promptCompleto, temperature, maxTokens);\n    modeloUsado = modelo;\n    break;\n  } catch (e) {\n    erros.push(`${modelo}: ${e.message}`);\n    if (e.message.includes('429') || e.message.includes('RESOURCE_EXHAUSTED') || e.message.includes('quota')) {\n      await notificarTelegram(`⚠️ Gemini ${modelo} sem quota. Tentando próximo...`);\n      continue;\n    }\n    // Erro não relacionado a quota — tentar próximo mesmo assim\n    continue;\n  }\n}\n\nif (!resultado) {\n  await notificarTelegram(`❌ TODOS os modelos Gemini falharam:\\n${erros.join('\\n')}`);\n  throw new Error('Todos os modelos falharam: ' + erros.join(' | '));\n}\n\n// Se usou modelo diferente do primeiro, notificar\nif (modeloUsado !== MODELOS[0]) {\n  await notificarTelegram(`🔄 Modelo trocado: ${modeloUsado} (primário indisponível)`);\n}\n\nconst texto = resultado.candidates[0].content.parts[0].text;\n\nreturn [{\n  json: {\n    ...($input.all()[0].json),\n    gemini_response: resultado,\n    gemini_text: texto,\n    modelo_usado: modeloUsado,\n    fallback: modeloUsado !== MODELOS[0]\n  }\n}];",
+        "nodeVersion": 2
+      },
+      "id": "w2-d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f04",
+      "name": "Gemini P01 Sintese",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        910,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Texto já extraído pelo nó de fallback\nconst sintese = $input.all()[0].json.gemini_text;\nconst modeloUsado = $input.all()[0].json.modelo_usado || 'desconhecido';\n\n// Recuperar dados do validador\nconst dadosOriginais = $('Validar Input').first().json;\n\n// Extrair dados b\\u00e1sicos\nconst varaMatch = sintese.match(/Vara\\s+e\\s+comarca\\s*\\|\\s*(.+?)(?:\\n|\\|)/i);\nconst tipoMatch = sintese.match(/Tipo\\s+de\\s+a\\u00e7\\u00e3o\\s*\\|\\s*(.+?)(?:\\n|\\|)/i);\nconst valorMatch = sintese.match(/Valor\\s+da\\s+causa\\s*\\|\\s*R?\\$?\\s*([\\d.,]+)/i);\nconst quesitosMatch = sintese.match(/\\*\\*TOTAL\\*\\*\\s*\\|\\s*\\*\\*(\\d+)\\*\\*/i);\nconst paginasEstimadas = Math.ceil(dadosOriginais.texto_length / 3000);\n\nreturn [{\n  json: {\n    ...dadosOriginais,\n    sintese_texto: sintese,\n    vara: varaMatch ? varaMatch[1].trim() : '[VERIFICAR]',\n    tipo_acao: tipoMatch ? tipoMatch[1].trim() : '[VERIFICAR]',\n    valor_causa: valorMatch ? valorMatch[1].trim() : '[VERIFICAR]',\n    total_quesitos: quesitosMatch ? parseInt(quesitosMatch[1]) : 0,\n    paginas_estimadas: paginasEstimadas\n  }\n}];"
+      },
+      "id": "w2-e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8005",
+      "name": "Parsear Sintese",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1130,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.all()[0].json;\n\nconst PROMPT_02 = '# PROMPT 02 \\u2014 AN\\u00c1LISE DE COMPLEXIDADE T\\u00c9CNICA DO PROCESSO\\n\\n## DADOS FIXOS DO PERITO\\nNome: Jesus Eduardo Noleto da Penha | CRM/MG: 92.148 | CPF: 127.858.856-60\\nCidade: Governador Valadares/MG | E-mail: contato@stemmia.com.br\\n\\n## INSTRU\\u00c7\\u00c3O\\n\\nCom base na s\\u00edntese do processo (fornecida abaixo), avalie cada um dos 50 fatores de complexidade. Para cada fator, marque como PRESENTE (com evid\\u00eancia dos autos), INDETERMINADO ou AUSENTE. Calcule o score total e classifique a complexidade.\\n\\nIMPORTANTE: Cada fator marcado como PRESENTE precisa de evid\\u00eancia expl\\u00edcita extra\\u00edda dos autos. Fatores sem evid\\u00eancia devem ser marcados como AUSENTE, nunca como PRESENTE.\\n\\n---\\n\\n## VARREDURA DE FATORES (50 FATORES)\\n\\n### A \\u2014 COMPLEXIDADE CL\\u00cdNICA (8 fatores)\\n\\n| Fator | Descri\\u00e7\\u00e3o | Status | Evid\\u00eancia |\\n|-------|-----------|--------|-----------|\\n| A1 | Multiespecialidade (2+ especialidades m\\u00e9dicas envolvidas) | [PRESENTE/INDETERMINADO/AUSENTE] | [citar evid\\u00eancia] |\\n| A2 | Nexo causal de dif\\u00edcil determina\\u00e7\\u00e3o | [status] | [evid\\u00eancia] |\\n| A3 | Comorbidades confundidoras | [status] | [evid\\u00eancia] |\\n| A4 | Doen\\u00e7a preexistente em discuss\\u00e3o | [status] | [evid\\u00eancia] |\\n| A5 | Menor de idade ou vulner\\u00e1vel | [status] | [evid\\u00eancia] |\\n| A6 | Simula\\u00e7\\u00e3o/dissimula\\u00e7\\u00e3o alegada por alguma parte | [status] | [evid\\u00eancia] |\\n| A7 | Quadro psiqui\\u00e1trico concomitante | [status] | [evid\\u00eancia] |\\n| A8 | Sequelas m\\u00faltiplas (2+ sistemas org\\u00e2nicos) | [status] | [evid\\u00eancia] |\\n\\n### B \\u2014 COMPLEXIDADE DOCUMENTAL (6 fatores)\\n\\n| Fator | Descri\\u00e7\\u00e3o | Status | Evid\\u00eancia |\\n|-------|-----------|--------|-----------|\\n| B1 | Alto volume documental (>200 p\\u00e1ginas) | [status] | [evid\\u00eancia] |\\n| B2 | M\\u00faltiplas fontes documentais (2+ hospitais/cl\\u00ednicas) | [status] | [evid\\u00eancia] |\\n| B3 | Documenta\\u00e7\\u00e3o contradit\\u00f3ria entre fontes | [status] | [evid\\u00eancia] |\\n| B4 | Documenta\\u00e7\\u00e3o incompleta ou com lacunas relevantes | [status] | [evid\\u00eancia] |\\n| B5 | Documentos em l\\u00edngua estrangeira | [status] | [evid\\u00eancia] |\\n| B6 | Imagens ou exames especializados para an\\u00e1lise | [status] | [evid\\u00eancia] |\\n\\n### C \\u2014 COMPLEXIDADE PROCESSUAL (22 fatores)\\n\\n#### C1-C4: Pertin\\u00eancia tem\\u00e1tica dos quesitos\\n| Fator | Descri\\u00e7\\u00e3o | Status | Evid\\u00eancia |\\n|-------|-----------|--------|-----------|\\n| C1 | Quesitos do ju\\u00edzo com complexidade t\\u00e9cnica elevada | [status] | [evid\\u00eancia] |\\n| C2 | Quesitos do autor com complexidade t\\u00e9cnica elevada | [status] | [evid\\u00eancia] |\\n| C3 | Quesitos do r\\u00e9u com complexidade t\\u00e9cnica elevada | [status] | [evid\\u00eancia] |\\n| C4 | Quesitos de terceiros/litisconsortes | [status] | [evid\\u00eancia] |\\n\\n#### C5-C9: V\\u00edcios de formula\\u00e7\\u00e3o\\n| Fator | Descri\\u00e7\\u00e3o | Status | Evid\\u00eancia |\\n|-------|-----------|--------|-----------|\\n| C5 | Quesitos com v\\u00edcios de formula\\u00e7\\u00e3o (ambiguidade) | [status] | [evid\\u00eancia] |\\n| C6 | Quesitos repetidos entre as partes | [status] | [evid\\u00eancia] |\\n| C7 | Quesitos que extrapolam a \\u00e1rea m\\u00e9dica | [status] | [evid\\u00eancia] |\\n| C8 | Quesitos com m\\u00faltiplas perguntas embutidas | [status] | [evid\\u00eancia] |\\n| C9 | Quesitos que demandam pesquisa cient\\u00edfica espec\\u00edfica | [status] | [evid\\u00eancia] |\\n\\n#### C10-C15: V\\u00edcios estruturais\\n| Fator | Descri\\u00e7\\u00e3o | Status | Evid\\u00eancia |\\n|-------|-----------|--------|-----------|\\n| C10 | Mais de 20 quesitos no total | [status] | [evid\\u00eancia] |\\n| C11 | Necessidade de an\\u00e1lise de per\\u00edcia anterior | [status] | [evid\\u00eancia] |\\n| C12 | Necessidade de an\\u00e1lise de parecer de assistente t\\u00e9cnico | [status] | [evid\\u00eancia] |\\n| C13 | M\\u00faltiplos autores ou r\\u00e9us a examinar | [status] | [evid\\u00eancia] |\\n| C14 | Processo com segredo de justi\\u00e7a | [status] | [evid\\u00eancia] |\\n| C15 | Processo com urg\\u00eancia ou prazo exiguo | [status] | [evid\\u00eancia] |\\n\\n#### C16-C22: Carga de trabalho derivada\\n| Fator | Descri\\u00e7\\u00e3o | Status | Evid\\u00eancia |\\n|-------|-----------|--------|-----------|\\n| C16 | Necessidade de exame cl\\u00ednico presencial | [status] | [evid\\u00eancia] |\\n| C17 | Necessidade de deslocamento para exame | [status] | [evid\\u00eancia] |\\n| C18 | Necessidade de solicitar exames complementares | [status] | [evid\\u00eancia] |\\n| C19 | Necessidade de requisitar documentos adicionais | [status] | [evid\\u00eancia] |\\n| C20 | Necessidade de elaborar quesitos ao assistente t\\u00e9cnico | [status] | [evid\\u00eancia] |\\n| C21 | Necessidade de audi\\u00eancia para esclarecimentos | [status] | [evid\\u00eancia] |\\n| C22 | Necessidade de laudo complementar prov\\u00e1vel | [status] | [evid\\u00eancia] |\\n\\n### D \\u2014 COMPLEXIDADE T\\u00c9CNICA (6 fatores)\\n\\n| Fator | Descri\\u00e7\\u00e3o | Status | Evid\\u00eancia |\\n|-------|-----------|--------|-----------|\\n| D1 | Necessidade de instrumentos ou escalas especializadas | [status] | [evid\\u00eancia] |\\n| D2 | Quantifica\\u00e7\\u00e3o de dano corporal (Baremo, Dpvat, etc.) | [status] | [evid\\u00eancia] |\\n| D3 | Necessidade de avalia\\u00e7\\u00e3o pela CIF (Classifica\\u00e7\\u00e3o Internacional de Funcionalidade) | [status] | [evid\\u00eancia] |\\n| D4 | Necessidade de consultar tabelas espec\\u00edficas (SUSEP, DPVAT, Baremo) | [status] | [evid\\u00eancia] |\\n| D5 | Necessidade de solicitar ou analisar exames especializados | [status] | [evid\\u00eancia] |\\n| D6 | Necessidade de pesquisa cient\\u00edfica espec\\u00edfica para fundamenta\\u00e7\\u00e3o | [status] | [evid\\u00eancia] |\\n\\n### H \\u2014 COMPLEXIDADE SECURIT\\u00c1RIA (8 fatores)\\n\\n| Fator | Descri\\u00e7\\u00e3o | Status | Evid\\u00eancia |\\n|-------|-----------|--------|-----------|\\n| H1 | Exist\\u00eancia de ap\\u00f3lice de seguro nos autos | [status] | [evid\\u00eancia] |\\n| H2 | An\\u00e1lise de coberturas contratadas vs. sinistro | [status] | [evid\\u00eancia] |\\n| H3 | Quest\\u00e3o contratual de exclus\\u00e3o de cobertura | [status] | [evid\\u00eancia] |\\n| H4 | Discuss\\u00e3o de doen\\u00e7a preexistente para fins securit\\u00e1rios | [status] | [evid\\u00eancia] |\\n| H5 | Avalia\\u00e7\\u00e3o de invalidez (total/parcial, funcional/laborativa) | [status] | [evid\\u00eancia] |\\n| H6 | An\\u00e1lise de car\\u00eancias e prazos contratuais | [status] | [evid\\u00eancia] |\\n| H7 | Coexist\\u00eancia de m\\u00faltiplas ap\\u00f3lices | [status] | [evid\\u00eancia] |\\n| H8 | Quest\\u00f5es regulat\\u00f3rias SUSEP espec\\u00edficas | [status] | [evid\\u00eancia] |\\n\\n---\\n\\n## C\\u00c1LCULO DO SCORE\\n\\nContar APENAS fatores marcados como PRESENTE:\\n\\n| Grupo | Presentes | Total |\\n|-------|-----------|-------|\\n| A \\u2014 Cl\\u00ednica | [X] | 8 |\\n| B \\u2014 Documental | [X] | 6 |\\n| C \\u2014 Processual | [X] | 22 |\\n| D \\u2014 T\\u00e9cnica | [X] | 6 |\\n| H \\u2014 Securit\\u00e1ria | [X] | 8 |\\n| **TOTAL (50)** | **[X]** | **50** |\\n\\n### CLASSIFICA\\u00c7\\u00c3O\\n\\n| Score | Classifica\\u00e7\\u00e3o |\\n|-------|--------------|\\n| 0-5 | BAIXA |\\n| 6-12 | M\\u00c9DIA |\\n| 13-20 | ALTA |\\n| 21+ | EXCEPCIONAL |\\n\\n**Classifica\\u00e7\\u00e3o deste processo:** [resultado]\\n\\n---\\n\\n## ESTIMATIVA DE ATIVIDADES PERICIAIS\\n\\n| Atividade | Necess\\u00e1ria? | Justificativa |\\n|-----------|------------|--------------|\\n| An\\u00e1lise documental dos autos | SIM/N\\u00c3O | [justificar] |\\n| Exame cl\\u00ednico presencial | SIM/N\\u00c3O | [justificar] |\\n| Solicita\\u00e7\\u00e3o de exames complementares | SIM/N\\u00c3O | [justificar] |\\n| Requisi\\u00e7\\u00e3o de documentos adicionais | SIM/N\\u00c3O | [justificar] |\\n| Pesquisa cient\\u00edfica espec\\u00edfica | SIM/N\\u00c3O | [justificar] |\\n| Consulta a tabelas (Baremo, SUSEP, CIF) | SIM/N\\u00c3O | [justificar] |\\n| An\\u00e1lise de per\\u00edcia anterior | SIM/N\\u00c3O | [justificar] |\\n| An\\u00e1lise de parecer de assistente t\\u00e9cnico | SIM/N\\u00c3O | [justificar] |\\n| Elabora\\u00e7\\u00e3o de laudo pericial | SIM | [obrigat\\u00f3rio] |\\n| Resposta a quesitos | SIM | [obrigat\\u00f3rio] |\\n| Deslocamento | SIM/N\\u00c3O | [justificar] |\\n| Audi\\u00eancia para esclarecimentos (potencial) | SIM/N\\u00c3O | [justificar] |\\n\\n---\\n\\n## REGRAS\\n\\n- Cada fator PRESENTE precisa de evid\\u00eancia concreta dos autos\\n- Fatores sem evid\\u00eancia clara = AUSENTE (n\\u00e3o INDETERMINADO)\\n- N\\u00c3O inflar o score sem lastro factual\\n- Tom t\\u00e9cnico e objetivo';\n\nreturn [{\n  json: {\n    ...data,\n    prompt_completo: PROMPT_02 + '\\n\\n---\\n\\nS\\u00cdNTESE DO PROCESSO (output do PROMPT 01):\\n\\n' + data.sintese_texto\n  }\n}];"
+      },
+      "id": "w2-f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f809006",
+      "name": "Preparar P02",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1350,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// === GEMINI FALLBACK AUTOMÁTICO ===\n// Tenta modelos em ordem até um funcionar\n// Se todos falharem, lança erro com detalhes\n\nconst GEMINI_KEY = 'AIzaSyA9Gh9JYW4VEiKVlmCR0ziUD3umK9pJYWQ';\nconst MODELOS = [\"gemini-2.5-flash\", \"gemini-2.5-flash-lite\", \"gemini-2.5-pro\"];\nconst TELEGRAM_TOKEN = '8603024374:AAH81RHxIBwOsTaDI87nM7ap2DHcuE3xnxA';\nconst TELEGRAM_CHAT = '8397602236';\n\nconst promptCompleto = $json.prompt_completo;\nconst temperature = 0.2;\nconst maxTokens = 8192;\n\nasync function chamarGemini(modelo, prompt, temp, tokens) {\n  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${GEMINI_KEY}`;\n  const body = JSON.stringify({\n    contents: [{parts: [{text: prompt}]}],\n    generationConfig: {temperature: temp, maxOutputTokens: tokens}\n  });\n\n  const resp = await fetch(url, {\n    method: 'POST',\n    headers: {'Content-Type': 'application/json'},\n    body: body,\n    signal: AbortSignal.timeout(120000)\n  });\n\n  const data = await resp.json();\n\n  if (data.error) {\n    const code = data.error.code || resp.status;\n    throw new Error(`${code}: ${data.error.message}`);\n  }\n\n  if (!data.candidates || data.candidates.length === 0) {\n    throw new Error('Resposta vazia');\n  }\n\n  if (data.candidates[0].finishReason === 'SAFETY') {\n    throw new Error('Bloqueado por filtro de segurança');\n  }\n\n  return data;\n}\n\nasync function notificarTelegram(msg) {\n  try {\n    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {\n      method: 'POST',\n      headers: {'Content-Type': 'application/json'},\n      body: JSON.stringify({chat_id: TELEGRAM_CHAT, text: msg})\n    });\n  } catch(e) {}\n}\n\nlet resultado = null;\nlet modeloUsado = '';\nconst erros = [];\n\nfor (const modelo of MODELOS) {\n  try {\n    resultado = await chamarGemini(modelo, promptCompleto, temperature, maxTokens);\n    modeloUsado = modelo;\n    break;\n  } catch (e) {\n    erros.push(`${modelo}: ${e.message}`);\n    if (e.message.includes('429') || e.message.includes('RESOURCE_EXHAUSTED') || e.message.includes('quota')) {\n      await notificarTelegram(`⚠️ Gemini ${modelo} sem quota. Tentando próximo...`);\n      continue;\n    }\n    // Erro não relacionado a quota — tentar próximo mesmo assim\n    continue;\n  }\n}\n\nif (!resultado) {\n  await notificarTelegram(`❌ TODOS os modelos Gemini falharam:\\n${erros.join('\\n')}`);\n  throw new Error('Todos os modelos falharam: ' + erros.join(' | '));\n}\n\n// Se usou modelo diferente do primeiro, notificar\nif (modeloUsado !== MODELOS[0]) {\n  await notificarTelegram(`🔄 Modelo trocado: ${modeloUsado} (primário indisponível)`);\n}\n\nconst texto = resultado.candidates[0].content.parts[0].text;\n\nreturn [{\n  json: {\n    ...($input.all()[0].json),\n    gemini_response: resultado,\n    gemini_text: texto,\n    modelo_usado: modeloUsado,\n    fallback: modeloUsado !== MODELOS[0]\n  }\n}];",
+        "nodeVersion": 2
+      },
+      "id": "w2-a7b8c9d0-e1f2-4a3b-4c5d-6e7f80910207",
+      "name": "Gemini P02 Complexidade",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1570,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Texto já extraído pelo nó de fallback\nconst sintese = $input.all()[0].json.gemini_text;\nconst modeloUsado = $input.all()[0].json.modelo_usado || 'desconhecido';\n\nconst response = $input.all()[0].json;\nif (!response.candidates || response.candidates.length === 0) {\n  throw new Error('Erro Gemini P02: ' + (response.error?.message || 'Sem resposta'));\n}\nif (response.candidates[0].finishReason === 'SAFETY') {\n  throw new Error('Gemini P02 bloqueou por filtro de seguran\\u00e7a');\n}\n\nconst complexidade_texto = response.candidates[0].content.parts[0].text;\nconst dadosOriginais = $('Parsear Sintese').first().json;\n\n// Extrair score total\nconst scoreMatch = complexidade_texto.match(/\\*\\*TOTAL\\s*\\(50\\)\\*\\*\\s*\\|\\s*\\*\\*(\\d+)\\*\\*/i);\nconst score = scoreMatch ? parseInt(scoreMatch[1]) : 0;\n\n// Classificar\nlet classificacao;\nif (score <= 5) classificacao = 'BAIXA';\nelse if (score <= 12) classificacao = 'M\\u00c9DIA';\nelse if (score <= 20) classificacao = 'ALTA';\nelse classificacao = 'EXCEPCIONAL';\n\n// Calcular honor\\u00e1rios se n\\u00e3o fornecido\nlet valorHonorarios = dadosOriginais.valor_honorarios;\nif (!valorHonorarios) {\n  const base = 2000;\n  const porPaginas = dadosOriginais.paginas_estimadas * 15;\n  const porQuesitos = dadosOriginais.total_quesitos * 120;\n  const adicionalComplexidade = score <= 5 ? 0 : score <= 12 ? 1000 : score <= 20 ? 2000 : 4000;\n\n  valorHonorarios = base + porPaginas + porQuesitos + adicionalComplexidade;\n\n  // Arredondar para centena mais pr\\u00f3xima\n  valorHonorarios = Math.round(valorHonorarios / 100) * 100;\n\n  // M\\u00ednimo R$ 2.500, m\\u00e1ximo R$ 15.000\n  valorHonorarios = Math.max(2500, Math.min(15000, valorHonorarios));\n}\n\n// Valor por extenso\nfunction valorExtenso(valor) {\n  const milhares = Math.floor(valor / 1000);\n  const centenas = valor % 1000;\n  const extensoMilhares = {1:'um',2:'dois',3:'tr\\u00eas',4:'quatro',5:'cinco',6:'seis',7:'sete',8:'oito',9:'nove',10:'dez',11:'onze',12:'doze',13:'treze',14:'quatorze',15:'quinze'};\n  const extensoCentenas = {0:'',100:'cem',200:'duzentos',300:'trezentos',400:'quatrocentos',500:'quinhentos',600:'seiscentos',700:'setecentos',800:'oitocentos',900:'novecentos'};\n\n  let resultado = '';\n  if (milhares > 0) {\n    resultado = (extensoMilhares[milhares] || milhares) + ' mil';\n    if (centenas > 0) resultado += ' e ' + (extensoCentenas[centenas] || centenas);\n  } else {\n    resultado = extensoCentenas[centenas] || centenas.toString();\n  }\n  return resultado + ' reais';\n}\n\nreturn [{\n  json: {\n    ...dadosOriginais,\n    complexidade_texto,\n    score,\n    classificacao,\n    valor_honorarios: valorHonorarios,\n    valor_extenso: valorExtenso(valorHonorarios),\n    formula: 'Base R$2.000 + (' + dadosOriginais.paginas_estimadas + ' p\\u00e1gs \\u00d7 R$15) + (' + dadosOriginais.total_quesitos + ' quesitos \\u00d7 R$120) + adicional ' + classificacao\n  }\n}];"
+      },
+      "id": "w2-b8c9d0e1-f2a3-4b4c-5d6e-7f8091020308",
+      "name": "Parsear Complexidade",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        250,
+        550
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.all()[0].json;\n\nconst PROMPT_03 = '# PROMPT 03 \\u2014 PETI\\u00c7\\u00c3O DE ACEITE E PROPOSTA DE HONOR\\u00c1RIOS\\n\\n## DADOS FIXOS DO PERITO\\nNome: Jesus Eduardo Noleto da Penha | CRM/MG: 92.148 | CPF: 127.858.856-60\\nCidade: Governador Valadares/MG | E-mail: contato@stemmia.com.br\\nEndere\\u00e7o: Rua Jo\\u00e3o Pinheiro, 531, Sala 207, Governador Valadares \\u2013 MG\\nMembro da ABMLPM \\u2014 Associa\\u00e7\\u00e3o Brasileira de Medicina Legal e Per\\u00edcia M\\u00e9dica\\n\\n## INSTRU\\u00c7\\u00c3O\\n\\nCom base nos dados compilados (s\\u00edntese do processo + an\\u00e1lise de complexidade + valor calculado), gere uma peti\\u00e7\\u00e3o formal de aceite do encargo pericial com proposta fundamentada de honor\\u00e1rios.\\n\\n## LEGISLA\\u00c7\\u00c3O APLIC\\u00c1VEL\\n\\n- CPC Art. 95 (adiantamento de despesas pelo autor)\\n- CPC Art. 465 (nomea\\u00e7\\u00e3o do perito e proposta de honor\\u00e1rios)\\n- CPC Art. 466 (dever de zelo e imparcialidade)\\n- CPC Art. 467 (hip\\u00f3teses de escusa)\\n- CPC Art. 473 (requisitos do laudo pericial)\\n- CPC Art. 477 (protocolo e prazo do laudo)\\n- Resolu\\u00e7\\u00e3o CNJ 232/2016 Art. 2\\u00ba (crit\\u00e9rios de fixa\\u00e7\\u00e3o de honor\\u00e1rios: natureza, dificuldade, tempo, local, condi\\u00e7\\u00e3o econ\\u00f4mica)\\n- Resolu\\u00e7\\u00e3o CFM 2.430/2025 (exame presencial obrigat\\u00f3rio em per\\u00edcia m\\u00e9dica)\\n\\n## FORMATO DA PETI\\u00c7\\u00c3O \\u2014 12 SE\\u00c7\\u00d5ES\\n\\n### CABE\\u00c7ALHO\\n\\nAO JU\\u00cdZO DA [VARA] \\u2013 MG\\n\\nProcesso n\\u00ba: **[CNJ]**\\n\\n**MANIFESTA\\u00c7\\u00c3O \\u2014 ACEITE DO ENCARGO PERICIAL E PROPOSTA DE HONOR\\u00c1RIOS**\\n\\n**[Vocativo conforme g\\u00eanero do juiz]**,\\n\\n### SE\\u00c7\\u00c3O I \\u2014 DO ACEITE (art. 466-467 CPC)\\n\\nDeclara\\u00e7\\u00e3o formal de aceite do encargo pericial, mencionando:\\n- Refer\\u00eancia ao despacho/decis\\u00e3o que nomeou o perito (citar ID do PJe se dispon\\u00edvel)\\n- Aus\\u00eancia de impedimento ou suspei\\u00e7\\u00e3o (art. 467 CPC)\\n- Compromisso com o dever de zelo (art. 466 CPC)\\n- Qualifica\\u00e7\\u00e3o do perito (CRM, especialidade, membro da ABMLPM)\\n\\n### SE\\u00c7\\u00c3O II \\u2014 DO OBJETO DA PER\\u00cdCIA\\n\\nDescrever em 3-5 linhas o que o Ju\\u00edzo determinou que o perito avalie, com base na s\\u00edntese do processo.\\n\\n### SE\\u00c7\\u00c3O III \\u2014 DO MAPA DO PROCESSO\\n\\nResumo estruturado com:\\n- Natureza da a\\u00e7\\u00e3o\\n- Fato gerador\\n- Pedidos do autor\\n- Teses da defesa\\n- Valor da causa\\n- Assistentes t\\u00e9cnicos indicados (se houver)\\n- Volume documental estimado\\n\\n### SE\\u00c7\\u00c3O IV \\u2014 DA AN\\u00c1LISE SECURIT\\u00c1RIA (se aplic\\u00e1vel)\\n\\nSe houver componente securit\\u00e1rio:\\n- Tipo de seguro e ap\\u00f3lice\\n- Coberturas e exclus\\u00f5es relevantes\\n- Quest\\u00f5es t\\u00e9cnicas securit\\u00e1rias que impactam a per\\u00edcia\\nSe n\\u00e3o aplic\\u00e1vel, indicar: \"N\\u00e3o foram identificados componentes securit\\u00e1rios neste processo.\"\\n\\n### SE\\u00c7\\u00c3O V \\u2014 DOS QUESITOS\\n\\nTabela resumo:\\n| Origem | Quantidade | Observa\\u00e7\\u00f5es |\\n|--------|-----------|-------------|\\n| Ju\\u00edzo | [N] | [obs] |\\n| Autor | [N] | [obs] |\\n| R\\u00e9u | [N] | [obs] |\\n| Outros | [N] | [obs] |\\n| **TOTAL** | **[N]** | |\\n\\nDestacar v\\u00edcios identificados (repeti\\u00e7\\u00e3o, ambiguidade, extrapola\\u00e7\\u00e3o da \\u00e1rea m\\u00e9dica).\\n\\n### SE\\u00c7\\u00c3O VI \\u2014 DA COMPLEXIDADE E ESCOPO\\n\\nApresentar o score dos 50 fatores de forma resumida:\\n- Score total: [X]/50\\n- Classifica\\u00e7\\u00e3o: [BAIXA/M\\u00c9DIA/ALTA/EXCEPCIONAL]\\n- Principais fatores presentes com evid\\u00eancia dos autos\\n- Referenciar os grupos (A=Cl\\u00ednica, B=Documental, C=Processual, D=T\\u00e9cnica, H=Securit\\u00e1ria)\\n\\n### SE\\u00c7\\u00c3O VII \\u2014 DA ESTIMATIVA DE ATIVIDADES\\n\\n| Atividade | Descri\\u00e7\\u00e3o |\\n|-----------|-----------|\\n| An\\u00e1lise documental | [descrever volume e fontes] |\\n| Exame cl\\u00ednico | [descrever se presencial, local, etc.] |\\n| Exames complementares | [se necess\\u00e1rio, quais] |\\n| Pesquisa cient\\u00edfica | [se necess\\u00e1ria, tema] |\\n| Elabora\\u00e7\\u00e3o do laudo | [estimativa de p\\u00e1ginas] |\\n| Resposta a quesitos | [total de quesitos] |\\n\\n### SE\\u00c7\\u00c3O VIII \\u2014 DA PROPOSTA DE HONOR\\u00c1RIOS\\n\\nR$ [VALOR] ([VALOR POR EXTENSO])\\n\\nFundamenta\\u00e7\\u00e3o tripla:\\n1. **Crit\\u00e9rios legais** (Art. 465 CPC c/c Art. 2\\u00ba Res. CNJ 232/2016): natureza do trabalho, grau de dificuldade, tempo estimado, local da presta\\u00e7\\u00e3o, condi\\u00e7\\u00e3o econ\\u00f4mica das partes\\n2. **An\\u00e1lise de complexidade**: score [X]/50, classifica\\u00e7\\u00e3o [Y], com principais fatores\\n3. **F\\u00f3rmula objetiva**: apresentar a f\\u00f3rmula de c\\u00e1lculo usada\\n\\n### SE\\u00c7\\u00c3O IX \\u2014 RESSALVAS\\n\\nO valor proposto N\\u00c3O inclui:\\n- Honor\\u00e1rios de audi\\u00eancia para esclarecimentos\\n- Laudo complementar por fato superveniente\\n- Deslocamento para comarca diversa\\n- Exames complementares (custeados pelas partes)\\n\\n### SE\\u00c7\\u00c3O X \\u2014 PRAZO ESTIMADO\\n\\nConforme complexidade:\\n- BAIXA: 30 dias\\n- M\\u00c9DIA: 45 dias\\n- ALTA: 60 dias\\n- EXCEPCIONAL: 90 dias\\n\\nIndicar o prazo correspondente \\u00e0 classifica\\u00e7\\u00e3o, contados da efetiva\\u00e7\\u00e3o do dep\\u00f3sito dos honor\\u00e1rios e disponibiliza\\u00e7\\u00e3o completa dos autos.\\n\\n### SE\\u00c7\\u00c3O XI \\u2014 DADOS PARA DEP\\u00d3SITO\\n\\nBanco Santander (033)\\nAg\\u00eancia: 2960\\nConta Corrente: 01035135-5\\nTitular: Jesus Eduardo Noleto da Penha\\nCPF: 127.858.856-60\\nPIX: perito@drjesus.com.br\\n\\n### SE\\u00c7\\u00c3O XII \\u2014 CONTATOS PROFISSIONAIS\\n\\nDr. Jesus Eduardo Noleto da Penha\\nM\\u00e9dico \\u2014 Perito Judicial \\u2014 CRM-MG 92.148\\nMembro da ABMLPM \\u2014 Associa\\u00e7\\u00e3o Brasileira de Medicina Legal e Per\\u00edcia M\\u00e9dica\\nE-mail: contato@stemmia.com.br\\nEndere\\u00e7o: Rua Jo\\u00e3o Pinheiro, 531, Sala 207, Governador Valadares \\u2013 MG\\n\\n[Data por extenso]\\nGovernador Valadares \\u2013 MG\\n\\n---\\n\\n## REGRAS DE ESTILO\\n\\n- Tom de perito, frases diretas\\n- IDs de documentos do PJe em **negrito**\\n- Valores sempre por extenso entre par\\u00eanteses\\n- N\\u00c3O inflar complexidade sem lastro nos autos\\n- Referenciar IDs de documentos quando dispon\\u00edveis\\n- \"o perito\" ou nome pr\\u00f3prio (nunca \"Este perito\")\\n- \"o Ju\\u00edzo\" (nunca \"Ilustr\\u00edssimo\" ou \"Excelent\\u00edssimo\")\\n- Sem latinismos desnecess\\u00e1rios\\n- N\\u00famero do processo e IDs sempre em **negrito**';\n\nconst meses = ['janeiro','fevereiro','mar\\u00e7o','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];\nconst hoje = new Date();\nconst dataExtenso = hoje.getDate() + ' de ' + meses[hoje.getMonth()] + ' de ' + hoje.getFullYear();\n\nconst contexto = '\\n---\\nDADOS COMPILADOS PARA GERA\\u00c7\\u00c3O DA PETI\\u00c7\\u00c3O:\\n\\n1. S\\u00cdNTESE DO PROCESSO (PROMPT 01):\\n' + data.sintese_texto + '\\n\\n2. AN\\u00c1LISE DE COMPLEXIDADE (PROMPT 02):\\n' + data.complexidade_texto + '\\n\\n3. VALOR PRETENDIDO: R$ ' + data.valor_honorarios + ',00 (' + data.valor_extenso + ')\\n4. G\\u00caNERO DO JUIZ: ' + (data.genero_juiz === 'F' ? 'Feminino (Merit\\u00edssima Ju\\u00edza)' : 'Masculino (Merit\\u00edssimo Juiz)') + '\\n5. DATA ATUAL: ' + dataExtenso + '\\n6. DADOS BANC\\u00c1RIOS: Santander 033, Ag\\u00eancia 2960, CC 01035135-5, PIX perito@drjesus.com.br\\n7. ENDERE\\u00c7O: Rua Jo\\u00e3o Pinheiro, 531, Sala 207, Governador Valadares \\u2013 MG\\n---';\n\nreturn [{\n  json: {\n    ...data,\n    data_extenso: dataExtenso,\n    prompt_completo: PROMPT_03 + '\\n\\n' + contexto\n  }\n}];"
+      },
+      "id": "w2-c9d0e1f2-a3b4-4c5d-6e7f-809102030409",
+      "name": "Preparar P03",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        470,
+        550
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// === GEMINI FALLBACK AUTOMÁTICO ===\n// Tenta modelos em ordem até um funcionar\n// Se todos falharem, lança erro com detalhes\n\nconst GEMINI_KEY = 'AIzaSyA9Gh9JYW4VEiKVlmCR0ziUD3umK9pJYWQ';\nconst MODELOS = [\"gemini-2.5-flash\", \"gemini-2.5-flash-lite\", \"gemini-2.5-pro\"];\nconst TELEGRAM_TOKEN = '8603024374:AAH81RHxIBwOsTaDI87nM7ap2DHcuE3xnxA';\nconst TELEGRAM_CHAT = '8397602236';\n\nconst promptCompleto = $json.prompt_completo;\nconst temperature = 0.2;\nconst maxTokens = 8192;\n\nasync function chamarGemini(modelo, prompt, temp, tokens) {\n  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${GEMINI_KEY}`;\n  const body = JSON.stringify({\n    contents: [{parts: [{text: prompt}]}],\n    generationConfig: {temperature: temp, maxOutputTokens: tokens}\n  });\n\n  const resp = await fetch(url, {\n    method: 'POST',\n    headers: {'Content-Type': 'application/json'},\n    body: body,\n    signal: AbortSignal.timeout(120000)\n  });\n\n  const data = await resp.json();\n\n  if (data.error) {\n    const code = data.error.code || resp.status;\n    throw new Error(`${code}: ${data.error.message}`);\n  }\n\n  if (!data.candidates || data.candidates.length === 0) {\n    throw new Error('Resposta vazia');\n  }\n\n  if (data.candidates[0].finishReason === 'SAFETY') {\n    throw new Error('Bloqueado por filtro de segurança');\n  }\n\n  return data;\n}\n\nasync function notificarTelegram(msg) {\n  try {\n    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {\n      method: 'POST',\n      headers: {'Content-Type': 'application/json'},\n      body: JSON.stringify({chat_id: TELEGRAM_CHAT, text: msg})\n    });\n  } catch(e) {}\n}\n\nlet resultado = null;\nlet modeloUsado = '';\nconst erros = [];\n\nfor (const modelo of MODELOS) {\n  try {\n    resultado = await chamarGemini(modelo, promptCompleto, temperature, maxTokens);\n    modeloUsado = modelo;\n    break;\n  } catch (e) {\n    erros.push(`${modelo}: ${e.message}`);\n    if (e.message.includes('429') || e.message.includes('RESOURCE_EXHAUSTED') || e.message.includes('quota')) {\n      await notificarTelegram(`⚠️ Gemini ${modelo} sem quota. Tentando próximo...`);\n      continue;\n    }\n    // Erro não relacionado a quota — tentar próximo mesmo assim\n    continue;\n  }\n}\n\nif (!resultado) {\n  await notificarTelegram(`❌ TODOS os modelos Gemini falharam:\\n${erros.join('\\n')}`);\n  throw new Error('Todos os modelos falharam: ' + erros.join(' | '));\n}\n\n// Se usou modelo diferente do primeiro, notificar\nif (modeloUsado !== MODELOS[0]) {\n  await notificarTelegram(`🔄 Modelo trocado: ${modeloUsado} (primário indisponível)`);\n}\n\nconst texto = resultado.candidates[0].content.parts[0].text;\n\nreturn [{\n  json: {\n    ...($input.all()[0].json),\n    gemini_response: resultado,\n    gemini_text: texto,\n    modelo_usado: modeloUsado,\n    fallback: modeloUsado !== MODELOS[0]\n  }\n}];",
+        "nodeVersion": 2
+      },
+      "id": "w2-d0e1f2a3-b4c5-4d6e-7f80-91020304050a",
+      "name": "Gemini P03 Proposta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        690,
+        550
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Texto já extraído pelo nó de fallback\nconst sintese = $input.all()[0].json.gemini_text;\nconst modeloUsado = $input.all()[0].json.modelo_usado || 'desconhecido';\n\nconst response = $input.all()[0].json;\nif (!response.candidates || response.candidates.length === 0) {\n  throw new Error('Erro Gemini P03: ' + (response.error?.message || 'Sem resposta'));\n}\nif (response.candidates[0].finishReason === 'SAFETY') {\n  throw new Error('Gemini P03 bloqueou por filtro de seguran\\u00e7a');\n}\n\nconst proposta_texto = response.candidates[0].content.parts[0].text;\nconst dadosOriginais = $('Parsear Complexidade').first().json;\n\n// Truncar texto original para verifica\\u00e7\\u00e3o (usar menos tokens)\nconst textoOriginal = dadosOriginais.texto_processo.substring(0, 200000);\n\nconst promptVerificacao = 'Voc\\u00ea \\u00e9 um verificador forense. Cruze CADA afirma\\u00e7\\u00e3o factual da peti\\u00e7\\u00e3o abaixo com o texto original do processo.\\n\\nPara cada afirma\\u00e7\\u00e3o factual (nomes, datas, valores, diagn\\u00f3sticos, n\\u00fameros de documentos), verifique:\\n- CONFIRMADO: a afirma\\u00e7\\u00e3o corresponde ao texto original (cite o trecho)\\n- NAO_ENCONTRADO: n\\u00e3o h\\u00e1 correspond\\u00eancia no texto original\\n- DIVERGENTE: o texto original diz algo diferente\\n\\nResponda EXCLUSIVAMENTE em JSON v\\u00e1lido com esta estrutura:\\n{\\n  \"total\": N,\\n  \"confirmadas\": N,\\n  \"nao_encontradas\": N,\\n  \"divergentes\": N,\\n  \"score\": \"XX%\",\\n  \"itens_criticos\": [\\n    {\"afirmacao\": \"...\", \"status\": \"NAO_ENCONTRADO\", \"observacao\": \"...\"},\\n    {\"afirmacao\": \"...\", \"status\": \"DIVERGENTE\", \"observacao\": \"...\"}\\n  ]\\n}\\n\\nListe em itens_criticos APENAS os NAO_ENCONTRADO e DIVERGENTE.\\n\\nPETI\\u00c7\\u00c3O GERADA:\\n' + proposta_texto + '\\n\\nTEXTO ORIGINAL DO PROCESSO:\\n' + textoOriginal;\n\nreturn [{\n  json: {\n    ...dadosOriginais,\n    proposta_texto,\n    prompt_completo: promptVerificacao\n  }\n}];"
+      },
+      "id": "w2-e1f2a3b4-c5d6-4e7f-8091-0203040506b0",
+      "name": "Preparar Verificacao",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        910,
+        550
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// === GEMINI FALLBACK AUTOMÁTICO ===\n// Tenta modelos em ordem até um funcionar\n// Se todos falharem, lança erro com detalhes\n\nconst GEMINI_KEY = 'AIzaSyA9Gh9JYW4VEiKVlmCR0ziUD3umK9pJYWQ';\nconst MODELOS = [\"gemini-2.5-flash\", \"gemini-2.5-flash-lite\", \"gemini-2.5-pro\"];\nconst TELEGRAM_TOKEN = '8603024374:AAH81RHxIBwOsTaDI87nM7ap2DHcuE3xnxA';\nconst TELEGRAM_CHAT = '8397602236';\n\nconst promptCompleto = $json.prompt_completo;\nconst temperature = 0.2;\nconst maxTokens = 8192;\n\nasync function chamarGemini(modelo, prompt, temp, tokens) {\n  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${GEMINI_KEY}`;\n  const body = JSON.stringify({\n    contents: [{parts: [{text: prompt}]}],\n    generationConfig: {temperature: temp, maxOutputTokens: tokens}\n  });\n\n  const resp = await fetch(url, {\n    method: 'POST',\n    headers: {'Content-Type': 'application/json'},\n    body: body,\n    signal: AbortSignal.timeout(120000)\n  });\n\n  const data = await resp.json();\n\n  if (data.error) {\n    const code = data.error.code || resp.status;\n    throw new Error(`${code}: ${data.error.message}`);\n  }\n\n  if (!data.candidates || data.candidates.length === 0) {\n    throw new Error('Resposta vazia');\n  }\n\n  if (data.candidates[0].finishReason === 'SAFETY') {\n    throw new Error('Bloqueado por filtro de segurança');\n  }\n\n  return data;\n}\n\nasync function notificarTelegram(msg) {\n  try {\n    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {\n      method: 'POST',\n      headers: {'Content-Type': 'application/json'},\n      body: JSON.stringify({chat_id: TELEGRAM_CHAT, text: msg})\n    });\n  } catch(e) {}\n}\n\nlet resultado = null;\nlet modeloUsado = '';\nconst erros = [];\n\nfor (const modelo of MODELOS) {\n  try {\n    resultado = await chamarGemini(modelo, promptCompleto, temperature, maxTokens);\n    modeloUsado = modelo;\n    break;\n  } catch (e) {\n    erros.push(`${modelo}: ${e.message}`);\n    if (e.message.includes('429') || e.message.includes('RESOURCE_EXHAUSTED') || e.message.includes('quota')) {\n      await notificarTelegram(`⚠️ Gemini ${modelo} sem quota. Tentando próximo...`);\n      continue;\n    }\n    // Erro não relacionado a quota — tentar próximo mesmo assim\n    continue;\n  }\n}\n\nif (!resultado) {\n  await notificarTelegram(`❌ TODOS os modelos Gemini falharam:\\n${erros.join('\\n')}`);\n  throw new Error('Todos os modelos falharam: ' + erros.join(' | '));\n}\n\n// Se usou modelo diferente do primeiro, notificar\nif (modeloUsado !== MODELOS[0]) {\n  await notificarTelegram(`🔄 Modelo trocado: ${modeloUsado} (primário indisponível)`);\n}\n\nconst texto = resultado.candidates[0].content.parts[0].text;\n\nreturn [{\n  json: {\n    ...($input.all()[0].json),\n    gemini_response: resultado,\n    gemini_text: texto,\n    modelo_usado: modeloUsado,\n    fallback: modeloUsado !== MODELOS[0]\n  }\n}];",
+        "nodeVersion": 2
+      },
+      "id": "w2-f2a3b4c5-d6e7-4f80-9102-030405060c00",
+      "name": "Gemini Verificacao",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1130,
+        550
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Texto já extraído pelo nó de fallback\nconst sintese = $input.all()[0].json.gemini_text;\nconst modeloUsado = $input.all()[0].json.modelo_usado || 'desconhecido';\n\nconst response = $input.all()[0].json;\nconst dadosAnteriores = $('Preparar Verificacao').first().json;\n\nlet verificacao = { total: 0, confirmadas: 0, nao_encontradas: 0, divergentes: 0, score: 'N/A', itens_criticos: [] };\n\nif (response.candidates && response.candidates.length > 0) {\n  const textoVerif = response.candidates[0].content.parts[0].text;\n  try {\n    verificacao = JSON.parse(textoVerif);\n  } catch (e) {\n    // Tentar extrair JSON do texto\n    const match = textoVerif.match(/\\{[\\s\\S]*\\}/);\n    if (match) {\n      try {\n        verificacao = JSON.parse(match[0]);\n      } catch (e2) {\n        verificacao.score = 'ERRO_PARSE';\n      }\n    }\n  }\n}\n\nreturn [{\n  json: {\n    status: 'ok',\n    cnj: dadosAnteriores.cnj,\n    vara: dadosAnteriores.vara,\n    tipo_acao: dadosAnteriores.tipo_acao,\n    classificacao: dadosAnteriores.classificacao,\n    score_complexidade: dadosAnteriores.score + '/50',\n    valor_honorarios: 'R$ ' + dadosAnteriores.valor_honorarios + ',00',\n    valor_extenso: dadosAnteriores.valor_extenso,\n    formula: dadosAnteriores.formula,\n    total_quesitos: dadosAnteriores.total_quesitos,\n    paginas_estimadas: dadosAnteriores.paginas_estimadas,\n    sintese: dadosAnteriores.sintese_texto,\n    complexidade: dadosAnteriores.complexidade_texto,\n    proposta_md: dadosAnteriores.proposta_texto,\n    verificacao,\n    data: dadosAnteriores.data_extenso || new Date().toLocaleDateString('pt-BR')\n  }\n}];"
+      },
+      "id": "w2-a3b4c5d6-e7f8-4091-0203-040506070d00",
+      "name": "Montar Resultado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1350,
+        550
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot8603024374:AAH81RHxIBwOsTaDI87nM7ap2DHcuE3xnxA/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"8397602236\",\n  \"text\": \"\\ud83d\\udccb ANALISE + PROPOSTA\\n\\nProcesso: {{ $json.cnj }}\\nVara: {{ $json.vara }}\\nTipo: {{ $json.tipo_acao }}\\nComplexidade: {{ $json.classificacao }} ({{ $json.score_complexidade }})\\nHonorarios: {{ $json.valor_honorarios }}\\nQuesitos: {{ $json.total_quesitos }}\\nPaginas: {{ $json.paginas_estimadas }}\\n\\nVerificacao: {{ $json.verificacao.score || 'N/A' }}\\nConfirmadas: {{ $json.verificacao.confirmadas || 0 }}\\nDivergentes: {{ $json.verificacao.divergentes || 0 }}\\nNao encontradas: {{ $json.verificacao.nao_encontradas || 0 }}\\n\\nFormula: {{ $json.formula }}\",\n  \"parse_mode\": \"HTML\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "w2-b4c5d6e7-f809-4102-0304-05060708e000",
+      "name": "Telegram Proposta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1570,
+        550
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { status: $json.status || 'ok', cnj: $json.cnj, vara: $json.vara, tipo_acao: $json.tipo_acao, classificacao: $json.classificacao, score_complexidade: $json.score_complexidade, valor_honorarios: $json.valor_honorarios, valor_extenso: $json.valor_extenso, formula: $json.formula, total_quesitos: $json.total_quesitos, paginas_estimadas: $json.paginas_estimadas, sintese: $json.sintese, complexidade: $json.complexidade, proposta_md: $json.proposta_md, verificacao: $json.verificacao, data: $json.data } }}",
+        "options": {}
+      },
+      "id": "w2-c5d6e7f8-0910-4203-0405-060708090f00",
+      "name": "Respond Proposta",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        250,
+        800
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Proposta": {
+      "main": [
+        [
+          {
+            "node": "Validar Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Input": {
+      "main": [
+        [
+          {
+            "node": "Preparar P01",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar P01": {
+      "main": [
+        [
+          {
+            "node": "Gemini P01 Sintese",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini P01 Sintese": {
+      "main": [
+        [
+          {
+            "node": "Parsear Sintese",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Sintese": {
+      "main": [
+        [
+          {
+            "node": "Preparar P02",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar P02": {
+      "main": [
+        [
+          {
+            "node": "Gemini P02 Complexidade",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini P02 Complexidade": {
+      "main": [
+        [
+          {
+            "node": "Parsear Complexidade",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Complexidade": {
+      "main": [
+        [
+          {
+            "node": "Preparar P03",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar P03": {
+      "main": [
+        [
+          {
+            "node": "Gemini P03 Proposta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini P03 Proposta": {
+      "main": [
+        [
+          {
+            "node": "Preparar Verificacao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Verificacao": {
+      "main": [
+        [
+          {
+            "node": "Gemini Verificacao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Verificacao": {
+      "main": [
+        [
+          {
+            "node": "Montar Resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Resultado": {
+      "main": [
+        [
+          {
+            "node": "Telegram Proposta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Proposta": {
+      "main": [
+        [
+          {
+            "node": "Respond Proposta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Sao_Paulo",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "stemmia-analise-proposta-002"
+  },
+  "tags": [
+    {
+      "name": "Stemmia",
+      "id": "1"
+    },
+    {
+      "name": "Pericia",
+      "id": "2"
+    }
+  ]
+}

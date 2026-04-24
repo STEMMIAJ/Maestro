@@ -1,0 +1,178 @@
+{
+  "name": "Stemmia - Verificador",
+  "nodes": [
+    {
+      "id": "a1b2c3d4-1111-4aaa-bbbb-000000000001",
+      "name": "Webhook Verificar",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        250,
+        300
+      ],
+      "webhookId": "verificar-peticao",
+      "parameters": {
+        "path": "verificar",
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "a1b2c3d4-2222-4aaa-bbbb-000000000002",
+      "name": "Validar Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        470,
+        300
+      ],
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst data = items[0].json.body || items[0].json;\n\nconst peticao = data.peticao;\nconst texto = data.texto_processo;\n\nif (!peticao || !texto) {\n  throw new Error('Campos obrigatórios: peticao, texto_processo');\n}\n\n// Truncar texto se muito grande\nconst textoTruncado = texto.length > 900000 ? texto.substring(0, 900000) : texto;\n\nconst PROMPT_VERIFICACAO = `Você é um verificador forense de petições médico-judiciais. Seu trabalho é garantir que NENHUMA afirmação factual na petição seja inventada.\n\nREGRAS ESTRITAS:\n1. Para CADA afirmação factual na petição, busque evidência no texto do processo\n2. CONFIRMADO: dado encontrado no texto, com citação exata do trecho onde aparece\n3. NAO_ENCONTRADO: dado não aparece no texto (pode ter sido inventado pela IA)\n4. DIVERGENTE: dado aparece mas com valor/nome/data diferente\n5. REFERENCIA_LEGAL: artigo de lei ou resolução (verificar se a citação parece correta)\n6. DADO_FIXO: dado do perito (CRM 92.148, CPF, email contato@stemmia.com.br) — sempre correto, não verificar\n\nCATEGORIAS DE AFIRMAÇÃO:\n- FACTUAL: nomes, datas, valores, números de processo, IDs de documentos, diagnósticos, CIDs\n- LEGAL: artigos de lei, resoluções, súmulas citadas\n- FIXO: dados do próprio perito (sempre corretos)\n\nATENÇÃO ESPECIAL:\n- IDs de documentos do PJe (números de ~11 dígitos): VERIFICAR se aparecem no texto\n- Nomes de partes: VERIFICAR grafia exata\n- Valores monetários: VERIFICAR se coincidem\n- Datas: VERIFICAR se são as mesmas\n- CIDs: VERIFICAR se o código corresponde à descrição\n\nResponda EXCLUSIVAMENTE em JSON válido com esta estrutura:\n{\n  \"resumo\": {\n    \"total\": <número total de afirmações verificadas>,\n    \"confirmadas\": <quantidade>,\n    \"nao_encontradas\": <quantidade>,\n    \"divergentes\": <quantidade>,\n    \"referencias_legais\": <quantidade>,\n    \"dados_fixos\": <quantidade>,\n    \"score_percentual\": \"<XX>%\",\n    \"parecer\": \"APROVADO|APROVADO_COM_RESSALVAS|REPROVADO\"\n  },\n  \"itens\": [\n    {\n      \"id\": 1,\n      \"afirmacao\": \"texto da afirmação encontrada na petição\",\n      \"categoria\": \"FACTUAL|LEGAL|FIXO\",\n      \"status\": \"CONFIRMADO|NAO_ENCONTRADO|DIVERGENTE\",\n      \"evidencia\": \"trecho exato do processo que confirma ou contradiz\",\n      \"localizacao\": \"seção/contexto onde foi encontrado no processo\",\n      \"observacao\": \"se divergente, explicar a divergência\"\n    }\n  ]\n}\n\nCRITÉRIOS DE PARECER:\n- APROVADO: 0 divergentes E 0 não encontrados\n- APROVADO_COM_RESSALVAS: 0 divergentes E ≤3 não encontrados (podem ser dados que precisam preencher manualmente)\n- REPROVADO: qualquer divergente OU >3 não encontrados`;\n\nconst promptCompleto = PROMPT_VERIFICACAO + '\\n\\n---\\n\\nPETIÇÃO A VERIFICAR:\\n\\n' + peticao + '\\n\\n---\\n\\nTEXTO ORIGINAL DO PROCESSO:\\n\\n' + textoTruncado;\n\nreturn [{\n  json: {\n    peticao,\n    texto_length: texto.length,\n    prompt_completo: promptCompleto\n  }\n}];"
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// === GEMINI FALLBACK AUTOMÁTICO ===\n// Tenta modelos em ordem até um funcionar\n// Se todos falharem, lança erro com detalhes\n\nconst GEMINI_KEY = 'AIzaSyA9Gh9JYW4VEiKVlmCR0ziUD3umK9pJYWQ';\nconst MODELOS = [\"gemini-2.5-flash\", \"gemini-2.5-flash-lite\", \"gemini-2.5-pro\"];\nconst TELEGRAM_TOKEN = '8603024374:AAH81RHxIBwOsTaDI87nM7ap2DHcuE3xnxA';\nconst TELEGRAM_CHAT = '8397602236';\n\nconst promptCompleto = $json.prompt_completo;\nconst temperature = 0.2;\nconst maxTokens = 8192;\n\nasync function chamarGemini(modelo, prompt, temp, tokens) {\n  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${GEMINI_KEY}`;\n  const body = JSON.stringify({\n    contents: [{parts: [{text: prompt}]}],\n    generationConfig: {temperature: temp, maxOutputTokens: tokens}\n  });\n\n  const resp = await fetch(url, {\n    method: 'POST',\n    headers: {'Content-Type': 'application/json'},\n    body: body,\n    signal: AbortSignal.timeout(120000)\n  });\n\n  const data = await resp.json();\n\n  if (data.error) {\n    const code = data.error.code || resp.status;\n    throw new Error(`${code}: ${data.error.message}`);\n  }\n\n  if (!data.candidates || data.candidates.length === 0) {\n    throw new Error('Resposta vazia');\n  }\n\n  if (data.candidates[0].finishReason === 'SAFETY') {\n    throw new Error('Bloqueado por filtro de segurança');\n  }\n\n  return data;\n}\n\nasync function notificarTelegram(msg) {\n  try {\n    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {\n      method: 'POST',\n      headers: {'Content-Type': 'application/json'},\n      body: JSON.stringify({chat_id: TELEGRAM_CHAT, text: msg})\n    });\n  } catch(e) {}\n}\n\nlet resultado = null;\nlet modeloUsado = '';\nconst erros = [];\n\nfor (const modelo of MODELOS) {\n  try {\n    resultado = await chamarGemini(modelo, promptCompleto, temperature, maxTokens);\n    modeloUsado = modelo;\n    break;\n  } catch (e) {\n    erros.push(`${modelo}: ${e.message}`);\n    if (e.message.includes('429') || e.message.includes('RESOURCE_EXHAUSTED') || e.message.includes('quota')) {\n      await notificarTelegram(`⚠️ Gemini ${modelo} sem quota. Tentando próximo...`);\n      continue;\n    }\n    // Erro não relacionado a quota — tentar próximo mesmo assim\n    continue;\n  }\n}\n\nif (!resultado) {\n  await notificarTelegram(`❌ TODOS os modelos Gemini falharam:\\n${erros.join('\\n')}`);\n  throw new Error('Todos os modelos falharam: ' + erros.join(' | '));\n}\n\n// Se usou modelo diferente do primeiro, notificar\nif (modeloUsado !== MODELOS[0]) {\n  await notificarTelegram(`🔄 Modelo trocado: ${modeloUsado} (primário indisponível)`);\n}\n\nconst texto = resultado.candidates[0].content.parts[0].text;\n\nreturn [{\n  json: {\n    ...($input.all()[0].json),\n    gemini_response: resultado,\n    gemini_text: texto,\n    modelo_usado: modeloUsado,\n    fallback: modeloUsado !== MODELOS[0]\n  }\n}];",
+        "nodeVersion": 2
+      },
+      "id": "a1b2c3d4-3333-4aaa-bbbb-000000000003",
+      "name": "Gemini Verificacao",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        690,
+        300
+      ]
+    },
+    {
+      "id": "a1b2c3d4-4444-4aaa-bbbb-000000000004",
+      "name": "Montar Relatorio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        910,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Texto já extraído pelo nó de fallback\nconst sintese = $input.all()[0].json.gemini_text;\nconst modeloUsado = $input.all()[0].json.modelo_usado || 'desconhecido';\n\nconst response = $input.all()[0].json;\n\n\n\nconst textoResposta = response.candidates[0].content.parts[0].text;\n\n// Parsear JSON\nlet verificacao;\ntry {\n  verificacao = JSON.parse(textoResposta);\n} catch (e) {\n  // Tentar extrair JSON de dentro de markdown code block\n  const jsonMatch = textoResposta.match(/```json?\\s*([\\s\\S]*?)```/);\n  if (jsonMatch) {\n    verificacao = JSON.parse(jsonMatch[1]);\n  } else {\n    throw new Error('Resposta do Gemini não é JSON válido: ' + textoResposta.substring(0, 500));\n  }\n}\n\nconst resumo = verificacao.resumo;\nconst itens = verificacao.itens || [];\n\n// Gerar relatório markdown\nconst meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];\nconst hoje = new Date();\nconst dataExtenso = hoje.getDate() + ' de ' + meses[hoje.getMonth()] + ' de ' + hoje.getFullYear();\n\nlet relatorio = `# RELATÓRIO DE VERIFICAÇÃO\\n\\n`;\nrelatorio += `**Data:** ${dataExtenso}\\n\\n`;\nrelatorio += `## RESUMO\\n\\n`;\nrelatorio += `| Métrica | Valor |\\n|---------|-------|\\n`;\nrelatorio += `| Total de afirmações | ${resumo.total} |\\n`;\nrelatorio += `| Confirmadas | ${resumo.confirmadas} |\\n`;\nrelatorio += `| Não encontradas | ${resumo.nao_encontradas} |\\n`;\nrelatorio += `| Divergentes | ${resumo.divergentes} |\\n`;\nrelatorio += `| Referências legais | ${resumo.referencias_legais} |\\n`;\nrelatorio += `| Dados fixos | ${resumo.dados_fixos} |\\n`;\nrelatorio += `| **Score** | **${resumo.score_percentual}** |\\n`;\nrelatorio += `| **Parecer** | **${resumo.parecer}** |\\n\\n`;\n\n// Itens divergentes (críticos)\nconst divergentes = itens.filter(i => i.status === 'DIVERGENTE');\nif (divergentes.length > 0) {\n  relatorio += `## ⚠️ ITENS DIVERGENTES (CRÍTICO)\\n\\n`;\n  divergentes.forEach(item => {\n    relatorio += `${item.id}. \"${item.afirmacao}\"\\n`;\n    relatorio += `   - **Status:** DIVERGENTE\\n`;\n    relatorio += `   - **Evidência:** ${item.evidencia}\\n`;\n    relatorio += `   - **Observação:** ${item.observacao}\\n\\n`;\n  });\n}\n\n// Itens não encontrados\nconst naoEncontrados = itens.filter(i => i.status === 'NAO_ENCONTRADO');\nif (naoEncontrados.length > 0) {\n  relatorio += `## ❓ ITENS NÃO ENCONTRADOS\\n\\n`;\n  naoEncontrados.forEach(item => {\n    relatorio += `${item.id}. \"${item.afirmacao}\"\\n`;\n    relatorio += `   - **Categoria:** ${item.categoria}\\n`;\n    relatorio += `   - **Observação:** ${item.observacao || 'Dado não localizado no texto do processo'}\\n\\n`;\n  });\n}\n\n// Todos os itens confirmados (resumido)\nconst confirmados = itens.filter(i => i.status === 'CONFIRMADO');\nif (confirmados.length > 0) {\n  relatorio += `## ✅ ITENS CONFIRMADOS (${confirmados.length})\\n\\n`;\n  confirmados.forEach(item => {\n    relatorio += `${item.id}. \"${item.afirmacao}\" — ${item.localizacao || 'confirmado'}\\n`;\n  });\n}\n\nreturn [{\n  json: {\n    relatorio_md: relatorio,\n    verificacao_json: verificacao,\n    parecer: resumo.parecer,\n    score: resumo.score_percentual,\n    total: resumo.total,\n    confirmadas: resumo.confirmadas,\n    nao_encontradas: resumo.nao_encontradas,\n    divergentes: resumo.divergentes\n  }\n}];"
+      }
+    },
+    {
+      "id": "a1b2c3d4-5555-4aaa-bbbb-000000000005",
+      "name": "Telegram Verificacao",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1130,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot8603024374:AAH81RHxIBwOsTaDI87nM7ap2DHcuE3xnxA/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"8397602236\",\n  \"text\": \"🔍 VERIFICAÇÃO CONCLUÍDA\\nScore: {{ $json.score }}\\nParecer: {{ $json.parecer }}\\nConfirmadas: {{ $json.confirmadas }}/{{ $json.total }}\\nNão encontradas: {{ $json.nao_encontradas }}\\nDivergentes: {{ $json.divergentes }}\"\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a1b2c3d4-6666-4aaa-bbbb-000000000006",
+      "name": "Respond Verificacao",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1350,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Verificar": {
+      "main": [
+        [
+          {
+            "node": "Validar Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Input": {
+      "main": [
+        [
+          {
+            "node": "Gemini Verificacao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Verificacao": {
+      "main": [
+        [
+          {
+            "node": "Montar Relatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Relatorio": {
+      "main": [
+        [
+          {
+            "node": "Telegram Verificacao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Verificacao": {
+      "main": [
+        [
+          {
+            "node": "Respond Verificacao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Sao_Paulo",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "stemmia-forense"
+  },
+  "tags": [
+    {
+      "name": "Stemmia"
+    },
+    {
+      "name": "Verificador"
+    }
+  ]
+}

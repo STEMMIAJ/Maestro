@@ -1,0 +1,20 @@
+# TODO — renomear_cidades.py
+
+## Propósito
+Após cadastro via incluir_push.py, PJe grava observação como "CONSELHEIRO PENA - GV",
+"Cons. Pena/GV", "Cons.Pena-GV" etc. Este script normaliza.
+
+## Entrada
+- Lista de CNJs + observação atual
+- Mapa de variações → canônico
+
+## Saída
+- CSV com substituições pendentes
+- Execução via Playwright navegando ao campo de observação
+
+## Dependências
+- playwright (já instalado)
+- sessão PJe autenticada
+
+## Status
+PENDENTE — execução em sessão separada (decisão do plano: renomear por último)

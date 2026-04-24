@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organograma &mdash; Sistema Pericial Stemmia</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #0a0a0f;
+    color: #e5e7eb;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    overflow: hidden;
+  }
+  header.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 64px;
+    background: linear-gradient(180deg, #0f0f18 0%, #0a0a0f 100%);
+    border-bottom: 1px solid #1f2937;
+    display: flex; align-items: center; padding: 0 20px;
+    z-index: 100;
+  }
+  header.topbar h1 {
+    margin: 0; font-size: 17px; font-weight: 600; letter-spacing: 0.2px;
+    color: #f3f4f6;
+  }
+  header.topbar .sub {
+    margin-left: 16px; font-size: 12px; color: #9ca3af;
+  }
+  aside.sidebar {
+    position: fixed; top: 64px; left: 0; bottom: 32px; width: 280px;
+    background: #0d0d14;
+    border-right: 1px solid #1f2937;
+    padding: 16px; overflow-y: auto;
+    z-index: 50;
+  }
+  aside.sidebar h2 {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.8px; color: #6b7280;
+    margin: 18px 0 8px 0;
+  }
+  aside.sidebar h2:first-child { margin-top: 0; }
+  .search-box {
+    width: 100%; padding: 9px 12px;
+    background: #111827; border: 1px solid #1f2937; border-radius: 6px;
+    color: #e5e7eb; font-size: 13px; outline: none;
+    transition: border-color .15s;
+  }
+  .search-box:focus { border-color: #3b82f6; }
+  .filter-group { display: flex; flex-direction: column; gap: 6px; }
+  .filter-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: #d1d5db; cursor: pointer;
+    padding: 4px 6px; border-radius: 4px;
+    transition: background .15s;
+  }
+  .filter-item:hover { background: #111827; }
+  .filter-item input[type="checkbox"] {
+    accent-color: #3b82f6; width: 14px; height: 14px; cursor: pointer;
+  }
+  .filter-swatch {
+    display: inline-block; width: 11px; height: 11px; border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .filter-count {
+    margin-left: auto; font-size: 10px; color: #6b7280;
+    background: #111827; padding: 2px 6px; border-radius: 10px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; color: #9ca3af; padding: 3px 0;
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 2px solid transparent; flex-shrink: 0;
+  }
+  #graph-container {
+    position: fixed; top: 64px; left: 280px; right: 0; bottom: 32px;
+    overflow: hidden;
+  }
+  svg.graph {
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at center, #0d0d14 0%, #060609 100%);
+    display: block;
+  }
+  .link { stroke: #374151; stroke-width: 1; stroke-opacity: 0.55; fill: none; }
+  .link.highlighted { stroke: #f3f4f6; stroke-width: 2.2; stroke-opacity: 1; }
+  .node-circle {
+    cursor: pointer;
+    transition: r 0.12s;
+  }
+  .node-label {
+    fill: #9ca3af; font-size: 10px; pointer-events: none;
+    text-shadow: 0 0 3px #0a0a0f, 0 0 6px #0a0a0f;
+  }
+  .node.highlighted .node-circle { stroke: #ffffff !important; stroke-width: 3 !important; }
+  .node.highlighted .node-label { fill: #f9fafb; font-weight: 600; }
+  .node.dim { opacity: 0.18; }
+  .link.dim { stroke-opacity: 0.08; }
+  aside.detail {
+    position: fixed; top: 64px; right: 0; bottom: 32px; width: 300px;
+    background: #0d0d14;
+    border-left: 1px solid #1f2937;
+    padding: 20px; overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.2s ease-out;
+    z-index: 60;
+  }
+  aside.detail.open { transform: translateX(0); }
+  aside.detail .close {
+    position: absolute; top: 12px; right: 14px;
+    background: none; border: none; color: #6b7280;
+    font-size: 22px; cursor: pointer; line-height: 1;
+    padding: 4px 8px; border-radius: 4px;
+  }
+  aside.detail .close:hover { background: #1f2937; color: #f3f4f6; }
+  aside.detail h2 {
+    margin: 0 0 10px 0; font-size: 16px; color: #f3f4f6;
+    padding-right: 30px; word-wrap: break-word;
+  }
+  .badge {
+    display: inline-block; font-size: 10px; padding: 3px 9px;
+    border-radius: 10px; font-weight: 600; letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .badge-ATIVO    { background: rgba(16,185,129,0.15); color: #10b981; }
+  .badge-PARADO   { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .badge-QUEBRADO { background: rgba(239,68,68,0.15);  color: #ef4444; }
+  .meta-row {
+    font-size: 11px; color: #9ca3af; margin: 10px 0;
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+  .meta-label {
+    font-size: 10px; text-transform: uppercase; color: #6b7280;
+    letter-spacing: 0.5px; margin-top: 14px; margin-bottom: 4px;
+  }
+  .detail-text {
+    font-size: 12.5px; color: #d1d5db; line-height: 1.5;
+  }
+  .detail-files {
+    list-style: none; padding: 0; margin: 0;
+    font-size: 11px; color: #9ca3af;
+  }
+  .detail-files li {
+    padding: 4px 8px; background: #111827; border-radius: 4px;
+    margin-bottom: 4px; word-break: break-all;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .tag {
+    display: inline-block; font-size: 10px; padding: 2px 8px;
+    border-radius: 10px; background: #1f2937; color: #9ca3af;
+    margin-right: 4px; margin-bottom: 4px;
+  }
+  .btn {
+    display: inline-block; padding: 7px 12px; font-size: 11px;
+    background: #1e3a8a; color: #f3f4f6; border: none; border-radius: 5px;
+    text-decoration: none; cursor: pointer; margin-top: 12px;
+    transition: background .15s;
+  }
+  .btn:hover { background: #2563eb; }
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 32px;
+    background: #0d0d14; border-top: 1px solid #1f2937;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: #6b7280;
+    z-index: 100;
+  }
+  .zoom-hint {
+    position: fixed; bottom: 40px; right: 12px;
+    font-size: 10px; color: #4b5563; z-index: 20;
+    pointer-events: none;
+  }
+  .no-match { opacity: 0.12 !important; }
+  .status-indicators {
+    display: flex; gap: 8px; font-size: 10px; color: #9ca3af;
+    margin-top: 6px;
+  }
+  .status-indicators span {
+    padding: 2px 8px; border-radius: 10px; background: #111827;
+  }
+</style>
+</head>
+<body>
+<header class="topbar" role="banner">
+  <h1>Organograma &mdash; Sistema Pericial Stemmia</h1>
+  <div class="sub" id="subcounts">__SUBCOUNTS__</div>
+</header>
+
+<aside class="sidebar" role="navigation" aria-label="Filtros e busca">
+  <h2>Busca</h2>
+  <input type="search" id="search" class="search-box" placeholder="Buscar por nome ou descricao..." autocomplete="off" aria-label="Buscar nos">
+
+  <h2>Camadas</h2>
+  <div class="filter-group" id="camadas-filter"></div>
+
+  <h2>Status</h2>
+  <div class="filter-group" id="status-filter">
+    <label class="filter-item"><input type="checkbox" data-status="ATIVO" checked><span style="color:#10b981">ATIVO</span><span class="filter-count" id="count-ATIVO">0</span></label>
+    <label class="filter-item"><input type="checkbox" data-status="PARADO" checked><span style="color:#f59e0b">PARADO</span><span class="filter-count" id="count-PARADO">0</span></label>
+    <label class="filter-item"><input type="checkbox" data-status="QUEBRADO" checked><span style="color:#ef4444">QUEBRADO</span><span class="filter-count" id="count-QUEBRADO">0</span></label>
+  </div>
+
+  <h2>Legenda status</h2>
+  <div class="legend-item"><span class="legend-dot" style="border-color:#10b981"></span>ATIVO &mdash; funcionando</div>
+  <div class="legend-item"><span class="legend-dot" style="border-color:#f59e0b"></span>PARADO &mdash; gap</div>
+  <div class="legend-item"><span class="legend-dot" style="border-color:#ef4444"></span>QUEBRADO &mdash; erro conhecido</div>
+
+  <h2>Dicas</h2>
+  <div style="font-size:11px; color:#6b7280; line-height:1.6;">
+    &middot; Clique em no: detalhes<br>
+    &middot; Arraste para mover<br>
+    &middot; Scroll: zoom<br>
+    &middot; Ctrl/Cmd+F: busca<br>
+    &middot; Esc: limpa
+  </div>
+</aside>
+
+<section id="graph-container">
+  <svg class="graph" role="application" aria-label="Grafo do sistema pericial Stemmia"></svg>
+</section>
+
+<aside class="detail" id="detail" role="complementary" aria-label="Detalhes do no selecionado">
+  <button class="close" id="close-detail" aria-label="Fechar painel">&times;</button>
+  <div id="detail-content"></div>
+</aside>
+
+<div class="zoom-hint">scroll para zoom &middot; arraste para pan</div>
+
+<footer role="contentinfo">
+  Gerado em __DATA_GERACAO__ &middot; Fonte: ORGANOGRAMA-dados.json &middot; gerar_organograma.py
+</footer>
+
+<script src="assets/d3.v7.min.js"></script>
+<script>
+const DADOS = __DADOS_JSON__;
+</script>
+<script>
+(function(){
+  "use strict";
+
+  const STATUS_COLORS = { ATIVO: "#10b981", PARADO: "#f59e0b", QUEBRADO: "#ef4444" };
+  const camadaById = Object.fromEntries(DADOS.camadas.map(c => [c.id, c]));
+
+  const activeCamadas = new Set(DADOS.camadas.map(c => c.id));
+  const activeStatus  = new Set(["ATIVO","PARADO","QUEBRADO"]);
+  let searchTerm = "";
+
+  // Build camadas filter UI
+  const camadasFilterEl = document.getElementById("camadas-filter");
+  DADOS.camadas.forEach(c => {
+    const count = DADOS.nos.filter(n => n.camada === c.id).length;
+    const label = document.createElement("label");
+    label.className = "filter-item";
+    label.innerHTML =
+      '<input type="checkbox" data-camada="' + c.id + '" checked>' +
+      '<span class="filter-swatch" style="background:' + c.cor + '"></span>' +
+      '<span>' + c.label + '</span>' +
+      '<span class="filter-count">' + count + '</span>';
+    camadasFilterEl.appendChild(label);
+  });
+
+  // Populate status counts
+  ["ATIVO","PARADO","QUEBRADO"].forEach(s => {
+    const n = DADOS.nos.filter(x => x.status === s).length;
+    const el = document.getElementById("count-" + s);
+    if (el) el.textContent = n;
+  });
+
+  // Prepare graph data (deep copies D3 can mutate)
+  const nodes = DADOS.nos.map(n => Object.assign({}, n));
+  const nodesById = Object.fromEntries(nodes.map(n => [n.id, n]));
+  const links = DADOS.ligacoes
+    .filter(l => nodesById[l.de] && nodesById[l.para])
+    .map(l => ({ source: l.de, target: l.para, tipo: l.tipo }));
+
+  // Compute degree for radius
+  const degree = {};
+  nodes.forEach(n => degree[n.id] = 0);
+  links.forEach(l => {
+    degree[l.source] = (degree[l.source] || 0) + 1;
+    degree[l.target] = (degree[l.target] || 0) + 1;
+  });
+  const maxDeg = Math.max(1, ...Object.values(degree));
+  nodes.forEach(n => {
+    n._deg = degree[n.id] || 0;
+    n._r = 7 + (n._deg / maxDeg) * 7;
+  });
+
+  // Build neighbor map
+  const neighbors = {};
+  nodes.forEach(n => neighbors[n.id] = new Set());
+  links.forEach(l => {
+    neighbors[l.source].add(l.target);
+    neighbors[l.target].add(l.source);
+  });
+
+  const svg = d3.select("svg.graph");
+  const container = document.getElementById("graph-container");
+  let width = container.clientWidth;
+  let height = container.clientHeight;
+
+  const g = svg.append("g");
+
+  const zoom = d3.zoom()
+    .scaleExtent([0.2, 5])
+    .on("zoom", ev => g.attr("transform", ev.transform));
+  svg.call(zoom);
+
+  const linkSel = g.append("g").attr("class","links")
+    .selectAll("line")
+    .data(links)
+    .join("line")
+    .attr("class","link");
+
+  const nodeSel = g.append("g").attr("class","nodes")
+    .selectAll("g")
+    .data(nodes, d => d.id)
+    .join("g")
+    .attr("class","node");
+
+  nodeSel.append("circle")
+    .attr("class","node-circle")
+    .attr("r", d => d._r)
+    .attr("fill", d => (camadaById[d.camada] || {}).cor || "#555")
+    .attr("stroke", d => STATUS_COLORS[d.status] || "#888")
+    .attr("stroke-width", 2.2);
+
+  nodeSel.append("text")
+    .attr("class","node-label")
+    .attr("x", d => d._r + 4)
+    .attr("y", 3)
+    .text(d => d.label);
+
+  nodeSel.on("mouseover", function(ev, d){
+      if (!isVisible(d)) return;
+      nodeSel.classed("dim", n => n.id !== d.id && !neighbors[d.id].has(n.id));
+      linkSel.classed("highlighted", l => l.source.id === d.id || l.target.id === d.id);
+      linkSel.classed("dim", l => l.source.id !== d.id && l.target.id !== d.id);
+      d3.select(this).select(".node-circle").attr("r", d._r + 5);
+    })
+    .on("mouseout", function(ev, d){
+      nodeSel.classed("dim", false);
+      linkSel.classed("highlighted", false).classed("dim", false);
+      d3.select(this).select(".node-circle").attr("r", d._r);
+      applyFilters();
+    })
+    .on("click", function(ev, d){
+      ev.stopPropagation();
+      openDetail(d);
+    });
+
+  nodeSel.call(d3.drag()
+    .on("start", (ev, d) => {
+      if (!ev.active) sim.alphaTarget(0.3).restart();
+      d.fx = d.x; d.fy = d.y;
+    })
+    .on("drag",  (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
+    .on("end",   (ev, d) => {
+      if (!ev.active) sim.alphaTarget(0);
+      d.fx = null; d.fy = null;
+    }));
+
+  const sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(80).strength(0.6))
+    .force("charge", d3.forceManyBody().strength(-200))
+    .force("center", d3.forceCenter(width/2, height/2))
+    .force("collide", d3.forceCollide().radius(d => d._r + 12))
+    .on("tick", tick);
+
+  function tick(){
+    linkSel
+      .attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+    nodeSel.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+  }
+
+  window.addEventListener("resize", () => {
+    width = container.clientWidth;
+    height = container.clientHeight;
+    sim.force("center", d3.forceCenter(width/2, height/2));
+    sim.alpha(0.3).restart();
+  });
+
+  // ---- Filters
+  function isVisible(n){
+    if (!activeCamadas.has(n.camada)) return false;
+    if (!activeStatus.has(n.status)) return false;
+    return true;
+  }
+  function matchesSearch(n){
+    if (!searchTerm) return true;
+    const t = searchTerm.toLowerCase();
+    return (n.label || "").toLowerCase().includes(t) ||
+           (n.descricao || "").toLowerCase().includes(t);
+  }
+  function applyFilters(){
+    nodeSel.style("opacity", d => {
+      if (!isVisible(d)) return 0.08;
+      if (searchTerm && !matchesSearch(d)) return 0.18;
+      return 1;
+    });
+    nodeSel.classed("highlighted", d => searchTerm && matchesSearch(d) && isVisible(d));
+    linkSel.style("opacity", l => {
+      const sv = isVisible(l.source), tv = isVisible(l.target);
+      if (!sv || !tv) return 0.05;
+      return 0.55;
+    });
+  }
+
+  document.querySelectorAll('#camadas-filter input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener("change", () => {
+      const id = cb.getAttribute("data-camada");
+      if (cb.checked) activeCamadas.add(id); else activeCamadas.delete(id);
+      applyFilters();
+    });
+  });
+  document.querySelectorAll('#status-filter input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener("change", () => {
+      const s = cb.getAttribute("data-status");
+      if (cb.checked) activeStatus.add(s); else activeStatus.delete(s);
+      applyFilters();
+    });
+  });
+
+  const searchEl = document.getElementById("search");
+  searchEl.addEventListener("input", () => {
+    searchTerm = searchEl.value.trim();
+    applyFilters();
+  });
+
+  // ---- Detail panel
+  const detailEl = document.getElementById("detail");
+  const detailContentEl = document.getElementById("detail-content");
+  document.getElementById("close-detail").addEventListener("click", closeDetail);
+
+  function openDetail(d){
+    const camada = camadaById[d.camada] || { label: d.camada, cor: "#555" };
+    const fileLi = (d.arquivos || []).map(f => "<li>" + escapeHtml(f) + "</li>").join("");
+    const tagHtml = (d.tags || []).map(t => '<span class="tag">' + escapeHtml(t) + "</span>").join("");
+    const firstFile = (d.arquivos && d.arquivos[0]) ? d.arquivos[0] : "";
+    const openBtn = firstFile
+      ? '<a class="btn" href="file://' + absolutePath(firstFile) + '" target="_blank" rel="noopener">Abrir no Finder</a>'
+      : '';
+    detailContentEl.innerHTML =
+      '<h2>' + escapeHtml(d.label) + '</h2>' +
+      '<div class="meta-row">' +
+        '<span class="badge badge-' + d.status + '">' + d.status + '</span>' +
+        '<span style="color:' + camada.cor + '">&#9632; ' + escapeHtml(camada.label) + '</span>' +
+      '</div>' +
+      '<div class="meta-label">Descricao</div>' +
+      '<div class="detail-text">' + escapeHtml(d.descricao || "&mdash;") + '</div>' +
+      (fileLi ? '<div class="meta-label">Arquivos</div><ul class="detail-files">' + fileLi + '</ul>' : '') +
+      (tagHtml ? '<div class="meta-label">Tags</div><div>' + tagHtml + '</div>' : '') +
+      '<div class="meta-label">ID</div>' +
+      '<div class="detail-text" style="font-family:monospace; font-size:11px; color:#6b7280;">' + escapeHtml(d.id) + '</div>' +
+      openBtn;
+    detailEl.classList.add("open");
+  }
+  function closeDetail(){
+    detailEl.classList.remove("open");
+  }
+  function absolutePath(p){
+    if (!p) return "";
+    if (p.startsWith("/")) return p;
+    if (p.startsWith("~")) return "/Users/jesus" + p.substring(1);
+    return "/Users/jesus/Desktop/STEMMIA%20Dexter/" + p.replace(/ /g, "%20");
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  // ---- Keyboard shortcuts
+  document.addEventListener("keydown", ev => {
+    if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === "f") {
+      ev.preventDefault();
+      searchEl.focus(); searchEl.select();
+    } else if (ev.key === "Escape") {
+      closeDetail();
+      if (searchEl.value) { searchEl.value = ""; searchTerm = ""; applyFilters(); }
+    }
+  });
+
+  // Click background closes detail
+  svg.on("click", () => closeDetail());
+
+  applyFilters();
+})();
+</script>
+</body>
+</html>

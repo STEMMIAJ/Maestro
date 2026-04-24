@@ -1,0 +1,81 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;overflow:hidden}
+body{
+  background:#0a0e1a;
+  color:#e5e7eb;
+  font-family:-apple-system,"SF Pro Display","Helvetica Neue",sans-serif;
+  font-feature-settings:"tnum";
+  -webkit-font-smoothing:antialiased;
+  padding:90px 70px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  background-image:
+    radial-gradient(ellipse 900px 500px at 20% 0%, rgba(96,165,250,0.12), transparent),
+    radial-gradient(ellipse 700px 500px at 100% 100%, rgba(167,139,250,0.10), transparent);
+}
+.top{display:flex;align-items:center;gap:16px;font-size:20px;color:#9ca3af;letter-spacing:3px;text-transform:uppercase}
+.dot{width:10px;height:10px;background:#60a5fa;border-radius:50%}
+h1{
+  font-size:96px;
+  font-weight:800;
+  line-height:0.98;
+  letter-spacing:-3.5px;
+  margin-top:30px;
+}
+h1 em{font-style:normal;color:#60a5fa}
+.sub{font-size:32px;color:#9ca3af;margin-top:32px;line-height:1.35;max-width:900px}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  margin-top:auto;
+}
+.card{
+  background:#111827;
+  border:1px solid #1f2937;
+  border-radius:22px;
+  padding:38px 34px;
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:"";position:absolute;top:0;left:0;width:100%;height:4px;
+  background:linear-gradient(90deg,var(--c,#60a5fa),transparent);
+}
+.c1{--c:#60a5fa}
+.c2{--c:#a78bfa}
+.c3{--c:#34d399}
+.c4{--c:#fbbf24}
+.num{
+  font-size:88px;
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-3px;
+  color:var(--c);
+  margin-bottom:14px;
+  font-variant-numeric:tabular-nums;
+}
+.lbl{font-size:22px;color:#e5e7eb;font-weight:500;line-height:1.3}
+.lbl small{display:block;color:#9ca3af;font-size:15px;font-weight:400;margin-top:6px;letter-spacing:0.3px}
+footer{
+  margin-top:40px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:18px;color:#6b7280;letter-spacing:1.5px;
+}
+footer b{color:#e5e7eb;font-weight:600}
+</style></head>
+<body>
+  <div class="top"><span class="dot"></span>MÉDICO PERITO · AUTODIDATA · 9 MESES</div>
+  <h1>O que eu construí<br>pra minhas perícias<br>com <em>IA</em>.</h1>
+  <div class="sub">Não sou engenheiro. Precisava resolver um problema próprio — TEA + TDAH + carga pericial pesada. Aprendi o mínimo. Código abaixo é real, rodando hoje.</div>
+
+  <div class="grid">
+    <div class="card c1"><div class="num">85</div><div class="lbl">agentes de IA<small>cada um com função específica</small></div></div>
+    <div class="card c2"><div class="num">159</div><div class="lbl">scripts Python<small>pipeline de processo pericial</small></div></div>
+    <div class="card c3"><div class="num">53.383</div><div class="lbl">linhas de código<small>sistema próprio, verificável</small></div></div>
+    <div class="card c4"><div class="num">93</div><div class="lbl">memórias persistentes<small>sistema aprende a operar comigo</small></div></div>
+  </div>
+
+  <footer><span>stemmia.com.br</span><span>1 / 3</span></footer>
+</body></html>

@@ -1,0 +1,6 @@
+Options -Indexes
+Header set X-Robots-Tag "noindex, nofollow"
+AuthType Basic
+AuthName "Claude Memory Backup"
+AuthUserFile /home/stemmiac/.htpasswd-backup
+Require valid-user

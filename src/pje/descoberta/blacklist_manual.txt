@@ -1,0 +1,17 @@
+# Blacklist manual — CNJs em que Dr. Jesus é PARTE (não perito).
+#
+# 1 CNJ por linha. Formato: NNNNNNN-NN.AAAA.J.TR.OOOO
+# Linhas vazias e iniciadas com # são ignoradas.
+#
+# Como popular:
+#   1. Ir em https://pje.tjmg.jus.br/pje/ConsultaPublica/listView.seam
+#   2. Buscar por CPF 127.858.856-60
+#   3. Copiar cada CNJ listado e colar aqui
+#
+# Qualquer CNJ desta lista NUNCA entra como PERITO nos relatórios.
+#
+# Esta lista tem PRECEDÊNCIA sobre qualquer outro filtro.
+#
+# Exemplo:
+# 5001234-56.2025.8.13.0627
+#
