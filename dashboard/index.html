@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maestro - painel Stemmia</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="topo-inner">
+      <h1>Maestro - painel Stemmia</h1>
+      <p class="timestamp">gerado em <span id="gerado-em">-</span></p>
+    </div>
+  </header>
+
+  <main class="conteudo">
+    <div id="banner-erro" class="banner-erro" hidden></div>
+
+    <section class="grid-cards" aria-label="Resumo geral">
+      <article class="card">
+        <p class="card-label">Total processos</p>
+        <p class="card-value" id="card-total">-</p>
+      </article>
+      <article class="card">
+        <p class="card-label">Urgentes</p>
+        <p class="card-value card-value-urgente" id="card-urgentes">-</p>
+      </article>
+      <article class="card">
+        <p class="card-label">Tarefas prazo &lt;7d</p>
+        <p class="card-value" id="card-tarefas">-</p>
+      </article>
+      <article class="card">
+        <p class="card-label">Ultimo heartbeat</p>
+        <p class="card-value card-value-pequeno" id="card-heartbeat">-</p>
+      </article>
+    </section>
+
+    <section class="busca-wrapper" aria-label="Busca de processos">
+      <label for="busca" class="busca-label">Buscar CNJ</label>
+      <input type="text" id="busca" class="busca-input" placeholder="Digite parte do numero CNJ..." autocomplete="off">
+    </section>
+
+    <section class="tabela-wrapper" aria-label="Processos recentes">
+      <h2>Processos recentes</h2>
+      <table class="tabela-processos">
+        <thead>
+          <tr>
+            <th>CNJ</th>
+            <th>Comarca</th>
+            <th>Urgencia</th>
+            <th>Atualizado</th>
+            <th>Ficha</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-body">
+          <tr><td colspan="5" class="vazio">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

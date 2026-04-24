@@ -1,0 +1,3656 @@
+[
+  {
+    "id": "a0001",
+    "verbo": "criar",
+    "alvo": "algum jeito algum trompete alguma automação para fazer uma coisa que você",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0001",
+    "text_excerpt": "Perplexity eu preciso de ajuda eu preciso criar algum jeito algum trompete alguma automação para fazer uma coisa que você fez por mim um dia muito bem que foi encontrar um laudo pericial medico real, de um processo judicial mesmo, nao sei c"
+  },
+  {
+    "id": "a0002",
+    "verbo": "fazer",
+    "alvo": "um resumo em tópicos e aí irmos detalhando cada parte estou um",
+    "horizonte": "hoje",
+    "prioridade": 1,
+    "chunk_ref": "c0001",
+    "text_excerpt": "Tipo a gente fazer um resumo em tópicos e aí irmos detalhando cada parte estou um pouco perdida e por isso que a inteligência artificial me ajuda tanto porque é uma área totalmente nova e aí eu tenho que fazer tudo do zero de novo e se eu p"
+  },
+  {
+    "id": "a0003",
+    "verbo": "faz",
+    "alvo": "sentido buscar não só “modelos”, mas laudos efetivamente produzidos em processos, porque",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "Você já tem o ponto mais importante: quer aprender por reconstrução de exemplos reais e montar um banco de dados comparável, o que é especialmente útil para quem precisa extrair padrão estrutural a partir de material concreto.Também faz sen"
+  },
+  {
+    "id": "a0004",
+    "verbo": "buscar",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "## O que buscar"
+  },
+  {
+    "id": "a0005",
+    "verbo": "busca",
+    "alvo": "úteis",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "Exemplos de eixos de busca úteis:"
+  },
+  {
+    "id": "a0006",
+    "verbo": "busca",
+    "alvo": "fica aberta demais",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "A sua dificuldade não é falta de ideia; é que a busca fica aberta demais."
+  },
+  {
+    "id": "a0007",
+    "verbo": "buscar",
+    "alvo": "primeiro o laudo; buscar a sentença que fala bem dele",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "Aqui a virada é: não buscar primeiro o laudo; buscar a sentença que fala bem dele."
+  },
+  {
+    "id": "a0008",
+    "verbo": "definir",
+    "alvo": "a taxonomia do banco, ou seja, quais classes de processo e subtemas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "- Definir a taxonomia do banco, ou seja, quais classes de processo e subtemas você quer comparar.juspodivmdigital+1"
+  },
+  {
+    "id": "a0009",
+    "verbo": "definir",
+    "alvo": "a taxonomia do banco, ou seja, quais classes de processo e subtemas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "Definir a taxonomia do banco, ou seja, quais classes de processo e subtemas você quer comparar.juspodivmdigital+1"
+  },
+  {
+    "id": "a0010",
+    "verbo": "criar",
+    "alvo": "as fórmulas de busca, já prontas por nicho, em vez de pesquisar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "- Criar as fórmulas de busca, já prontas por nicho, em vez de pesquisar improvisando toda vez.iocmf+2"
+  },
+  {
+    "id": "a0011",
+    "verbo": "criar",
+    "alvo": "as fórmulas de busca, já prontas por nicho, em vez de pesquisar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "Criar as fórmulas de busca, já prontas por nicho, em vez de pesquisar improvisando toda vez.iocmf+2"
+  },
+  {
+    "id": "a0012",
+    "verbo": "mapear",
+    "alvo": "todos os “tipos de situação real”, este aqui deve funcionar melhor",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "Para mapear todos os “tipos de situação real”, este aqui deve funcionar melhor:"
+  },
+  {
+    "id": "a0013",
+    "verbo": "busca",
+    "alvo": "para localizar exemplos reais desse tipo de laudo",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "- variações de busca para localizar exemplos reais desse tipo de laudo."
+  },
+  {
+    "id": "a0014",
+    "verbo": "busca",
+    "alvo": "para localizar exemplos reais desse tipo de laudo",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "variações de busca para localizar exemplos reais desse tipo de laudo."
+  },
+  {
+    "id": "a0015",
+    "verbo": "fazer",
+    "alvo": "agora",
+    "horizonte": "hoje",
+    "prioridade": 1,
+    "chunk_ref": "c0002",
+    "text_excerpt": "## O que fazer agora"
+  },
+  {
+    "id": "a0016",
+    "verbo": "criar",
+    "alvo": "6 categorias iniciais: previdenciária incapacidade, previdenciária auxílio-acidente, trabalhista nexo/incapacidade, securitária invalidez, cível",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "- Criar 6 categorias iniciais: previdenciária incapacidade, previdenciária auxílio-acidente, trabalhista nexo/incapacidade, securitária invalidez, cível dano corporal/erro médico, interdição/capacidade civil.cfm+3"
+  },
+  {
+    "id": "a0017",
+    "verbo": "criar",
+    "alvo": "6 categorias iniciais: previdenciária incapacidade, previdenciária auxílio-acidente, trabalhista nexo/incapacidade, securitária invalidez, cível",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "Criar 6 categorias iniciais: previdenciária incapacidade, previdenciária auxílio-acidente, trabalhista nexo/incapacidade, securitária invalidez, cível dano corporal/erro médico, interdição/capacidade civil.cfm+3"
+  },
+  {
+    "id": "a0018",
+    "verbo": "definir",
+    "alvo": "10 buscas-padrão",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "- Para cada uma, definir 10 buscas-padrão."
+  },
+  {
+    "id": "a0019",
+    "verbo": "definir",
+    "alvo": "10 buscas-padrão",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0002",
+    "text_excerpt": "Para cada uma, definir 10 buscas-padrão."
+  },
+  {
+    "id": "a0020",
+    "verbo": "fazer",
+    "alvo": "exatamente o resumo em tópicos que você pediu, já em formato de",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0002",
+    "text_excerpt": "Se você quiser, no próximo passo eu posso fazer exatamente o resumo em tópicos que você pediu, já em formato de projeto, com estas 4 partes:"
+  },
+  {
+    "id": "a0021",
+    "verbo": "busca",
+    "alvo": "comparação de estrutura, estudo por reconstrução e criação futura de automações.devmedia",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0004",
+    "text_excerpt": "- Objetivo do banco: permitir busca, comparação de estrutura, estudo por reconstrução e criação futura de automações.devmedia"
+  },
+  {
+    "id": "a0022",
+    "verbo": "busca",
+    "alvo": "comparação de estrutura, estudo por reconstrução e criação futura de automações.devmedia",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0004",
+    "text_excerpt": "Objetivo do banco: permitir busca, comparação de estrutura, estudo por reconstrução e criação futura de automações.devmedia"
+  },
+  {
+    "id": "a0023",
+    "verbo": "TODO",
+    "alvo": "Se você quiser, no próximo passo eu posso transformar isso em um",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0004",
+    "text_excerpt": "Se você quiser, no próximo passo eu posso transformar isso em um organograma visual mais bonito e operacional, tipo:"
+  },
+  {
+    "id": "a0024",
+    "verbo": "implementar",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0004",
+    "text_excerpt": "e já te entregar em tópicos prontos para implementar."
+  },
+  {
+    "id": "a0025",
+    "verbo": "integrar",
+    "alvo": "nós dois é: eu viro o arquiteto do sistema e dos prompts",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0004",
+    "text_excerpt": "O melhor jeito de integrar nós dois é: eu viro o arquiteto do sistema e dos prompts, e o Claude vira o executor massivo de busca, coleta e pré-organização."
+  },
+  {
+    "id": "a0026",
+    "verbo": "busca",
+    "alvo": "de alta escala, desde que você dê a ele uma missão bem",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0004",
+    "text_excerpt": "Isso combina bem com busca de alta escala, desde que você dê a ele uma missão bem fechada, modular e com formato rígido de saída, porque decompor tarefas complexas em subtarefas melhora a qualidade e a consistência dos resultados.arxiv+1"
+  },
+  {
+    "id": "a0027",
+    "verbo": "valida",
+    "alvo": "amostras, corrige rumo e escolhe quais nichos priorizar primeiro",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0005",
+    "text_excerpt": "- Você: valida amostras, corrige rumo e escolhe quais nichos priorizar primeiro."
+  },
+  {
+    "id": "a0028",
+    "verbo": "valida",
+    "alvo": "amostras, corrige rumo e escolhe quais nichos priorizar primeiro",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0005",
+    "text_excerpt": "Você: valida amostras, corrige rumo e escolhe quais nichos priorizar primeiro."
+  },
+  {
+    "id": "a0029",
+    "verbo": "mapear",
+    "alvo": "categorias",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "- Prompt 1: mapear categorias."
+  },
+  {
+    "id": "a0030",
+    "verbo": "mapear",
+    "alvo": "categorias",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "Prompt 1: mapear categorias."
+  },
+  {
+    "id": "a0031",
+    "verbo": "gerar",
+    "alvo": "estratégias de busca por categoria",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "- Prompt 2: gerar estratégias de busca por categoria."
+  },
+  {
+    "id": "a0032",
+    "verbo": "gerar",
+    "alvo": "estratégias de busca por categoria",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "Prompt 2: gerar estratégias de busca por categoria."
+  },
+  {
+    "id": "a0033",
+    "verbo": "busca",
+    "alvo": "e listar achados",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "- Prompt 3: executar busca e listar achados."
+  },
+  {
+    "id": "a0034",
+    "verbo": "busca",
+    "alvo": "e listar achados",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "Prompt 3: executar busca e listar achados."
+  },
+  {
+    "id": "a0035",
+    "verbo": "buscar",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "## O que ele deve buscar"
+  },
+  {
+    "id": "a0036",
+    "verbo": "busca",
+    "alvo": "precisa seguir estes eixos",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "A busca precisa seguir estes eixos:"
+  },
+  {
+    "id": "a0037",
+    "verbo": "buscar",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "## Como ele deve buscar"
+  },
+  {
+    "id": "a0038",
+    "verbo": "busca",
+    "alvo": "válidos",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "Exemplos de padrões de busca válidos:"
+  },
+  {
+    "id": "a0039",
+    "verbo": "buscar",
+    "alvo": "seis tipos de material",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "Você deve buscar seis tipos de material:"
+  },
+  {
+    "id": "a0040",
+    "verbo": "busca",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "Regras de busca:"
+  },
+  {
+    "id": "a0041",
+    "verbo": "busca",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "Eixos obrigatórios de busca:"
+  },
+  {
+    "id": "a0042",
+    "verbo": "busca",
+    "alvo": "específicas para cada categoria",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "- Depois gere consultas de busca específicas para cada categoria."
+  },
+  {
+    "id": "a0043",
+    "verbo": "busca",
+    "alvo": "específicas para cada categoria",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0006",
+    "text_excerpt": "Depois gere consultas de busca específicas para cada categoria."
+  },
+  {
+    "id": "a0044",
+    "verbo": "escreva",
+    "alvo": "em parágrafos longos",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0007",
+    "text_excerpt": "- Não escreva em parágrafos longos."
+  },
+  {
+    "id": "a0045",
+    "verbo": "escreva",
+    "alvo": "em parágrafos longos",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0007",
+    "text_excerpt": "Não escreva em parágrafos longos."
+  },
+  {
+    "id": "a0046",
+    "verbo": "busca",
+    "alvo": "estiver muito ampla, divida por categoria e continue por partes",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0007",
+    "text_excerpt": "- Se a busca estiver muito ampla, divida por categoria e continue por partes."
+  },
+  {
+    "id": "a0047",
+    "verbo": "busca",
+    "alvo": "estiver muito ampla, divida por categoria e continue por partes",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0007",
+    "text_excerpt": "Se a busca estiver muito ampla, divida por categoria e continue por partes."
+  },
+  {
+    "id": "a0048",
+    "verbo": "buscar",
+    "alvo": "como vai classificar os resultados e em que formato vai responder.Se houver",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Antes de iniciar, repita em 8 tópicos exatamente o que você vai buscar, como vai classificar os resultados e em que formato vai responder.Se houver ambiguidade, não invente: proponha a divisão da tarefa em etapas.Não comece pela análise; co"
+  },
+  {
+    "id": "a0049",
+    "verbo": "busca",
+    "alvo": "curtas, específicas e reutilizáveis para localizar laudos, quesitos, protocolos e sentenças relacionadas",
+    "horizonte": "hoje",
+    "prioridade": 1,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Agora, para cada categoria, crie consultas de busca curtas, específicas e reutilizáveis para localizar laudos, quesitos, protocolos e sentenças relacionadas."
+  },
+  {
+    "id": "a0050",
+    "verbo": "integrar",
+    "alvo": "eu e Claude",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "## Como integrar eu e Claude"
+  },
+  {
+    "id": "a0051",
+    "verbo": "roda",
+    "alvo": "no Claude",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Passo C: você roda no Claude."
+  },
+  {
+    "id": "a0052",
+    "verbo": "roda",
+    "alvo": "no Claude",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Passo C: você roda no Claude."
+  },
+  {
+    "id": "a0053",
+    "verbo": "cria",
+    "alvo": "o “template perfeito” e replica para os outros ramos.silicondales+1",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "A partir daí, a gente cria o “template perfeito” e replica para os outros ramos.silicondales+1"
+  },
+  {
+    "id": "a0054",
+    "verbo": "TODO",
+    "alvo": "Se você quiser, no próximo passo eu posso te entregar um pacote",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Se você quiser, no próximo passo eu posso te entregar um pacote pronto com 3 prompts encadeados, já no formato ideal para colar no Claude, começando exatamente por Previdenciário > Auxílio-acidente > Coluna."
+  },
+  {
+    "id": "a0055",
+    "verbo": "escrever",
+    "alvo": "mais texto”; precisa escrever melhor a arquitetura de comando, com papéis fixos",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Sim — você precisa descrever melhor as ordens para o Claude, mas não no sentido de “escrever mais texto”; precisa escrever melhor a arquitetura de comando, com papéis fixos, escopo, critérios de completude, limites de ação e gatilhos de aud"
+  },
+  {
+    "id": "a0056",
+    "verbo": "integrar",
+    "alvo": "papéis",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "E também concordo com a sua visão central: não é migrar, é integrar papéis."
+  },
+  {
+    "id": "a0057",
+    "verbo": "fazer",
+    "alvo": "tudo pelo Claude",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Isso evita o erro que você mesmo identificou: tentar fazer tudo pelo Claude."
+  },
+  {
+    "id": "a0058",
+    "verbo": "revisar",
+    "alvo": "a qualidade do sistema",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "O Claude pode executar demais e se dispersar; o OpenClaw pode manter o sistema vivo, agendado e observável; e eu te ajudo a desenhar os comandos certos e revisar a qualidade do sistema."
+  },
+  {
+    "id": "a0059",
+    "verbo": "instalar",
+    "alvo": "OpenClaw”",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Pelo que você descreveu, o projeto não é “instalar OpenClaw”."
+  },
+  {
+    "id": "a0060",
+    "verbo": "criar",
+    "alvo": "uma infra pessoal de memória, auditoria e organização da pasta Dexter",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- criar uma infra pessoal de memória, auditoria e organização da pasta Dexter;"
+  },
+  {
+    "id": "a0061",
+    "verbo": "criar",
+    "alvo": "uma infra pessoal de memória, auditoria e organização da pasta Dexter",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "criar uma infra pessoal de memória, auditoria e organização da pasta Dexter;"
+  },
+  {
+    "id": "a0062",
+    "verbo": "revisar",
+    "alvo": "projetos, ideias, sessões, memórias e banco de dados",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- dar ao OpenClaw comandos recorrentes para revisar projetos, ideias, sessões, memórias e banco de dados;"
+  },
+  {
+    "id": "a0063",
+    "verbo": "revisar",
+    "alvo": "projetos, ideias, sessões, memórias e banco de dados",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "dar ao OpenClaw comandos recorrentes para revisar projetos, ideias, sessões, memórias e banco de dados;"
+  },
+  {
+    "id": "a0064",
+    "verbo": "criar",
+    "alvo": "uma interface visual para isso, porque terminal puro te confunde pela associação",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- eventualmente criar uma interface visual para isso, porque terminal puro te confunde pela associação com Claude Code."
+  },
+  {
+    "id": "a0065",
+    "verbo": "criar",
+    "alvo": "uma interface visual para isso, porque terminal puro te confunde pela associação",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "eventualmente criar uma interface visual para isso, porque terminal puro te confunde pela associação com Claude Code."
+  },
+  {
+    "id": "a0066",
+    "verbo": "faz",
+    "alvo": "total sentido",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Então a pasta nova dentro de Dexter faz total sentido."
+  },
+  {
+    "id": "a0067",
+    "verbo": "audita",
+    "alvo": "e indexa o resto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Ele controla, audita e indexa o resto."
+  },
+  {
+    "id": "a0068",
+    "verbo": "decide",
+    "alvo": "ordem de execução, consolida relatórios e nunca altera dados sensíveis sem checklist",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Coordena os demais, decide ordem de execução, consolida relatórios e nunca altera dados sensíveis sem checklist de segurança."
+  },
+  {
+    "id": "a0069",
+    "verbo": "audita",
+    "alvo": "toda a pasta Dexter: projetos ativos, pastas órfãs, duplicações, nomes ruins, markdowns",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Audita toda a pasta Dexter: projetos ativos, pastas órfãs, duplicações, nomes ruins, markdowns obsoletos, arquivos soltos, pendências, outputs sem documentação."
+  },
+  {
+    "id": "a0070",
+    "verbo": "revisa",
+    "alvo": "resumos, remove redundância, propõe sínteses",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Consolida memórias úteis em formato legível, revisa resumos, remove redundância, propõe sínteses."
+  },
+  {
+    "id": "a0071",
+    "verbo": "busca",
+    "alvo": "de memória do OpenClaw (memory index, memory search, memory promote)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Isso se encaixa com a indexação e busca de memória do OpenClaw (memory index, memory search, memory promote)."
+  },
+  {
+    "id": "a0072",
+    "verbo": "mapeia",
+    "alvo": "todos os projetos do Mac dentro do escopo permitido, classifica por status",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Mapeia todos os projetos do Mac dentro do escopo permitido, classifica por status: ativo, pausado, abandonado, arquivado, experimental."
+  },
+  {
+    "id": "a0073",
+    "verbo": "faz",
+    "alvo": "sentido tanto por acessibilidade cognitiva quanto por preferência de uso",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Desenha a futura interface visual web, ideal para você não depender exclusivamente do terminal, o que faz sentido tanto por acessibilidade cognitiva quanto por preferência de uso."
+  },
+  {
+    "id": "a0074",
+    "verbo": "criar",
+    "alvo": "pasta openclaw-control-center",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Criar pasta openclaw-control-center"
+  },
+  {
+    "id": "a0075",
+    "verbo": "criar",
+    "alvo": "pasta openclaw-control-center",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar pasta openclaw-control-center"
+  },
+  {
+    "id": "a0076",
+    "verbo": "criar",
+    "alvo": "arquivos raiz",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Criar arquivos raiz"
+  },
+  {
+    "id": "a0077",
+    "verbo": "criar",
+    "alvo": "arquivos raiz",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar arquivos raiz"
+  },
+  {
+    "id": "a0078",
+    "verbo": "criar",
+    "alvo": "subpastas AGENTS, RULES, FLOWS, CRON, SCRIPTS, CONFIG, DATA, WEB-UI",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Criar subpastas AGENTS, RULES, FLOWS, CRON, SCRIPTS, CONFIG, DATA, WEB-UI"
+  },
+  {
+    "id": "a0079",
+    "verbo": "criar",
+    "alvo": "subpastas AGENTS, RULES, FLOWS, CRON, SCRIPTS, CONFIG, DATA, WEB-UI",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar subpastas AGENTS, RULES, FLOWS, CRON, SCRIPTS, CONFIG, DATA, WEB-UI"
+  },
+  {
+    "id": "a0080",
+    "verbo": "definir",
+    "alvo": "escopos de diretório",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir escopos de diretório"
+  },
+  {
+    "id": "a0081",
+    "verbo": "definir",
+    "alvo": "escopos de diretório",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir escopos de diretório"
+  },
+  {
+    "id": "a0082",
+    "verbo": "definir",
+    "alvo": "o que pode ser lido, indexado, resumido e modificado",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir o que pode ser lido, indexado, resumido e modificado"
+  },
+  {
+    "id": "a0083",
+    "verbo": "definir",
+    "alvo": "o que pode ser lido, indexado, resumido e modificado",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir o que pode ser lido, indexado, resumido e modificado"
+  },
+  {
+    "id": "a0084",
+    "verbo": "definir",
+    "alvo": "limites de privacidade",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir limites de privacidade"
+  },
+  {
+    "id": "a0085",
+    "verbo": "definir",
+    "alvo": "limites de privacidade",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir limites de privacidade"
+  },
+  {
+    "id": "a0086",
+    "verbo": "definir",
+    "alvo": "convenções de nomes",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir convenções de nomes"
+  },
+  {
+    "id": "a0087",
+    "verbo": "definir",
+    "alvo": "convenções de nomes",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir convenções de nomes"
+  },
+  {
+    "id": "a0088",
+    "verbo": "definir",
+    "alvo": "política de retenção",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir política de retenção"
+  },
+  {
+    "id": "a0089",
+    "verbo": "definir",
+    "alvo": "política de retenção",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir política de retenção"
+  },
+  {
+    "id": "a0090",
+    "verbo": "definir",
+    "alvo": "política de aprovação humana",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir política de aprovação humana"
+  },
+  {
+    "id": "a0091",
+    "verbo": "definir",
+    "alvo": "política de aprovação humana",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir política de aprovação humana"
+  },
+  {
+    "id": "a0092",
+    "verbo": "gerar",
+    "alvo": "relatório inicial",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Gerar relatório inicial"
+  },
+  {
+    "id": "a0093",
+    "verbo": "gerar",
+    "alvo": "relatório inicial",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Gerar relatório inicial"
+  },
+  {
+    "id": "a0094",
+    "verbo": "definir",
+    "alvo": "onde ficam memórias",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir onde ficam memórias"
+  },
+  {
+    "id": "a0095",
+    "verbo": "definir",
+    "alvo": "onde ficam memórias",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir onde ficam memórias"
+  },
+  {
+    "id": "a0096",
+    "verbo": "definir",
+    "alvo": "quais fontes entram",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir quais fontes entram"
+  },
+  {
+    "id": "a0097",
+    "verbo": "definir",
+    "alvo": "quais fontes entram",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir quais fontes entram"
+  },
+  {
+    "id": "a0098",
+    "verbo": "gerar",
+    "alvo": "digest semanal",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Gerar digest semanal"
+  },
+  {
+    "id": "a0099",
+    "verbo": "gerar",
+    "alvo": "digest semanal",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Gerar digest semanal"
+  },
+  {
+    "id": "a0100",
+    "verbo": "definir",
+    "alvo": "jobs diários",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir jobs diários"
+  },
+  {
+    "id": "a0101",
+    "verbo": "definir",
+    "alvo": "jobs diários",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir jobs diários"
+  },
+  {
+    "id": "a0102",
+    "verbo": "definir",
+    "alvo": "jobs semanais",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir jobs semanais"
+  },
+  {
+    "id": "a0103",
+    "verbo": "definir",
+    "alvo": "jobs semanais",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir jobs semanais"
+  },
+  {
+    "id": "a0104",
+    "verbo": "definir",
+    "alvo": "política de retries",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir política de retries"
+  },
+  {
+    "id": "a0105",
+    "verbo": "definir",
+    "alvo": "política de retries",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir política de retries"
+  },
+  {
+    "id": "a0106",
+    "verbo": "definir",
+    "alvo": "logs e alertas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir logs e alertas"
+  },
+  {
+    "id": "a0107",
+    "verbo": "definir",
+    "alvo": "logs e alertas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir logs e alertas"
+  },
+  {
+    "id": "a0108",
+    "verbo": "testar",
+    "alvo": "cron add, cron list, cron runs",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Testar cron add, cron list, cron runs"
+  },
+  {
+    "id": "a0109",
+    "verbo": "testar",
+    "alvo": "cron add, cron list, cron runs",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Testar cron add, cron list, cron runs"
+  },
+  {
+    "id": "a0110",
+    "verbo": "criar",
+    "alvo": "rotina de manutenção",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Criar rotina de manutenção"
+  },
+  {
+    "id": "a0111",
+    "verbo": "criar",
+    "alvo": "rotina de manutenção",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar rotina de manutenção"
+  },
+  {
+    "id": "a0112",
+    "verbo": "rodar",
+    "alvo": "sozinho e você conseguir verificar saúde e histórico com facilidade",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Completo quando: o sistema rodar sozinho e você conseguir verificar saúde e histórico com facilidade."
+  },
+  {
+    "id": "a0113",
+    "verbo": "definir",
+    "alvo": "objetivos da UI",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir objetivos da UI"
+  },
+  {
+    "id": "a0114",
+    "verbo": "definir",
+    "alvo": "objetivos da UI",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir objetivos da UI"
+  },
+  {
+    "id": "a0115",
+    "verbo": "definir",
+    "alvo": "rotas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir rotas"
+  },
+  {
+    "id": "a0116",
+    "verbo": "definir",
+    "alvo": "rotas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir rotas"
+  },
+  {
+    "id": "a0117",
+    "verbo": "definir",
+    "alvo": "widgets",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir widgets"
+  },
+  {
+    "id": "a0118",
+    "verbo": "definir",
+    "alvo": "widgets",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir widgets"
+  },
+  {
+    "id": "a0119",
+    "verbo": "definir",
+    "alvo": "telas de auditoria",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir telas de auditoria"
+  },
+  {
+    "id": "a0120",
+    "verbo": "definir",
+    "alvo": "telas de auditoria",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir telas de auditoria"
+  },
+  {
+    "id": "a0121",
+    "verbo": "definir",
+    "alvo": "tela de memória",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir tela de memória"
+  },
+  {
+    "id": "a0122",
+    "verbo": "definir",
+    "alvo": "tela de memória",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir tela de memória"
+  },
+  {
+    "id": "a0123",
+    "verbo": "definir",
+    "alvo": "tela de jobs e falhas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Definir tela de jobs e falhas"
+  },
+  {
+    "id": "a0124",
+    "verbo": "definir",
+    "alvo": "tela de jobs e falhas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Definir tela de jobs e falhas"
+  },
+  {
+    "id": "a0125",
+    "verbo": "criar",
+    "alvo": "o projeto openclaw-control-center e os documentos-base",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Objetivo: criar o projeto openclaw-control-center e os documentos-base."
+  },
+  {
+    "id": "a0126",
+    "verbo": "definir",
+    "alvo": "fronteiras",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "## Fase 2 — Definir fronteiras"
+  },
+  {
+    "id": "a0127",
+    "verbo": "auditar",
+    "alvo": "indexar, resumir e automatizar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Objetivo: dizer exatamente o que o sistema pode e não pode auditar, indexar, resumir e automatizar."
+  },
+  {
+    "id": "a0128",
+    "verbo": "fazer",
+    "alvo": "o Claude agir só dentro das regras do projeto, com CLAUDE.md, settings",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Objetivo: fazer o Claude agir só dentro das regras do projeto, com CLAUDE.md, settings por escopo e permissões adequadas."
+  },
+  {
+    "id": "a0129",
+    "verbo": "criar",
+    "alvo": "jobs recorrentes",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "## Fase 6 — Criar jobs recorrentes"
+  },
+  {
+    "id": "a0130",
+    "verbo": "criar",
+    "alvo": "interface visual",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "## Fase 7 — Criar interface visual"
+  },
+  {
+    "id": "a0131",
+    "verbo": "integrar",
+    "alvo": "isso ao site stemmia.com.br",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- só então integrar isso ao site stemmia.com.br."
+  },
+  {
+    "id": "a0132",
+    "verbo": "integrar",
+    "alvo": "isso ao site stemmia.com.br",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "só então integrar isso ao site stemmia.com.br."
+  },
+  {
+    "id": "a0133",
+    "verbo": "fazer",
+    "alvo": "tudo de uma vez",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Assim você não trava o projeto tentando fazer tudo de uma vez."
+  },
+  {
+    "id": "a0134",
+    "verbo": "baixar",
+    "alvo": "todos os arquivos do Claude”",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "## Sobre “baixar todos os arquivos do Claude”"
+  },
+  {
+    "id": "a0135",
+    "verbo": "mapear",
+    "alvo": "quais artefatos são realmente úteis",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- mapear quais artefatos são realmente úteis;"
+  },
+  {
+    "id": "a0136",
+    "verbo": "mapear",
+    "alvo": "quais artefatos são realmente úteis",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "mapear quais artefatos são realmente úteis;"
+  },
+  {
+    "id": "a0137",
+    "verbo": "definir",
+    "alvo": "fontes permitidas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- definir fontes permitidas;"
+  },
+  {
+    "id": "a0138",
+    "verbo": "definir",
+    "alvo": "fontes permitidas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "definir fontes permitidas;"
+  },
+  {
+    "id": "a0139",
+    "verbo": "auditar",
+    "alvo": "antes de copiar, indexar ou expor",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- auditar antes de copiar, indexar ou expor."
+  },
+  {
+    "id": "a0140",
+    "verbo": "auditar",
+    "alvo": "antes de copiar, indexar ou expor",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "auditar antes de copiar, indexar ou expor."
+  },
+  {
+    "id": "a0141",
+    "verbo": "escrever",
+    "alvo": "ordens melhores",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Sim: você deve escrever ordens melhores."
+  },
+  {
+    "id": "a0142",
+    "verbo": "gerar",
+    "alvo": "relatório de estrutura, redundância, arquivos órfãos e projetos parados",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Inventariar a pasta Dexter e gerar relatório de estrutura, redundância, arquivos órfãos e projetos parados."
+  },
+  {
+    "id": "a0143",
+    "verbo": "mover",
+    "alvo": "nada sem proposta explícita",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Não pode mover nada sem proposta explícita."
+  },
+  {
+    "id": "a0144",
+    "verbo": "instalar",
+    "alvo": "dependências",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não instalar dependências"
+  },
+  {
+    "id": "a0145",
+    "verbo": "gerar",
+    "alvo": "relatório de estrutura, redundância, arquivos órfãos e projetos parados",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Inventariar a pasta Dexter e gerar relatório de estrutura, redundância, arquivos órfãos e projetos parados."
+  },
+  {
+    "id": "a0146",
+    "verbo": "mover",
+    "alvo": "nada sem proposta explícita",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Não pode mover nada sem proposta explícita."
+  },
+  {
+    "id": "a0147",
+    "verbo": "instalar",
+    "alvo": "dependências",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não instalar dependências"
+  },
+  {
+    "id": "a0148",
+    "verbo": "criar",
+    "alvo": "openclaw-control-center",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- criar openclaw-control-center;"
+  },
+  {
+    "id": "a0149",
+    "verbo": "criar",
+    "alvo": "openclaw-control-center",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "criar openclaw-control-center;"
+  },
+  {
+    "id": "a0150",
+    "verbo": "definir",
+    "alvo": "regras de escopo e privacidade",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- definir regras de escopo e privacidade;"
+  },
+  {
+    "id": "a0151",
+    "verbo": "definir",
+    "alvo": "regras de escopo e privacidade",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "definir regras de escopo e privacidade;"
+  },
+  {
+    "id": "a0152",
+    "verbo": "configurar",
+    "alvo": "OpenClaw e validar doctor, status, dashboard, memory status, cron status",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- configurar OpenClaw e validar doctor, status, dashboard, memory status, cron status;"
+  },
+  {
+    "id": "a0153",
+    "verbo": "configurar",
+    "alvo": "OpenClaw e validar doctor, status, dashboard, memory status, cron status",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "configurar OpenClaw e validar doctor, status, dashboard, memory status, cron status;"
+  },
+  {
+    "id": "a0154",
+    "verbo": "criar",
+    "alvo": "agentes",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- criar agentes;"
+  },
+  {
+    "id": "a0155",
+    "verbo": "criar",
+    "alvo": "agentes",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "criar agentes;"
+  },
+  {
+    "id": "a0156",
+    "verbo": "criar",
+    "alvo": "scripts de auditoria",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- criar scripts de auditoria;"
+  },
+  {
+    "id": "a0157",
+    "verbo": "criar",
+    "alvo": "scripts de auditoria",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "criar scripts de auditoria;"
+  },
+  {
+    "id": "a0158",
+    "verbo": "integrar",
+    "alvo": "Claude Code + OpenClaw + auditoria contínua de projetos, memórias, ideias, transcrições",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Eu quero integrar Claude Code + OpenClaw + auditoria contínua de projetos, memórias, ideias, transcrições e banco de dados dentro da pasta Dexter."
+  },
+  {
+    "id": "a0159",
+    "verbo": "auditar",
+    "alvo": "continuamente a pasta Dexter",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "auditar continuamente a pasta Dexter;"
+  },
+  {
+    "id": "a0160",
+    "verbo": "mapear",
+    "alvo": "projetos, ideias, memórias e transcrições",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "mapear projetos, ideias, memórias e transcrições;"
+  },
+  {
+    "id": "a0161",
+    "verbo": "definir",
+    "alvo": "agentes, regras, fluxos e cron jobs",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "definir agentes, regras, fluxos e cron jobs;"
+  },
+  {
+    "id": "a0162",
+    "verbo": "criar",
+    "alvo": "estrutura de pastas robusta e legível",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Criar estrutura de pastas robusta e legível"
+  },
+  {
+    "id": "a0163",
+    "verbo": "mover",
+    "alvo": "nem apagar arquivos externos ao projeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Não mover nem apagar arquivos externos ao projeto"
+  },
+  {
+    "id": "a0164",
+    "verbo": "documentar",
+    "alvo": "critérios de completude",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Sempre documentar critérios de completude"
+  },
+  {
+    "id": "a0165",
+    "verbo": "escrever",
+    "alvo": "em português claro, técnico e operacional",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Sempre escrever em português claro, técnico e operacional"
+  },
+  {
+    "id": "a0166",
+    "verbo": "fazer",
+    "alvo": "agora",
+    "horizonte": "hoje",
+    "prioridade": 1,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- o que não fazer agora"
+  },
+  {
+    "id": "a0167",
+    "verbo": "fazer",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não-fazer"
+  },
+  {
+    "id": "a0168",
+    "verbo": "revise",
+    "alvo": "consistência entre arquivos",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- depois revise consistência entre arquivos"
+  },
+  {
+    "id": "a0169",
+    "verbo": "instalar",
+    "alvo": "nada",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não instalar nada"
+  },
+  {
+    "id": "a0170",
+    "verbo": "configurar",
+    "alvo": "cron real ainda",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não configurar cron real ainda"
+  },
+  {
+    "id": "a0171",
+    "verbo": "criar",
+    "alvo": "interface web funcional ainda",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não criar interface web funcional ainda"
+  },
+  {
+    "id": "a0172",
+    "verbo": "TODO",
+    "alvo": "não varrer todo o Mac ainda",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não varrer todo o Mac ainda"
+  },
+  {
+    "id": "a0173",
+    "verbo": "integrar",
+    "alvo": "Claude Code + OpenClaw + auditoria contínua de projetos, memórias, ideias, transcrições",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Eu quero integrar Claude Code + OpenClaw + auditoria contínua de projetos, memórias, ideias, transcrições e banco de dados dentro da pasta Dexter."
+  },
+  {
+    "id": "a0174",
+    "verbo": "auditar",
+    "alvo": "continuamente a pasta Dexter",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "auditar continuamente a pasta Dexter;"
+  },
+  {
+    "id": "a0175",
+    "verbo": "mapear",
+    "alvo": "projetos, ideias, memórias e transcrições",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "mapear projetos, ideias, memórias e transcrições;"
+  },
+  {
+    "id": "a0176",
+    "verbo": "definir",
+    "alvo": "agentes, regras, fluxos e cron jobs",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "definir agentes, regras, fluxos e cron jobs;"
+  },
+  {
+    "id": "a0177",
+    "verbo": "criar",
+    "alvo": "estrutura de pastas robusta e legível",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Criar estrutura de pastas robusta e legível"
+  },
+  {
+    "id": "a0178",
+    "verbo": "mover",
+    "alvo": "nem apagar arquivos externos ao projeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Não mover nem apagar arquivos externos ao projeto"
+  },
+  {
+    "id": "a0179",
+    "verbo": "documentar",
+    "alvo": "critérios de completude",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Sempre documentar critérios de completude"
+  },
+  {
+    "id": "a0180",
+    "verbo": "escrever",
+    "alvo": "em português claro, técnico e operacional",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Sempre escrever em português claro, técnico e operacional"
+  },
+  {
+    "id": "a0181",
+    "verbo": "fazer",
+    "alvo": "agora",
+    "horizonte": "hoje",
+    "prioridade": 1,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- o que não fazer agora"
+  },
+  {
+    "id": "a0182",
+    "verbo": "fazer",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não-fazer"
+  },
+  {
+    "id": "a0183",
+    "verbo": "revise",
+    "alvo": "consistência entre arquivos",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- depois revise consistência entre arquivos"
+  },
+  {
+    "id": "a0184",
+    "verbo": "instalar",
+    "alvo": "nada",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não instalar nada"
+  },
+  {
+    "id": "a0185",
+    "verbo": "configurar",
+    "alvo": "cron real ainda",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não configurar cron real ainda"
+  },
+  {
+    "id": "a0186",
+    "verbo": "criar",
+    "alvo": "interface web funcional ainda",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não criar interface web funcional ainda"
+  },
+  {
+    "id": "a0187",
+    "verbo": "TODO",
+    "alvo": "não varrer todo o Mac ainda",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- não varrer todo o Mac ainda"
+  },
+  {
+    "id": "a0188",
+    "verbo": "validar",
+    "alvo": "instalação",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- validar instalação;"
+  },
+  {
+    "id": "a0189",
+    "verbo": "validar",
+    "alvo": "instalação",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "validar instalação;"
+  },
+  {
+    "id": "a0190",
+    "verbo": "rodar",
+    "alvo": "openclaw doctor",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- rodar openclaw doctor;"
+  },
+  {
+    "id": "a0191",
+    "verbo": "rodar",
+    "alvo": "openclaw doctor",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "rodar openclaw doctor;"
+  },
+  {
+    "id": "a0192",
+    "verbo": "documentar",
+    "alvo": "resultados em CONFIG/openclaw.profile.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- documentar resultados em CONFIG/openclaw.profile.md;"
+  },
+  {
+    "id": "a0193",
+    "verbo": "documentar",
+    "alvo": "resultados em CONFIG/openclaw.profile.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "documentar resultados em CONFIG/openclaw.profile.md;"
+  },
+  {
+    "id": "a0194",
+    "verbo": "fazer",
+    "alvo": "uma rodada específica só para isso, porque depende de: tarefas locais pesadas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "A documentação do Claude Code confirma suporte a diferentes superfícies e provedores, e a do OpenClaw mostra múltiplas opções de auth/model providers no onboarding, incluindo vários provedores e perfis.Mas para te recomendar modelo ideal, c"
+  },
+  {
+    "id": "a0195",
+    "verbo": "configurar",
+    "alvo": "o OpenClaw com projeto próprio é o passo certo",
+    "horizonte": "hoje",
+    "prioridade": 1,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Então eu concordo 100% com você: parar agora e configurar o OpenClaw com projeto próprio é o passo certo."
+  },
+  {
+    "id": "a0196",
+    "verbo": "TODO",
+    "alvo": "Se quiser, no próximo passo eu posso te entregar a Rodada 2",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Se quiser, no próximo passo eu posso te entregar a Rodada 2 já pronta, em formato de comando para o Claude executar somente a configuração/verificação do OpenClaw, com checklist de saúde, memória, cron, dashboard, agentes e logs."
+  },
+  {
+    "id": "a0197",
+    "verbo": "busca",
+    "alvo": "semântica e promoção de memória já são recursos nativos.docs.openclaw+2",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "A documentação do OpenClaw mostra que a memória principal gira em torno de MEMORY.md e memory/YYYY-MM-DD.md, e que a busca semântica e promoção de memória já são recursos nativos.docs.openclaw+2"
+  },
+  {
+    "id": "a0198",
+    "verbo": "gerar",
+    "alvo": "derivados úteis",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Então a resposta prática é: não basta salvar a conversa bruta; o ideal é salvar a conversa completa + gerar derivados úteis."
+  },
+  {
+    "id": "a0199",
+    "verbo": "fazer",
+    "alvo": "agora",
+    "horizonte": "hoje",
+    "prioridade": 1,
+    "chunk_ref": "c0008",
+    "text_excerpt": "## O jeito certo de fazer agora"
+  },
+  {
+    "id": "a0200",
+    "verbo": "criar",
+    "alvo": "um script que:leia a conversa integral;extraia decisões, objetivos, agentes, pastas, fluxos, automações",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- mandar o Claude Code entrar na sua pasta python base e criar um script que:leia a conversa integral;extraia decisões, objetivos, agentes, pastas, fluxos, automações e dúvidas abertas;escreva esses conteúdos nos arquivos certos do projeto;"
+  },
+  {
+    "id": "a0201",
+    "verbo": "criar",
+    "alvo": "um script que",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "mandar o Claude Code entrar na sua pasta python base e criar um script que:"
+  },
+  {
+    "id": "a0202",
+    "verbo": "escreva",
+    "alvo": "esses conteúdos nos arquivos certos do projeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- escreva esses conteúdos nos arquivos certos do projeto;"
+  },
+  {
+    "id": "a0203",
+    "verbo": "escreva",
+    "alvo": "esses conteúdos nos arquivos certos do projeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "escreva esses conteúdos nos arquivos certos do projeto;"
+  },
+  {
+    "id": "a0204",
+    "verbo": "busca",
+    "alvo": "semântica com openclaw memory index e openclaw memory search;docs.openclaw",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- indexação e busca semântica com openclaw memory index e openclaw memory search;docs.openclaw"
+  },
+  {
+    "id": "a0205",
+    "verbo": "busca",
+    "alvo": "semântica com openclaw memory index e openclaw memory search;docs.openclaw",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "indexação e busca semântica com openclaw memory index e openclaw memory search;docs.openclaw"
+  },
+  {
+    "id": "a0206",
+    "verbo": "criar",
+    "alvo": "/verificar arquivos",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Não diga que fez algo sem realmente criar/verificar arquivos"
+  },
+  {
+    "id": "a0207",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, CHANGELOG.md e NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Sempre atualizar TASKS_NOW.md, CHANGELOG.md e NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0208",
+    "verbo": "gerar",
+    "alvo": "memória estruturada a partir dela",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "gerar memória estruturada a partir dela;"
+  },
+  {
+    "id": "a0209",
+    "verbo": "criar",
+    "alvo": "scripts Python na minha pasta python base para processar novas conversas no",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "criar scripts Python na minha pasta python base para processar novas conversas no mesmo formato;"
+  },
+  {
+    "id": "a0210",
+    "verbo": "escolher",
+    "alvo": "a mais adequada com justificativa curta em log",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Pasta python base: localizar automaticamente a pasta python base dentro de ~/Desktop/STEMMIA Dexter/ e usá-la como base de scripts reutilizáveis; se houver mais de uma candidata, listar opções e escolher a mais adequada com justificativa "
+  },
+  {
+    "id": "a0211",
+    "verbo": "criar",
+    "alvo": "scripts para repetir isso com futuras conversas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "criar scripts para repetir isso com futuras conversas"
+  },
+  {
+    "id": "a0212",
+    "verbo": "baixar",
+    "alvo": "e salvar documentação oficial essencial do OpenClaw para consulta local",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "baixar e salvar documentação oficial essencial do OpenClaw para consulta local"
+  },
+  {
+    "id": "a0213",
+    "verbo": "escolha",
+    "alvo": "de banco de dados",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "deixar pronto o plano futuro para dashboard web do stemmia.com.br, integração Telegram, relatórios e escolha de banco de dados"
+  },
+  {
+    "id": "a0214",
+    "verbo": "instalar",
+    "alvo": "nada sem necessidade real",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Não instalar nada sem necessidade real"
+  },
+  {
+    "id": "a0215",
+    "verbo": "configurar",
+    "alvo": "cron real ainda, apenas planejar e documentar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Não configurar cron real ainda, apenas planejar e documentar"
+  },
+  {
+    "id": "a0216",
+    "verbo": "TODO",
+    "alvo": "Não inventar dados, custos ou estados; se não souber, marcar como TODO/RESEARCH",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Não inventar dados, custos ou estados; se não souber, marcar como TODO/RESEARCH"
+  },
+  {
+    "id": "a0217",
+    "verbo": "criar",
+    "alvo": "dentro do projeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar dentro do projeto:"
+  },
+  {
+    "id": "a0218",
+    "verbo": "criar",
+    "alvo": "um arquivo placeholder claramente identificado para colagem manual e orientar no relatório",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Se o acesso direto ao link não trouxer o conteúdo completo, criar um arquivo placeholder claramente identificado para colagem manual e orientar no relatório final como preencher."
+  },
+  {
+    "id": "a0219",
+    "verbo": "gerar",
+    "alvo": "se possível",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Também gerar, se possível:"
+  },
+  {
+    "id": "a0220",
+    "verbo": "criar",
+    "alvo": "e/ou atualizar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar e/ou atualizar:"
+  },
+  {
+    "id": "a0221",
+    "verbo": "criar",
+    "alvo": "um subprojeto reutilizável para ingestão de conversas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Entrar na pasta python base e criar um subprojeto reutilizável para ingestão de conversas."
+  },
+  {
+    "id": "a0222",
+    "verbo": "criar",
+    "alvo": "algo como",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar algo como:"
+  },
+  {
+    "id": "a0223",
+    "verbo": "gerar",
+    "alvo": "derivados úteis para OpenClaw e para o projeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- gerar derivados úteis para OpenClaw e para o projeto"
+  },
+  {
+    "id": "a0224",
+    "verbo": "revisar",
+    "alvo": "README.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar README.md"
+  },
+  {
+    "id": "a0225",
+    "verbo": "revisar",
+    "alvo": "CLAUDE.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar CLAUDE.md"
+  },
+  {
+    "id": "a0226",
+    "verbo": "revisar",
+    "alvo": "OPENCLAW-ARCHITECTURE.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar OPENCLAW-ARCHITECTURE.md"
+  },
+  {
+    "id": "a0227",
+    "verbo": "revisar",
+    "alvo": "INTEGRATION-PLAN.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar INTEGRATION-PLAN.md"
+  },
+  {
+    "id": "a0228",
+    "verbo": "revisar",
+    "alvo": "TASKS_NOW.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar TASKS_NOW.md"
+  },
+  {
+    "id": "a0229",
+    "verbo": "revisar",
+    "alvo": "AGENTS/*.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar AGENTS/*.md"
+  },
+  {
+    "id": "a0230",
+    "verbo": "revisar",
+    "alvo": "RULES/*.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar RULES/*.md"
+  },
+  {
+    "id": "a0231",
+    "verbo": "revisar",
+    "alvo": "FLOWS/*.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar FLOWS/*.md"
+  },
+  {
+    "id": "a0232",
+    "verbo": "revisar",
+    "alvo": "CRON/*.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar CRON/*.md"
+  },
+  {
+    "id": "a0233",
+    "verbo": "revisar",
+    "alvo": "CONFIG/*.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar CONFIG/*.md"
+  },
+  {
+    "id": "a0234",
+    "verbo": "fazer",
+    "alvo": "melhorias reais e coerentes baseadas no conteúdo da conversa, sem inflar o",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Fazer melhorias reais e coerentes baseadas no conteúdo da conversa, sem inflar o projeto com texto inútil."
+  },
+  {
+    "id": "a0235",
+    "verbo": "baixar",
+    "alvo": "e salvar localmente, em docs/openclaw-official/, a documentação oficial essencial para este projeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Baixar e salvar localmente, em docs/openclaw-official/, a documentação oficial essencial para este projeto, em formato markdown ou html salvo localmente quando possível."
+  },
+  {
+    "id": "a0236",
+    "verbo": "criar",
+    "alvo": "também",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar também:"
+  },
+  {
+    "id": "a0237",
+    "verbo": "criar",
+    "alvo": "relatório inicial, SEM inventar números",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar relatório inicial, SEM inventar números:"
+  },
+  {
+    "id": "a0238",
+    "verbo": "criar",
+    "alvo": "uma task list realmente operacional",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar uma task list realmente operacional:"
+  },
+  {
+    "id": "a0239",
+    "verbo": "rodar",
+    "alvo": "primeiro quando começar a usar OpenClaw",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- quais comandos rodar primeiro quando começar a usar OpenClaw"
+  },
+  {
+    "id": "a0240",
+    "verbo": "baixa",
+    "alvo": "ambiguidade",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- instruções simples, para usuário autista/TDAH, em linguagem direta e baixa ambiguidade"
+  },
+  {
+    "id": "a0241",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md"
+  },
+  {
+    "id": "a0242",
+    "verbo": "atualizar",
+    "alvo": "TASKS_MASTER.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_MASTER.md"
+  },
+  {
+    "id": "a0243",
+    "verbo": "atualizar",
+    "alvo": "CHANGELOG.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar CHANGELOG.md"
+  },
+  {
+    "id": "a0244",
+    "verbo": "TODO",
+    "alvo": "registrar “próximo passo mínimo”",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- registrar “próximo passo mínimo”"
+  },
+  {
+    "id": "a0245",
+    "verbo": "criar",
+    "alvo": "estrutura completa mesmo assim",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- criar estrutura completa mesmo assim"
+  },
+  {
+    "id": "a0246",
+    "verbo": "criar",
+    "alvo": "/verificar arquivos",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Não diga que fez algo sem realmente criar/verificar arquivos"
+  },
+  {
+    "id": "a0247",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, CHANGELOG.md e NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Sempre atualizar TASKS_NOW.md, CHANGELOG.md e NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0248",
+    "verbo": "gerar",
+    "alvo": "memória estruturada a partir dela",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "gerar memória estruturada a partir dela;"
+  },
+  {
+    "id": "a0249",
+    "verbo": "criar",
+    "alvo": "scripts Python na minha pasta python base para processar novas conversas no",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "criar scripts Python na minha pasta python base para processar novas conversas no mesmo formato;"
+  },
+  {
+    "id": "a0250",
+    "verbo": "escolher",
+    "alvo": "a mais adequada com justificativa curta em log",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Pasta python base: localizar automaticamente a pasta python base dentro de ~/Desktop/STEMMIA Dexter/ e usá-la como base de scripts reutilizáveis; se houver mais de uma candidata, listar opções e escolher a mais adequada com justificativa "
+  },
+  {
+    "id": "a0251",
+    "verbo": "criar",
+    "alvo": "scripts para repetir isso com futuras conversas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "criar scripts para repetir isso com futuras conversas"
+  },
+  {
+    "id": "a0252",
+    "verbo": "baixar",
+    "alvo": "e salvar documentação oficial essencial do OpenClaw para consulta local",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "baixar e salvar documentação oficial essencial do OpenClaw para consulta local"
+  },
+  {
+    "id": "a0253",
+    "verbo": "escolha",
+    "alvo": "de banco de dados",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "deixar pronto o plano futuro para dashboard web do stemmia.com.br, integração Telegram, relatórios e escolha de banco de dados"
+  },
+  {
+    "id": "a0254",
+    "verbo": "instalar",
+    "alvo": "nada sem necessidade real",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Não instalar nada sem necessidade real"
+  },
+  {
+    "id": "a0255",
+    "verbo": "configurar",
+    "alvo": "cron real ainda, apenas planejar e documentar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Não configurar cron real ainda, apenas planejar e documentar"
+  },
+  {
+    "id": "a0256",
+    "verbo": "TODO",
+    "alvo": "Não inventar dados, custos ou estados; se não souber, marcar como TODO/RESEARCH",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Não inventar dados, custos ou estados; se não souber, marcar como TODO/RESEARCH"
+  },
+  {
+    "id": "a0257",
+    "verbo": "criar",
+    "alvo": "dentro do projeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar dentro do projeto:"
+  },
+  {
+    "id": "a0258",
+    "verbo": "criar",
+    "alvo": "um arquivo placeholder claramente identificado para colagem manual e orientar no relatório",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Se o acesso direto ao link não trouxer o conteúdo completo, criar um arquivo placeholder claramente identificado para colagem manual e orientar no relatório final como preencher."
+  },
+  {
+    "id": "a0259",
+    "verbo": "gerar",
+    "alvo": "se possível",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Também gerar, se possível:"
+  },
+  {
+    "id": "a0260",
+    "verbo": "criar",
+    "alvo": "e/ou atualizar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar e/ou atualizar:"
+  },
+  {
+    "id": "a0261",
+    "verbo": "criar",
+    "alvo": "um subprojeto reutilizável para ingestão de conversas",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Entrar na pasta python base e criar um subprojeto reutilizável para ingestão de conversas."
+  },
+  {
+    "id": "a0262",
+    "verbo": "criar",
+    "alvo": "algo como",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar algo como:"
+  },
+  {
+    "id": "a0263",
+    "verbo": "gerar",
+    "alvo": "derivados úteis para OpenClaw e para o projeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- gerar derivados úteis para OpenClaw e para o projeto"
+  },
+  {
+    "id": "a0264",
+    "verbo": "revisar",
+    "alvo": "README.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar README.md"
+  },
+  {
+    "id": "a0265",
+    "verbo": "revisar",
+    "alvo": "CLAUDE.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar CLAUDE.md"
+  },
+  {
+    "id": "a0266",
+    "verbo": "revisar",
+    "alvo": "OPENCLAW-ARCHITECTURE.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar OPENCLAW-ARCHITECTURE.md"
+  },
+  {
+    "id": "a0267",
+    "verbo": "revisar",
+    "alvo": "INTEGRATION-PLAN.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar INTEGRATION-PLAN.md"
+  },
+  {
+    "id": "a0268",
+    "verbo": "revisar",
+    "alvo": "TASKS_NOW.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar TASKS_NOW.md"
+  },
+  {
+    "id": "a0269",
+    "verbo": "revisar",
+    "alvo": "AGENTS/*.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar AGENTS/*.md"
+  },
+  {
+    "id": "a0270",
+    "verbo": "revisar",
+    "alvo": "RULES/*.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar RULES/*.md"
+  },
+  {
+    "id": "a0271",
+    "verbo": "revisar",
+    "alvo": "FLOWS/*.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar FLOWS/*.md"
+  },
+  {
+    "id": "a0272",
+    "verbo": "revisar",
+    "alvo": "CRON/*.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar CRON/*.md"
+  },
+  {
+    "id": "a0273",
+    "verbo": "revisar",
+    "alvo": "CONFIG/*.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Revisar CONFIG/*.md"
+  },
+  {
+    "id": "a0274",
+    "verbo": "fazer",
+    "alvo": "melhorias reais e coerentes baseadas no conteúdo da conversa, sem inflar o",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Fazer melhorias reais e coerentes baseadas no conteúdo da conversa, sem inflar o projeto com texto inútil."
+  },
+  {
+    "id": "a0275",
+    "verbo": "baixar",
+    "alvo": "e salvar localmente, em docs/openclaw-official/, a documentação oficial essencial para este projeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Baixar e salvar localmente, em docs/openclaw-official/, a documentação oficial essencial para este projeto, em formato markdown ou html salvo localmente quando possível."
+  },
+  {
+    "id": "a0276",
+    "verbo": "criar",
+    "alvo": "também",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar também:"
+  },
+  {
+    "id": "a0277",
+    "verbo": "criar",
+    "alvo": "relatório inicial, SEM inventar números",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar relatório inicial, SEM inventar números:"
+  },
+  {
+    "id": "a0278",
+    "verbo": "criar",
+    "alvo": "uma task list realmente operacional",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar uma task list realmente operacional:"
+  },
+  {
+    "id": "a0279",
+    "verbo": "rodar",
+    "alvo": "primeiro quando começar a usar OpenClaw",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- quais comandos rodar primeiro quando começar a usar OpenClaw"
+  },
+  {
+    "id": "a0280",
+    "verbo": "baixa",
+    "alvo": "ambiguidade",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- instruções simples, para usuário autista/TDAH, em linguagem direta e baixa ambiguidade"
+  },
+  {
+    "id": "a0281",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md"
+  },
+  {
+    "id": "a0282",
+    "verbo": "atualizar",
+    "alvo": "TASKS_MASTER.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_MASTER.md"
+  },
+  {
+    "id": "a0283",
+    "verbo": "atualizar",
+    "alvo": "CHANGELOG.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar CHANGELOG.md"
+  },
+  {
+    "id": "a0284",
+    "verbo": "TODO",
+    "alvo": "registrar “próximo passo mínimo”",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- registrar “próximo passo mínimo”"
+  },
+  {
+    "id": "a0285",
+    "verbo": "criar",
+    "alvo": "estrutura completa mesmo assim",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- criar estrutura completa mesmo assim"
+  },
+  {
+    "id": "a0286",
+    "verbo": "criar",
+    "alvo": "o pipeline com arquivo de entrada manual",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Se ele disser que não conseguiu puxar a conversa integral do link, não tem problema: mande ele continuar e criar o pipeline com arquivo de entrada manual."
+  },
+  {
+    "id": "a0287",
+    "verbo": "criar",
+    "alvo": "o pipeline com arquivo de entrada manual",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Se ele disser que não conseguiu puxar a conversa integral do link, não tem problema: mande ele continuar e criar o pipeline com arquivo de entrada manual."
+  },
+  {
+    "id": "a0288",
+    "verbo": "roda",
+    "alvo": "o pipeline de ingestão",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- depois roda o pipeline de ingestão;"
+  },
+  {
+    "id": "a0289",
+    "verbo": "roda",
+    "alvo": "o pipeline de ingestão",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "depois roda o pipeline de ingestão;"
+  },
+  {
+    "id": "a0290",
+    "verbo": "criar",
+    "alvo": "um pipeline de ingestão de conversas que transforme qualquer conversa importante em",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "É criar um pipeline de ingestão de conversas que transforme qualquer conversa importante em:"
+  },
+  {
+    "id": "a0291",
+    "verbo": "faz",
+    "alvo": "muito bem a parte de criar o pipeline e os arquivos; e",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "O OpenClaw já tem a parte de memória e indexação; o Claude Code faz muito bem a parte de criar o pipeline e os arquivos; e você passa a operar com continuidade real.openclawlab+2"
+  },
+  {
+    "id": "a0292",
+    "verbo": "TODO",
+    "alvo": "Se quiser, no próximo passo eu posso te entregar uma versão 2",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Se quiser, no próximo passo eu posso te entregar uma versão 2 desse comando, mais curta e mais robusta, já dividida em Rodada A, Rodada B e Rodada C, para diminuir a chance de o Claude se perder."
+  },
+  {
+    "id": "a0293",
+    "verbo": "criar",
+    "alvo": "um script para transformar isso em memória estruturada (Markdown) dentro do projeto",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Funciona, sim: se você salvar essa conversa e criar um script para transformar isso em memória estruturada (Markdown) dentro do projeto, o OpenClaw consegue “entender” Dexter via MEMORY.md + memory/*.md e busca semântica (openclaw memory in"
+  },
+  {
+    "id": "a0294",
+    "verbo": "criar",
+    "alvo": "toda a estrutura de arquivos de memória",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- criar toda a estrutura de arquivos de memória;"
+  },
+  {
+    "id": "a0295",
+    "verbo": "criar",
+    "alvo": "toda a estrutura de arquivos de memória",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "criar toda a estrutura de arquivos de memória;"
+  },
+  {
+    "id": "a0296",
+    "verbo": "criar",
+    "alvo": "scripts em Python na pasta base",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- criar scripts em Python na pasta base;"
+  },
+  {
+    "id": "a0297",
+    "verbo": "criar",
+    "alvo": "scripts em Python na pasta base",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "criar scripts em Python na pasta base;"
+  },
+  {
+    "id": "a0298",
+    "verbo": "baixar",
+    "alvo": "docs oficiais do OpenClaw",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- baixar docs oficiais do OpenClaw;"
+  },
+  {
+    "id": "a0299",
+    "verbo": "baixar",
+    "alvo": "docs oficiais do OpenClaw",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "baixar docs oficiais do OpenClaw;"
+  },
+  {
+    "id": "a0300",
+    "verbo": "planejar",
+    "alvo": "dashboard no stemmia.com.br, automações Telegram, banco de dados e backups (sem executar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- planejar dashboard no stemmia.com.br, automações Telegram, banco de dados e backups (sem executar nada disso ainda)."
+  },
+  {
+    "id": "a0301",
+    "verbo": "planejar",
+    "alvo": "dashboard no stemmia.com.br, automações Telegram, banco de dados e backups (sem executar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "planejar dashboard no stemmia.com.br, automações Telegram, banco de dados e backups (sem executar nada disso ainda)."
+  },
+  {
+    "id": "a0302",
+    "verbo": "TODO",
+    "alvo": "próximo passo mínimo (1 ação concreta)",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- próximo passo mínimo (1 ação concreta)"
+  },
+  {
+    "id": "a0303",
+    "verbo": "integrar",
+    "alvo": "Claude Code + OpenClaw + Dexter",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- integrar Claude Code + OpenClaw + Dexter"
+  },
+  {
+    "id": "a0304",
+    "verbo": "criar",
+    "alvo": "scripts Python na minha pasta python base para repetir esse processo com",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "3) criar scripts Python na minha pasta python base para repetir esse processo com outras conversas;"
+  },
+  {
+    "id": "a0305",
+    "verbo": "escolher",
+    "alvo": "a melhor",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- escolher a melhor"
+  },
+  {
+    "id": "a0306",
+    "verbo": "escolha",
+    "alvo": "em log",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- justificar a escolha em log"
+  },
+  {
+    "id": "a0307",
+    "verbo": "criar",
+    "alvo": "mesmo assim toda a estrutura de arquivos e scripts",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- criar mesmo assim toda a estrutura de arquivos e scripts,"
+  },
+  {
+    "id": "a0308",
+    "verbo": "criar",
+    "alvo": "scripts Python para ingestão de conversas futuras (pipeline reutilizável)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar scripts Python para ingestão de conversas futuras (pipeline reutilizável)."
+  },
+  {
+    "id": "a0309",
+    "verbo": "baixar",
+    "alvo": "e salvar documentação oficial essencial do OpenClaw (CLI, memory, dashboard, cron, agents",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Baixar e salvar documentação oficial essencial do OpenClaw (CLI, memory, dashboard, cron, agents, tasks, status/health, plugins/hooks) para consulta local."
+  },
+  {
+    "id": "a0310",
+    "verbo": "escolha",
+    "alvo": "de banco de dados (Supabase x outros, + backup no próprio site)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- escolha de banco de dados (Supabase x outros, + backup no próprio site)."
+  },
+  {
+    "id": "a0311",
+    "verbo": "baixa",
+    "alvo": "ambiguidade)",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Deixar checkpoints muito bons para a próxima sessão (orientados a um usuário autista/TDAH, com baixa ambiguidade)."
+  },
+  {
+    "id": "a0312",
+    "verbo": "instalar",
+    "alvo": "nada sem necessidade real",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- NÃO instalar nada sem necessidade real."
+  },
+  {
+    "id": "a0313",
+    "verbo": "configurar",
+    "alvo": "cron real ainda (apenas planejar, documentar e, no máximo, testar comandos em",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- NÃO configurar cron real ainda (apenas planejar, documentar e, no máximo, testar comandos em modo seco)."
+  },
+  {
+    "id": "a0314",
+    "verbo": "TODO",
+    "alvo": "NÃO inventar dados, custos, valores, estados ou métricas – quando precisar, marcar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- NÃO inventar dados, custos, valores, estados ou métricas – quando precisar, marcar como TODO/RESEARCH e indicar que depende de pesquisa futura."
+  },
+  {
+    "id": "a0315",
+    "verbo": "fazer",
+    "alvo": "qualquer alteração, crie",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Antes de fazer qualquer alteração, crie:"
+  },
+  {
+    "id": "a0316",
+    "verbo": "definir",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Cada arquivo deve definir:"
+  },
+  {
+    "id": "a0317",
+    "verbo": "fazer",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- o que PODE fazer"
+  },
+  {
+    "id": "a0318",
+    "verbo": "fazer",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- o que NÃO PODE fazer"
+  },
+  {
+    "id": "a0319",
+    "verbo": "criar",
+    "alvo": "um arquivo",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Se não conseguir extrair de forma programática, criar um arquivo:"
+  },
+  {
+    "id": "a0320",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Atualizar TASKS_NOW.md"
+  },
+  {
+    "id": "a0321",
+    "verbo": "atualizar",
+    "alvo": "TASKS_MASTER.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Atualizar TASKS_MASTER.md"
+  },
+  {
+    "id": "a0322",
+    "verbo": "atualizar",
+    "alvo": "CHANGELOG.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Atualizar CHANGELOG.md"
+  },
+  {
+    "id": "a0323",
+    "verbo": "atualizar",
+    "alvo": "NEXT_SESSION_CONTEXT.md com",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Atualizar NEXT_SESSION_CONTEXT.md com:"
+  },
+  {
+    "id": "a0324",
+    "verbo": "criar",
+    "alvo": "/atualizar os arquivos",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar/atualizar os arquivos:"
+  },
+  {
+    "id": "a0325",
+    "verbo": "rodando",
+    "alvo": ")",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- futuras (quando OpenClaw estiver rodando)."
+  },
+  {
+    "id": "a0326",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0327",
+    "verbo": "definir",
+    "alvo": "dentro de ~/Desktop/STEMMIA Dexter/), criar um subprojeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Na pasta python base (a definir dentro de ~/Desktop/STEMMIA Dexter/), criar um subprojeto:"
+  },
+  {
+    "id": "a0328",
+    "verbo": "escrever",
+    "alvo": "/atualizar MEMORY.md, memory/YYYY-MM-DD.md, reports/*",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "generate_memory_files: escrever/atualizar MEMORY.md, memory/YYYY-MM-DD.md, reports/*."
+  },
+  {
+    "id": "a0329",
+    "verbo": "atualizar",
+    "alvo": "NEXT_SESSION_CONTEXT.md e TASKS_NOW.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "generate_session_checkpoint: atualizar NEXT_SESSION_CONTEXT.md e TASKS_NOW.md."
+  },
+  {
+    "id": "a0330",
+    "verbo": "documentar",
+    "alvo": "a assinatura esperada de cada script",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- documentar a assinatura esperada de cada script"
+  },
+  {
+    "id": "a0331",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0332",
+    "verbo": "revisar",
+    "alvo": "e melhorar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Usar o conteúdo extraído da conversa para revisar e melhorar:"
+  },
+  {
+    "id": "a0333",
+    "verbo": "faz",
+    "alvo": "e o que NÃO FAZ",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- o que o projeto FAZ e o que NÃO FAZ."
+  },
+  {
+    "id": "a0334",
+    "verbo": "instalar",
+    "alvo": "arbitrário, etc.)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- limites rígidos (não destruir, não instalar arbitrário, etc.)"
+  },
+  {
+    "id": "a0335",
+    "verbo": "mapear",
+    "alvo": "as Fases 0–8 deste comando como roadmap",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- mapear as Fases 0–8 deste comando como roadmap."
+  },
+  {
+    "id": "a0336",
+    "verbo": "planejar",
+    "alvo": "(não ativar ainda) jobs diários/semanais",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- planejar (não ativar ainda) jobs diários/semanais:"
+  },
+  {
+    "id": "a0337",
+    "verbo": "configurar",
+    "alvo": "ainda)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- descrever perfil de modelo pretendido (sem configurar ainda)."
+  },
+  {
+    "id": "a0338",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0339",
+    "verbo": "baixar",
+    "alvo": "(quando possível) e salvar localmente na pasta",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Baixar (quando possível) e salvar localmente na pasta:"
+  },
+  {
+    "id": "a0340",
+    "verbo": "criar",
+    "alvo": "também",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar também:"
+  },
+  {
+    "id": "a0341",
+    "verbo": "configurar",
+    "alvo": "agora)",
+    "horizonte": "hoje",
+    "prioridade": 1,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- que tipo de jobs futuros serão configurados (sem configurar agora)."
+  },
+  {
+    "id": "a0342",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0343",
+    "verbo": "criar",
+    "alvo": "relatórios iniciais (sem inventar números)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar relatórios iniciais (sem inventar números):"
+  },
+  {
+    "id": "a0344",
+    "verbo": "TODO",
+    "alvo": "separar o que é conhecido do que é TODO/RESEARCH",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- separar o que é conhecido do que é TODO/RESEARCH."
+  },
+  {
+    "id": "a0345",
+    "verbo": "planejar",
+    "alvo": "criação de pasta no projeto do site somente para dashboard",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- planejar criação de pasta no projeto do site somente para dashboard"
+  },
+  {
+    "id": "a0346",
+    "verbo": "baixa",
+    "alvo": "sobrecarga cognitiva (para autismo/TDAH)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- foco em simplicidade e baixa sobrecarga cognitiva (para autismo/TDAH)."
+  },
+  {
+    "id": "a0347",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0348",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0349",
+    "verbo": "baixa",
+    "alvo": "ambiguidade",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- baixa ambiguidade"
+  },
+  {
+    "id": "a0350",
+    "verbo": "TODO",
+    "alvo": "principais TODO/RESEARCH",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- principais TODO/RESEARCH."
+  },
+  {
+    "id": "a0351",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md"
+  },
+  {
+    "id": "a0352",
+    "verbo": "criar",
+    "alvo": "toda a estrutura de mesmo jeito",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Criar toda a estrutura de mesmo jeito."
+  },
+  {
+    "id": "a0353",
+    "verbo": "rodar",
+    "alvo": "depois de colar",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- qual comando ou script rodar depois de colar."
+  },
+  {
+    "id": "a0354",
+    "verbo": "TODO",
+    "alvo": "próximo passo mínimo (1 ação concreta)",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- próximo passo mínimo (1 ação concreta)"
+  },
+  {
+    "id": "a0355",
+    "verbo": "integrar",
+    "alvo": "Claude Code + OpenClaw + Dexter",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- integrar Claude Code + OpenClaw + Dexter"
+  },
+  {
+    "id": "a0356",
+    "verbo": "criar",
+    "alvo": "scripts Python na minha pasta python base para repetir esse processo com",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "3) criar scripts Python na minha pasta python base para repetir esse processo com outras conversas;"
+  },
+  {
+    "id": "a0357",
+    "verbo": "escolher",
+    "alvo": "a melhor",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- escolher a melhor"
+  },
+  {
+    "id": "a0358",
+    "verbo": "escolha",
+    "alvo": "em log",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- justificar a escolha em log"
+  },
+  {
+    "id": "a0359",
+    "verbo": "criar",
+    "alvo": "mesmo assim toda a estrutura de arquivos e scripts",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- criar mesmo assim toda a estrutura de arquivos e scripts,"
+  },
+  {
+    "id": "a0360",
+    "verbo": "criar",
+    "alvo": "scripts Python para ingestão de conversas futuras (pipeline reutilizável)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar scripts Python para ingestão de conversas futuras (pipeline reutilizável)."
+  },
+  {
+    "id": "a0361",
+    "verbo": "baixar",
+    "alvo": "e salvar documentação oficial essencial do OpenClaw (CLI, memory, dashboard, cron, agents",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Baixar e salvar documentação oficial essencial do OpenClaw (CLI, memory, dashboard, cron, agents, tasks, status/health, plugins/hooks) para consulta local."
+  },
+  {
+    "id": "a0362",
+    "verbo": "escolha",
+    "alvo": "de banco de dados (Supabase x outros, + backup no próprio site)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- escolha de banco de dados (Supabase x outros, + backup no próprio site)."
+  },
+  {
+    "id": "a0363",
+    "verbo": "baixa",
+    "alvo": "ambiguidade)",
+    "horizonte": "indefinido",
+    "prioridade": 2,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Deixar checkpoints muito bons para a próxima sessão (orientados a um usuário autista/TDAH, com baixa ambiguidade)."
+  },
+  {
+    "id": "a0364",
+    "verbo": "instalar",
+    "alvo": "nada sem necessidade real",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- NÃO instalar nada sem necessidade real."
+  },
+  {
+    "id": "a0365",
+    "verbo": "configurar",
+    "alvo": "cron real ainda (apenas planejar, documentar e, no máximo, testar comandos em",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- NÃO configurar cron real ainda (apenas planejar, documentar e, no máximo, testar comandos em modo seco)."
+  },
+  {
+    "id": "a0366",
+    "verbo": "TODO",
+    "alvo": "NÃO inventar dados, custos, valores, estados ou métricas – quando precisar, marcar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- NÃO inventar dados, custos, valores, estados ou métricas – quando precisar, marcar como TODO/RESEARCH e indicar que depende de pesquisa futura."
+  },
+  {
+    "id": "a0367",
+    "verbo": "fazer",
+    "alvo": "qualquer alteração, crie",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Antes de fazer qualquer alteração, crie:"
+  },
+  {
+    "id": "a0368",
+    "verbo": "definir",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Cada arquivo deve definir:"
+  },
+  {
+    "id": "a0369",
+    "verbo": "fazer",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- o que PODE fazer"
+  },
+  {
+    "id": "a0370",
+    "verbo": "fazer",
+    "alvo": "",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- o que NÃO PODE fazer"
+  },
+  {
+    "id": "a0371",
+    "verbo": "criar",
+    "alvo": "um arquivo",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Se não conseguir extrair de forma programática, criar um arquivo:"
+  },
+  {
+    "id": "a0372",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Atualizar TASKS_NOW.md"
+  },
+  {
+    "id": "a0373",
+    "verbo": "atualizar",
+    "alvo": "TASKS_MASTER.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Atualizar TASKS_MASTER.md"
+  },
+  {
+    "id": "a0374",
+    "verbo": "atualizar",
+    "alvo": "CHANGELOG.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Atualizar CHANGELOG.md"
+  },
+  {
+    "id": "a0375",
+    "verbo": "atualizar",
+    "alvo": "NEXT_SESSION_CONTEXT.md com",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Atualizar NEXT_SESSION_CONTEXT.md com:"
+  },
+  {
+    "id": "a0376",
+    "verbo": "criar",
+    "alvo": "/atualizar os arquivos",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar/atualizar os arquivos:"
+  },
+  {
+    "id": "a0377",
+    "verbo": "rodando",
+    "alvo": ")",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- futuras (quando OpenClaw estiver rodando)."
+  },
+  {
+    "id": "a0378",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0379",
+    "verbo": "definir",
+    "alvo": "dentro de ~/Desktop/STEMMIA Dexter/), criar um subprojeto",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Na pasta python base (a definir dentro de ~/Desktop/STEMMIA Dexter/), criar um subprojeto:"
+  },
+  {
+    "id": "a0380",
+    "verbo": "escrever",
+    "alvo": "/atualizar MEMORY.md, memory/YYYY-MM-DD.md, reports/*",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "generate_memory_files: escrever/atualizar MEMORY.md, memory/YYYY-MM-DD.md, reports/*."
+  },
+  {
+    "id": "a0381",
+    "verbo": "atualizar",
+    "alvo": "NEXT_SESSION_CONTEXT.md e TASKS_NOW.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "generate_session_checkpoint: atualizar NEXT_SESSION_CONTEXT.md e TASKS_NOW.md."
+  },
+  {
+    "id": "a0382",
+    "verbo": "documentar",
+    "alvo": "a assinatura esperada de cada script",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- documentar a assinatura esperada de cada script"
+  },
+  {
+    "id": "a0383",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0384",
+    "verbo": "revisar",
+    "alvo": "e melhorar",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Usar o conteúdo extraído da conversa para revisar e melhorar:"
+  },
+  {
+    "id": "a0385",
+    "verbo": "faz",
+    "alvo": "e o que NÃO FAZ",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- o que o projeto FAZ e o que NÃO FAZ."
+  },
+  {
+    "id": "a0386",
+    "verbo": "instalar",
+    "alvo": "arbitrário, etc.)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- limites rígidos (não destruir, não instalar arbitrário, etc.)"
+  },
+  {
+    "id": "a0387",
+    "verbo": "mapear",
+    "alvo": "as Fases 0–8 deste comando como roadmap",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- mapear as Fases 0–8 deste comando como roadmap."
+  },
+  {
+    "id": "a0388",
+    "verbo": "planejar",
+    "alvo": "(não ativar ainda) jobs diários/semanais",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- planejar (não ativar ainda) jobs diários/semanais:"
+  },
+  {
+    "id": "a0389",
+    "verbo": "configurar",
+    "alvo": "ainda)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- descrever perfil de modelo pretendido (sem configurar ainda)."
+  },
+  {
+    "id": "a0390",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0391",
+    "verbo": "baixar",
+    "alvo": "(quando possível) e salvar localmente na pasta",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Baixar (quando possível) e salvar localmente na pasta:"
+  },
+  {
+    "id": "a0392",
+    "verbo": "criar",
+    "alvo": "também",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar também:"
+  },
+  {
+    "id": "a0393",
+    "verbo": "configurar",
+    "alvo": "agora)",
+    "horizonte": "hoje",
+    "prioridade": 1,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- que tipo de jobs futuros serão configurados (sem configurar agora)."
+  },
+  {
+    "id": "a0394",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0395",
+    "verbo": "criar",
+    "alvo": "relatórios iniciais (sem inventar números)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "Criar relatórios iniciais (sem inventar números):"
+  },
+  {
+    "id": "a0396",
+    "verbo": "TODO",
+    "alvo": "separar o que é conhecido do que é TODO/RESEARCH",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- separar o que é conhecido do que é TODO/RESEARCH."
+  },
+  {
+    "id": "a0397",
+    "verbo": "planejar",
+    "alvo": "criação de pasta no projeto do site somente para dashboard",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- planejar criação de pasta no projeto do site somente para dashboard"
+  },
+  {
+    "id": "a0398",
+    "verbo": "baixa",
+    "alvo": "sobrecarga cognitiva (para autismo/TDAH)",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- foco em simplicidade e baixa sobrecarga cognitiva (para autismo/TDAH)."
+  },
+  {
+    "id": "a0399",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0400",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md, NEXT_SESSION_CONTEXT.md"
+  },
+  {
+    "id": "a0401",
+    "verbo": "baixa",
+    "alvo": "ambiguidade",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- baixa ambiguidade"
+  },
+  {
+    "id": "a0402",
+    "verbo": "TODO",
+    "alvo": "principais TODO/RESEARCH",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- principais TODO/RESEARCH."
+  },
+  {
+    "id": "a0403",
+    "verbo": "atualizar",
+    "alvo": "TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- atualizar TASKS_NOW.md, TASKS_MASTER.md, CHANGELOG.md"
+  },
+  {
+    "id": "a0404",
+    "verbo": "criar",
+    "alvo": "toda a estrutura de mesmo jeito",
+    "horizonte": "indefinido",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- Criar toda a estrutura de mesmo jeito."
+  },
+  {
+    "id": "a0405",
+    "verbo": "rodar",
+    "alvo": "depois de colar",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "- qual comando ou script rodar depois de colar."
+  },
+  {
+    "id": "a0406",
+    "verbo": "rodar",
+    "alvo": "o pipeline depois.docs.openclaw+1",
+    "horizonte": "depois",
+    "prioridade": 3,
+    "chunk_ref": "c0008",
+    "text_excerpt": "e rodar o pipeline depois.docs.openclaw+1"
+  }
+]

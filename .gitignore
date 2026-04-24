@@ -1,0 +1,47 @@
+# Maestro .gitignore
+
+# Secrets — NUNCA commitar
+.env
+.env.local
+.env.*.local
+credenciais-*.txt
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs / temp
+logs/*.log
+*.log
+tmp/
+.cache/
+
+# DB local regeneravel (fonte-da-verdade = FICHA.json)
+banco-local/maestro.db
+banco-local/maestro.db-journal
+banco-local/maestro.db-wal
+banco-local/maestro.db-shm
+*.sqlite-journal
+
+# Workspace OpenClaw (dados de runtime)
+workspace/
+
+# Dashboard gerado (data.json = build, fonte = maestro.db)
+dashboard/data.json.bak
+
+# Edicao/backup
+*~
+*.bak
+*.swp
+.idea/
+.vscode/

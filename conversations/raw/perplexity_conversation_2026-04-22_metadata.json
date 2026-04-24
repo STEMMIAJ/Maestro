@@ -1,0 +1,13 @@
+{
+  "origem": "Perplexity",
+  "data_captura": "2026-04-22",
+  "url": "https://www.perplexity.ai/search/bb7372f9-c9d4-4195-9653-e56098864476",
+  "metodo_captura": "MCP chrome (superpowers-chrome) — navigate + extract markdown",
+  "formato": "markdown",
+  "integridade": "integral (capturada via DOM, 135992 chars, 4440 linhas)",
+  "arquivo_bruto": "perplexity_conversation_2026-04-22_full.md",
+  "notas": [
+    "Pode conter ruido de UI (menus, botoes) junto ao conteudo.",
+    "Processamento subsequente deve filtrar navegacao/UI do texto da conversa."
+  ]
+}

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Pre-push: roda verificações finais antes de enviar para remote.
+set -euo pipefail
+
+ROOT=$(git rev-parse --show-toplevel)
+cd "$ROOT"
+
+# Proibir force-push para main
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -z "$local_ref" ] && continue
+  if [[ "$remote_ref" == "refs/heads/main" ]]; then
+    # Permitir só se é fast-forward
+    if [ "$remote_sha" != "0000000000000000000000000000000000000000" ]; then
+      if ! git merge-base --is-ancestor "$remote_sha" "$local_sha" 2>/dev/null; then
+        echo "✗ force-push em main bloqueado. Crie branch nova e abra PR." >&2
+        exit 1
+      fi
+    fi
+  fi
+done
+
+# Verificar que CHANGELOG.md existe
+if [ ! -f CHANGELOG.md ]; then
+  echo "✗ CHANGELOG.md não existe. Crie antes de push." >&2
+  exit 1
+fi
+
+echo "✓ pre-push OK"
