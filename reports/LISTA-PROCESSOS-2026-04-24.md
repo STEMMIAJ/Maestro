@@ -1,5 +1,5 @@
 # Lista de Processos — 167 processos
-> Gerado em 2026-04-24 | Com autor/réu: 101 | Com vara: 126 | Com cidade: 127
+> Gerado 2026-04-24 | Com autor/réu: 101 | Com vara: 131 | Com cidade: 129
 
 | # | CNJ | Cidade | Vara | Autor | Réu | Perito |
 |---|-----|--------|------|-------|-----|--------|
@@ -41,12 +41,12 @@
 | 36 | `5001702-49.2024.8.13.0184` | Conselheiro Pena | 2ª Vara CCIJ | HAYSSA PAULA DOS SANTOS STOCO | ESTADO DE MINAS GERAIS | — |
 | 37 | `5004462-81.2024.8.13.0309` | Inhapim | 1ª Vara CCEP | — | — | — |
 | 38 | `5003107-57.2023.8.13.0184` | Conselheiro Pena | 2ª Vara CCIJ | — | — | — |
-| 39 | `5039279-07.2024.8.13.0105` | — | — | — | — | — |
+| 39 | `5039279-07.2024.8.13.0105` | — | 3ª Vara Ci | — | — | — |
 | 40 | `5035541-11.2024.8.13.0105` | GV | 6ª Vara Cível | — | — | — |
 | 41 | `5000048-32.2021.8.13.0184` | Conselheiro Pena | 1ª Vara CCEP | MARCIA REGINA SABADINI | INSTITUTO NACIONAL DO SEGURO SOCIAL | — |
 | 42 | `5000506-10.2025.8.13.0184` | Conselheiro Pena | 1ª Vara CCEP | MARCIA REGINA SABADINI | INSTITUTO NACIONAL DO SEGURO SOCIAL | — |
 | 43 | `5030880-86.2024.8.13.0105` | GV | 3ª Vara Cível | — | — | — |
-| 44 | `5039279-07.2024.8.13.0105` | — | — | — | — | — |
+| 44 | `5039279-07.2024.8.13.0105` | — | 3ª Vara Ci | — | — | — |
 | 45 | `5034347-39.2025.8.13.0105` | Governador Valadares | 6ª Vara Cível | MARCIA REGINA SABADINI | INSTITUTO NACIONAL DO SEGURO SOCIAL | — |
 | 46 | `5013218-75.2025.8.13.0105` | Governador Valadares | 6ª Vara Cível | MARCIA REGINA SABADINI | INSTITUTO NACIONAL DO SEGURO SOCIAL | — |
 | 47 | `5008297-73.2025.8.13.0105` | Governador Valadares | 6ª Vara Cível | SILAS ANICETO MENDES | CARDIF DO BRASIL VIDA E PREVIDENCIA S/A | — |
@@ -74,13 +74,13 @@
 | 69 | `5015391-72.2025.8.13.0105` | Governador Valadares | 6ª Vara Cível | VIVIANE ALMEIDA SOARES | CEMIG DISTRIBUIÇÃO S.A. | — |
 | 70 | `5016366-70.2020.8.13.0105` | Governador Valadares - INATIVA RES. 1.122/2025 | 6ª Vara Cível da Comarca de Governador V… | CELSO DAMASCENO MOREIRA | PLANALTO TURISMO EIRELI - EPP | — |
 | 71 | `5017700-42.2020.8.13.0105` | Governador Valadares | 3ª Vara Cível da Comarca de Governador V… | PHELIPE BARROS CORREIA | LUPERPLAS INDUSTRIA E COMERCIO DE PLASTICOS LTDA | — |
-| 72 | `5018356-57.2024.8.13.0105` | — | — | — | — | — |
+| 72 | `5018356-57.2024.8.13.0105` | Gov Valadares | 3ª Vara Cível | — | — | — |
 | 73 | `5022941-21.2025.8.13.0105` | Governador Valadares | 6ª Vara Cível | — | — | — |
 | 74 | `5024581-59.2025.8.13.0105` | Governador Valadares | 6ª Vara Cível | VIVIANE ALMEIDA SOARES | CEMIG DISTRIBUIÇÃO S.A. | — |
 | 75 | `5030880-86.2024.8.13.0105` | GV | 3ª Vara Cível | — | — | — |
 | 76 | `5034347-39.2025.8.13.0105` | Governador Valadares | 6ª Vara Cível | MARCIA REGINA SABADINI | INSTITUTO NACIONAL DO SEGURO SOCIAL | — |
 | 77 | `5035541-11.2024.8.13.0105` | GV | 6ª Vara Cível | — | — | — |
-| 78 | `5039279-07.2024.8.13.0105` | — | — | — | — | — |
+| 78 | `5039279-07.2024.8.13.0105` | Gov Valadares | 3ª Vara Cível | — | — | — |
 | 79 | `5000237-19.2022.8.13.0396` | — | — | — | — | — |
 | 80 | `5065815-44.2023.8.13.0702` | Uberlândia | 10ª Vara Cível da Comarca de Uberlândia | ANDERSON CLAYTON CUNHA | BRADESCO VIDA E PREVIDENCIA S.A. | RAFAEL VAIKSNORAS |
 | 81 | `5000247-58.2025.8.13.0396` | — | — | — | — | — |
@@ -118,7 +118,7 @@
 | 113 | `5002392-87.2025.8.13.0396` | — | — | — | — | — |
 | 114 | `5002424-62.2025.8.13.0309` | Inhapim | 1ª Vara Cível | JAQUELINE ANGELICA BITARAES | COMPANHIA DE SANEAMENTO DE MINAS GERAIS COPASA MG | JESUS EDUARDO NOLETO DA PENHA |
 | 115 | `5002456-97.2025.8.13.0396` | Mantena | 1ª Vara Cível, Criminal e de Execuções P… | ORANY PEREIRA MENDONCA | INSTITUTO NACIONAL DO SEGURO SOCIAL | — |
-| 116 | `5002526-60.2024.8.13.0005` | Açucena | — | FABIANA DAYSE MAGALHAES SIMAN MEIRA | MARIA DE LOURDES MAGALHAES SIMAN | AMANDA VASCONCELOS AVELAR |
+| 116 | `5002526-60.2024.8.13.0005` | Açucena | Vara Única da Comarca de Açucena | FABIANA DAYSE MAGALHAES SIMAN MEIRA | MARIA DE LOURDES MAGALHAES SIMAN | AMANDA VASCONCELOS AVELAR |
 | 117 | `5002587-72.2025.8.13.0396` | Mantena | 1ª Vara Cível, Criminal e de Execuções P… | ORANY PEREIRA MENDONCA | INSTITUTO NACIONAL DO SEGURO SOCIAL | — |
 | 118 | `5002637-35.2024.8.13.0396` | — | — | — | — | — |
 | 119 | `5002785-22.2019.8.13.0396` | Mantena | 2ª Vara Cível, Criminal e da Infância e … | JASGESCLAN CARVALHO SOARES | INSTITUTO NACIONAL DO SEGURO SOCIAL | — |
