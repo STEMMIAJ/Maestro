@@ -1,5 +1,23 @@
 # CHANGELOG — Maestro
 
+## 2026-04-24 — Sessao 5 (documentacao leiga GitHub + politica salvamento)
+
+### Adicionado
+- `docs/github/01-EXPLICACAO-LEIGA.md` — git/GitHub em portugues sem jargao, metafora fotografia
+- `docs/github/02-COMO-SALVAR.md` — passo a passo de quando/como commitar e pushar
+- `docs/github/03-FLUXO-VISUAL.md` — diagrama ASCII do ciclo de 16 passos de sessao
+- `docs/github/04-GLOSSARIO.md` — glossario A-W + cola-parede com 11 comandos essenciais
+- `docs/politica/POLITICA-SALVAMENTO.md` — regras explicitas de quando commitar/pushar
+
+### Alterado
+- `CLAUDE.md` — adicionada URL do repo, POLITICA-SALVAMENTO.md no inicio, secao politica resumida, referencias aos 5 novos docs
+- `~/Desktop/STEMMIA Dexter/CLAUDE.md` — bloco Maestro expandido com comandos canonicos prontos para colar
+
+### Deploy publico
+- Uploaded para https://stemmia.com.br/maestro/ (4 guias + index) via FTP
+
+---
+
 ## 2026-04-24 — Sessao 4 (auditoria + sincronizacao)
 
 ### Adicionado
