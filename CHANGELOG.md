@@ -1,5 +1,9 @@
 # CHANGELOG — Maestro
 
+## 2026-04-24 — Handoff sessao 5
+
+- `HANDOFFS/HANDOFF-2026-04-24-04h54.md` — registro de encerramento da sessao
+
 ## 2026-04-24 — Sessao 5 (documentacao leiga GitHub + politica salvamento)
 
 ### Adicionado
