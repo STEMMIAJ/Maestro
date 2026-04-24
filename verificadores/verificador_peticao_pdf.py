@@ -174,6 +174,14 @@ def pagina_de_offset(offset: int, indice: List[Tuple[int, int]]) -> Optional[int
 # ---------------------------------------------------------------------------
 # Matching
 # ---------------------------------------------------------------------------
+
+# Tokens unicos rastreaveis: IDs PJe (>=8 digitos), datas DD/MM/AAAA, CNJs
+_TOKEN_UNICO_RE = re.compile(r"\d{8,}|\d{2}/\d{2}/\d{4}|\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}")
+
+# Score minimo concedido quando token unico e encontrado exatamente no corpus
+_TOKEN_MATCH_MIN_SCORE = 65.0
+
+
 def _fuzz_partial_ratio(a: str, b: str) -> float:
     """Wrapper: usa rapidfuzz se disponivel; fallback simples caso contrario."""
     if _rf_fuzz is not None:
@@ -191,6 +199,25 @@ def _fuzz_partial_ratio(a: str, b: str) -> float:
     return (hits / len(toks_a)) * 100.0
 
 
+def _buscar_token_unico(afirmacao: str, corpus_orig: str) -> Tuple[float, int, str]:
+    """
+    Etapa 1.5: busca tokens unicos (IDs numericos, datas, CNJs) no corpus via
+    busca exata. Se algum for encontrado, retorna score minimo TOKEN_MATCH_MIN_SCORE
+    com o offset exato. Garante que afirmacoes com IDs PJe existentes no processo
+    nao caiam para SEM-ANCORA por limitacao do fuzzy em corpus grande.
+    """
+    tokens = _TOKEN_UNICO_RE.findall(afirmacao)
+    if not tokens:
+        return 0.0, -1, ""
+
+    for tok in tokens:
+        pos = corpus_orig.find(tok)
+        if pos >= 0:
+            trecho = _extrair_contexto(corpus_orig, pos, len(tok) + 40)
+            return _TOKEN_MATCH_MIN_SCORE, pos, trecho
+    return 0.0, -1, ""
+
+
 def buscar_ancora(
     afirmacao: str,
     corpus_norm: str,
@@ -199,8 +226,10 @@ def buscar_ancora(
     """
     Retorna (score, offset_no_original, trecho_contexto).
 
-    Tenta substring exata (normalizada); se falhar, janelas deslizantes com
-    rapidfuzz.partial_ratio.
+    Pipeline:
+    1) Substring exata (normalizada) -> score 100
+    2) Token unico (ID/data/CNJ) -> score minimo TOKEN_MATCH_MIN_SCORE
+    3) Janelas deslizantes com rapidfuzz.partial_ratio
     """
     alvo = _normalize(afirmacao)
     if not alvo:
@@ -209,8 +238,6 @@ def buscar_ancora(
     # 1) Substring exata na versao normalizada
     pos_norm = corpus_norm.find(alvo)
     if pos_norm >= 0:
-        # Mapear pos_norm -> offset no corpus_orig e' aproximado.
-        # Usamos proporcao (bom o suficiente para exibicao de contexto).
         if len(corpus_norm) > 0:
             ratio = pos_norm / len(corpus_norm)
             off = int(ratio * len(corpus_orig))
@@ -219,12 +246,15 @@ def buscar_ancora(
         trecho = _extrair_contexto(corpus_orig, off, len(afirmacao))
         return 100.0, off, trecho
 
-    # 2) Janelas deslizantes
+    # 2) Token unico — busca exata de ID/data/CNJ no corpus original
+    tok_score, tok_off, tok_trecho = _buscar_token_unico(afirmacao, corpus_orig)
+
+    # 3) Janelas deslizantes
     melhor_score = 0.0
     melhor_offset = -1
     tamanho = len(corpus_norm)
     if tamanho == 0:
-        return 0.0, -1, ""
+        return max(tok_score, 0.0), tok_off, tok_trecho
 
     for inicio in range(0, tamanho, WINDOW_STEP):
         fim = min(inicio + WINDOW_SIZE, tamanho)
@@ -236,10 +266,13 @@ def buscar_ancora(
         if score >= 99.0:
             break
 
+    # Retornar o melhor entre janelas deslizantes e token unico
+    if tok_score > melhor_score:
+        return tok_score, tok_off, tok_trecho
+
     if melhor_offset < 0:
         return melhor_score, -1, ""
 
-    # Aproximacao offset_norm -> offset_orig
     ratio = melhor_offset / max(1, tamanho)
     off_orig = int(ratio * len(corpus_orig))
     trecho = _extrair_contexto(corpus_orig, off_orig, len(afirmacao))
@@ -324,8 +357,22 @@ def verificar(
     th_suspeita: float,
 ) -> Dict:
     peticao_texto = _load_text(peticao_path)
-    corpus_path = processo_path / "TEXTO-EXTRAIDO.txt"
-    corpus_orig = _load_text(corpus_path)
+
+    # Corpus principal
+    corpus_orig = _load_text(processo_path / "TEXTO-EXTRAIDO.txt")
+
+    # Concatenar demais TXTs da pasta (OCRs de anexos, termos, etc.)
+    # Excluir arquivos que começam com _ ou que são listas/índices simples
+    for txt_path in sorted(processo_path.glob("*.txt")):
+        if txt_path.name == "TEXTO-EXTRAIDO.txt":
+            continue
+        if txt_path.name.startswith("_"):
+            continue
+        try:
+            corpus_orig += "\n\n" + txt_path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            pass
+
     corpus_norm = _normalize(corpus_orig)
     indice_pag = construir_indice_paginas(corpus_orig)
 

@@ -1,5 +1,14 @@
 # CHANGELOG — Maestro
 
+## 2026-04-24 — Onda 2 + Onda 2.5 (verificador pipeline + auditoria CNJ)
+
+### Adicionado
+- `verificadores/auditar_numero_cnj_ficha.py` — varre 167 FICHAs, detecta e corrige numero_cnj divergente do nome da pasta. Encontrou 37 discrepâncias (2 CNJ errado, 35 campo vazio). Uso: `python3 auditar_numero_cnj_ficha.py [--fix]`
+- `FLOWS/pericia_completa.sh` — etapa 6/6 adicionada: verificador de rastreabilidade de petição. exit 1=REVISAR (warning), exit 2=BLOQUEADA (aborta pipeline). Flags: `--skip-verificador`, `--peticao=<arquivo.md>` (#11)
+
+### Modificado
+- `verificadores/verificador_peticao_pdf.py` — dois fixes: (1) etapa 1.5 de token único (IDs numéricos ≥8 dígitos, datas, CNJs) com busca exata antes do fuzzy sliding window; (2) corpus expandido para incluir todos os *.txt da pasta (não só TEXTO-EXTRAIDO.txt). Resultado em Perícia 88: 0 SEM-ANCORA (era 4), score médio 73.9% (era 64.4%), veredito REVISAR (era BLOQUEADA) (#11)
+
 ## 2026-04-24 — Handoff sessao 5
 
 - `HANDOFFS/HANDOFF-2026-04-24-04h54.md` — registro de encerramento da sessao

@@ -23,12 +23,16 @@ shift
 
 SKIP_INDEXACAO=0
 PULAR_TRIAGEM=0
+SKIP_VERIFICADOR=0
 DRY_RUN=0
+PETICAO_FILE=""
 for arg in "$@"; do
   case "$arg" in
     --skip-indexacao) SKIP_INDEXACAO=1 ;;
     --pular-triagem) PULAR_TRIAGEM=1 ;;
+    --skip-verificador) SKIP_VERIFICADOR=1 ;;
     --dry-run) DRY_RUN=1 ;;
+    --peticao=*) PETICAO_FILE="${arg#--peticao=}" ;;
     *) echo "[WARN] flag desconhecida: $arg" >&2 ;;
   esac
 done
@@ -40,6 +44,7 @@ PROCESSOS="$ANALISADOR/processos"
 SCRIPTS_ANALISE="$ANALISADOR/analisador de processos"
 TRIAR_PDF="$DEXTER/src/automacoes/triar_pdf.py"
 INDEXER="$DEXTER/Maestro/banco-local/indexer_ficha.py"
+VERIFICADOR="$DEXTER/Maestro/verificadores/verificador_peticao_pdf.py"
 LOGDIR="$DEXTER/Maestro/logs"
 
 PASTA="$PROCESSOS/$CNJ"
@@ -88,7 +93,8 @@ for dep in "$TRIAR_PDF" \
            "$SCRIPTS_ANALISE/pipeline_analise.py" \
            "$SCRIPTS_ANALISE/consolidar_ficha.py" \
            "$SCRIPTS_ANALISE/calcular_honorarios.py" \
-           "$INDEXER"; do
+           "$INDEXER" \
+           "$VERIFICADOR"; do
   if [ -f "$dep" ]; then
     say "[OK] dep: $dep"
   else
@@ -149,8 +155,46 @@ etapa "4/5 calcular_honorarios" \
 if [ "$SKIP_INDEXACAO" -eq 1 ]; then
   say "[SKIP] indexacao (flag --skip-indexacao)"
 else
-  etapa "5/5 indexer_ficha" \
+  etapa "5/6 indexer_ficha" \
     python3 "$INDEXER" --source "$PASTA"
+fi
+
+# --- Etapa 6: verificador de rastreabilidade de petição ---
+if [ "$SKIP_VERIFICADOR" -eq 1 ]; then
+  say "[SKIP] verificador (flag --skip-verificador)"
+else
+  # Auto-detectar petição mais recente em $PASTA/peticoes/*.md
+  if [ -n "$PETICAO_FILE" ]; then
+    PET="$PETICAO_FILE"
+  else
+    PET=$(find "$PASTA/peticoes" -maxdepth 1 -name "*.md" 2>/dev/null | sort | tail -1)
+  fi
+
+  if [ -z "$PET" ] || [ ! -f "$PET" ]; then
+    say "[SKIP] verificador — nenhuma petição .md encontrada em $PASTA/peticoes/"
+  else
+    say "────── ETAPA: 6/6 verificador_rastreabilidade ──────"
+    say "Petição: $PET"
+    say "CMD: python3 $VERIFICADOR --peticao $PET --processo $PASTA"
+    python3 "$VERIFICADOR" \
+      --peticao "$PET" \
+      --processo "$PASTA" \
+      --out-dir "$PASTA/verificacoes" 2>&1 | tee -a "$LOG"
+    VERI_RC=${PIPESTATUS[0]}
+
+    # Exit 0 = APROVADA, 1 = REVISAR (warning, não bloqueia), 2 = BLOQUEADA (aborta)
+    if [ "$VERI_RC" -eq 0 ]; then
+      say "[OK] verificador — veredito APROVADA"
+    elif [ "$VERI_RC" -eq 1 ]; then
+      say "[WARN] verificador — veredito REVISAR (suspeitas encontradas, mas sem SEM-ANCORA)"
+      say "[WARN] Revisar $PASTA/verificacoes/RELATORIO-VERIFICACAO.md antes de entregar"
+    else
+      say "[FAIL] verificador — veredito BLOQUEADA (afirmações sem âncora no processo)"
+      say "Relatório: $PASTA/verificacoes/RELATORIO-VERIFICACAO.md"
+      say "Use --skip-verificador para ignorar (não recomendado)"
+      exit 2
+    fi
+  fi
 fi
 
 # --- Resumo ---
