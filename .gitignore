@@ -1,0 +1,63 @@
+# Dados sensíveis - NUNCA versionar
+data/
+*.pdf
+*.PDF
+*.docx
+*.DOCX
+*.doc
+
+# Credenciais
+.env
+*.env
+.telegram-token
+*.pem
+*.key
+credentials.*
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
+log/
+
+# Temporários
+*.tmp
+*.bak
+*.swp
+*~
+
+# Obsidian cache (vault config é versionado)
+memoria/.obsidian/workspace.json
+memoria/.obsidian/cache/
+memoria/.obsidian/plugins/
+
+# Processos e dados de pacientes
+MUTIRÃO/
+processos/
+PROCESSOS/
+PROCESSOS-PENDENTES/
+*.json
+!src/**/*.json
+!n8n/*.json
+!painel/**/*.json
+
+# PDFs gerados
+SCRIPTS/*.pdf
