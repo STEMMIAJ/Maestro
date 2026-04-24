@@ -1,0 +1,15 @@
+{
+  "juizo.numero_vara":         { "tipo": "string", "fonte": "FICHA.json:processo.vara.numero",       "obrigatorio": true, "exemplo": "2" },
+  "juizo.materias":            { "tipo": "string", "fonte": "FICHA.json:processo.vara.materias",     "obrigatorio": true, "exemplo": "CÍVEL" },
+  "juizo.comarca":             { "tipo": "string", "fonte": "FICHA.json:processo.comarca",           "obrigatorio": true, "exemplo": "GOVERNADOR VALADARES" },
+  "juizo.uf":                  { "tipo": "string", "fonte": "FICHA.json:processo.uf",                "obrigatorio": true, "exemplo": "MG" },
+  "juizo.vocativo":            { "tipo": "string", "fonte": "FICHA.json:processo.vocativo",          "obrigatorio": true, "exemplo": "Meritíssimo Juiz," },
+  "processo.cnj":              { "tipo": "string", "fonte": "FICHA.json:processo.cnj",               "obrigatorio": true, "exemplo": "5008297-73.2025.8.13.0105" },
+  "processo.id_decisao":       { "tipo": "string", "fonte": "FICHA.json:processo.id_decisao",        "obrigatorio": true, "exemplo": "10637932621" },
+  "honorarios.valor_numerico": { "tipo": "string", "fonte": "FICHA.json:honorarios.valor_numerico",  "obrigatorio": true, "exemplo": "612,00" },
+  "honorarios.valor_extenso":  { "tipo": "string", "fonte": "FICHA.json:honorarios.valor_extenso",   "obrigatorio": true, "exemplo": "seiscentos e doze reais" },
+  "honorarios.fundamentacao":  { "tipo": "string", "fonte": "FICHA.json:honorarios.fundamentacao",   "obrigatorio": true, "exemplo": "Valor fundamentado no piso da Portaria TJMG 7231/2025 para perícia médica de baixa-média complexidade, considerando deslocamento, tempo e responsabilidade técnica." },
+  "honorarios.faixa_tabela":   { "tipo": "string", "fonte": "FICHA.json:honorarios.faixa_tabela",    "obrigatorio": true, "exemplo": "R$ 400,00 a R$ 3.060,00" },
+  "pericia.tipo":              { "tipo": "string", "fonte": "FICHA.json:pericia.tipo",               "obrigatorio": true, "exemplo": "perícia médica cível" },
+  "data.por_extenso":          { "tipo": "string", "fonte": "sistema:data_hoje_por_extenso",         "obrigatorio": true, "exemplo": "24 de abril de 2026" }
+}
