@@ -51,6 +51,31 @@ O código e os dados não ficam no Maestro — só este **playbook/documentaçã
         └── comarcas_ate230km_gv.html
 ```
 
+## Resultado final da sessão-origem (2026-04-24 18h19)
+
+**Time A concluiu as 298 sedes TJMG.**
+
+| Métrica | Valor |
+|---|---|
+| Total processado | 298 |
+| `status:"ok"` | 287 (96,3%) |
+| Falhas | 11 |
+| km min / max / média | 1,0 / 991 / 493 km |
+| Captchas detectados | 0 |
+
+**Validação âncoras (v2 Maps × realidade):**
+
+| Cidade | km v2 Maps | km v1 OSRM | Confere |
+|---|---|---|---|
+| Belo Horizonte | 314 | ~320 | ✅ |
+| Itajubá | 754 | 760,7 | ✅ |
+| Brazópolis | 759 | 763,5 | ✅ |
+| Uberaba | 786 | 792,5 | ✅ |
+| Conselheiro Pena | 94,4 | ~27 | ⚠️ (v2 rota alternativa, v1 mais preciso para cidade limítrofe) |
+
+**Falhas (11 cidades a reprocessar):**
+Conceição do Rio Verde, Congonhas, Conquista, Conselheiro Lafaiete, Coração de Jesus, Corinto, Governador Valadares (origem=destino trivial), Santos Dumont, São Francisco, São Gonçalo do Sapucaí, São Gotardo.
+
 ## Achado crítico da sessão-origem (2026-04-24)
 
 O script **antigo** `distancias_gv.py` (OSRM) **NÃO estava corrompido.** A auditoria do Time C mostrou que valores reais em `output/distancias_gv.csv` batem com a realidade rodoviária:
