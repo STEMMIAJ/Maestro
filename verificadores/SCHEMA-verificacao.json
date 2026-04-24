@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://stemmia.local/maestro/verificadores/SCHEMA-verificacao.json",
+  "title": "RelatorioVerificacaoPeticaoPDF",
+  "description": "Estrutura do RELATORIO-VERIFICACAO.json produzido por verificador_peticao_pdf.py. Cada afirmacao factual da peticao e classificada como ANCORADA, SUSPEITA, SEM-ANCORA ou CITACAO_LEGAL em relacao ao corpus TEXTO-EXTRAIDO.txt do processo.",
+  "type": "object",
+  "required": [
+    "peticao_path",
+    "processo_path",
+    "cnj",
+    "gerado_em",
+    "totais",
+    "veredito_global",
+    "afirmacoes"
+  ],
+  "properties": {
+    "peticao_path": {
+      "type": "string",
+      "description": "Caminho absoluto do arquivo peticao.md analisado."
+    },
+    "processo_path": {
+      "type": "string",
+      "description": "Caminho absoluto da pasta do processo (CNJ) usada como corpus."
+    },
+    "cnj": {
+      "type": "string",
+      "description": "Numero CNJ extraido do caminho do processo."
+    },
+    "gerado_em": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp ISO 8601 da geracao do relatorio."
+    },
+    "totais": {
+      "type": "object",
+      "required": ["ancoradas", "suspeitas", "sem_ancora", "citacoes_legais", "total"],
+      "properties": {
+        "ancoradas": {"type": "integer", "minimum": 0},
+        "suspeitas": {"type": "integer", "minimum": 0},
+        "sem_ancora": {"type": "integer", "minimum": 0},
+        "citacoes_legais": {"type": "integer", "minimum": 0},
+        "total": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "veredito_global": {
+      "type": "string",
+      "enum": ["APROVADA", "REVISAR", "BLOQUEADA"],
+      "description": "APROVADA = zero suspeitas e zero sem-ancora. REVISAR = ha suspeitas mas zero sem-ancora. BLOQUEADA = ha pelo menos uma sem-ancora."
+    },
+    "afirmacoes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "texto_original", "status", "score"],
+        "properties": {
+          "id": {"type": "integer", "minimum": 1},
+          "texto_original": {"type": "string", "minLength": 1},
+          "status": {
+            "type": "string",
+            "enum": ["ANCORADA", "SUSPEITA", "SEM-ANCORA", "CITACAO_LEGAL"]
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "partial_ratio (rapidfuzz) entre afirmacao normalizada e a melhor janela do corpus. 0 para CITACAO_LEGAL."
+          },
+          "ancora_trecho": {
+            "type": ["string", "null"],
+            "description": "Contexto de +/- 80 caracteres ao redor do offset onde a melhor correspondencia foi encontrada. null se CITACAO_LEGAL ou sem match."
+          },
+          "pagina": {
+            "type": ["integer", "null"],
+            "description": "Pagina aproximada derivada de marcadores <<< PAGINA N >>> no corpus. null se nao houver marcadores."
+          },
+          "threshold_aplicado": {
+            "type": ["number", "null"],
+            "description": "Valor de threshold-ancorada vigente na execucao (informativo). null para CITACAO_LEGAL."
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,232 @@
+{
+  "gerado_em": "2026-04-23T04:19:36+00:00",
+  "resumo": {
+    "total_processos": 138,
+    "urgentes": 0,
+    "tarefas_prazo_7d": 0,
+    "ultimo_heartbeat_ts": "2026-04-23 04:19:33"
+  },
+  "recentes": [
+    {
+      "cnj": "5000237-19.2022.8.13.0396",
+      "comarca": null,
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": null,
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5004032-07.2025.8.13.0694",
+      "comarca": "Três Pontas",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": 364.08,
+      "data_nomeacao": "10/03/2026",
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5031069-64.2024.8.13.0105",
+      "comarca": null,
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5002188-43.2025.8.13.0396",
+      "comarca": null,
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": null,
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5015391-72.2025.8.13.0105",
+      "comarca": "Governador Valadares",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5004266-44.2024.8.13.0396",
+      "comarca": null,
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": null,
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5003403-88.2024.8.13.0396",
+      "comarca": "Mantena",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5004692-22.2025.8.13.0396",
+      "comarca": null,
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": null,
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5001543-78.2021.8.13.0680",
+      "comarca": "Taiobeiras",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": 612.0,
+      "data_nomeacao": "10/03/2026",
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5002175-65.2025.8.13.0680",
+      "comarca": "Taiobeiras",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": "05/03/2026",
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5002456-97.2025.8.13.0396",
+      "comarca": "Mantena",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": "26/03/2026",
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5035541-11.2024.8.13.0105",
+      "comarca": "GV",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": "pendente",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5004251-41.2025.8.13.0396",
+      "comarca": null,
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": null,
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5016125-49.2023.8.13.0701",
+      "comarca": "Uberaba",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": "27/03/2026",
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5004904-79.2017.8.13.0313",
+      "comarca": null,
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5002205-16.2024.8.13.0396",
+      "comarca": "Mantena",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": "26/03/2026",
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5003730-96.2025.8.13.0396",
+      "comarca": null,
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": null,
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5000416-08.2021.8.13.0680",
+      "comarca": "Taiobeiras",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": "26/03/2026",
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5014017-55.2024.8.13.0105",
+      "comarca": "Governador Valadares",
+      "parte_autor": "VIVIANE ALMEIDA SOARES",
+      "parte_reu": "CEMIG DISTRIBUIÇÃO S.A.",
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": "pendente",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    },
+    {
+      "cnj": "5000920-17.2026.8.13.0396",
+      "comarca": "Mantena",
+      "parte_autor": null,
+      "parte_reu": null,
+      "valor_causa": null,
+      "data_nomeacao": null,
+      "urgencia": null,
+      "status": "organizado",
+      "updated_at": "2026-04-23T04:19:33+00:00"
+    }
+  ],
+  "tarefas_urgentes": []
+}

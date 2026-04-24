@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Wrapper conveniente: chama FLOWS/pericia_completa.sh
+# Uso:
+#   ./pericia <CNJ>                    # roda pipeline completo
+#   ./pericia <CNJ> --dry-run          # so verifica deps + pasta
+#   ./pericia <CNJ> --skip-indexacao   # pula etapa 5 (indexer maestro.db)
+#   ./pericia <CNJ> --pular-triagem    # pula etapa 1 (triar_pdf)
+#
+# Para ficar disponivel global, voce pode (manualmente):
+#   ln -sf "/Users/jesus/Desktop/STEMMIA Dexter/Maestro/bin/pericia" ~/bin/pericia
+# (assumindo ~/bin esta no PATH)
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec "$DIR/../FLOWS/pericia_completa.sh" "$@"

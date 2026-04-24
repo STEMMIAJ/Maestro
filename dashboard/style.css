@@ -1,0 +1,237 @@
+/* Maestro dashboard - style.css */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  background: #f6f7f9;
+  color: #1a1a1a;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* header */
+.topo {
+  background: #fff;
+  border-bottom: 1px solid #e4e6ea;
+  padding: 1.5rem 2rem;
+}
+
+.topo-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.topo h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.timestamp {
+  font-size: 0.85rem;
+  color: #999;
+  margin-top: 0.25rem;
+}
+
+/* conteudo */
+.conteudo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 3rem;
+}
+
+/* banner erro */
+.banner-erro {
+  background: #fff4f2;
+  border: 1px solid #c33;
+  color: #8a1a1a;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* cards */
+.grid-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .grid-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+  border: 1px solid #eceef1;
+}
+
+.card-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.card-value {
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: #0a6;
+  line-height: 1.1;
+}
+
+.card-value-urgente {
+  color: #c33;
+}
+
+.card-value-pequeno {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #555;
+}
+
+/* busca */
+.busca-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.busca-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 0.4rem;
+}
+
+.busca-input {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  font-family: inherit;
+}
+
+.busca-input:focus {
+  outline: none;
+  border-color: #0a6;
+  box-shadow: 0 0 0 3px rgba(0, 170, 102, 0.15);
+}
+
+/* tabela */
+.tabela-wrapper {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid #eceef1;
+  overflow-x: auto;
+}
+
+.tabela-wrapper h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+}
+
+.tabela-processos {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tabela-processos th,
+.tabela-processos td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #f0f1f4;
+}
+
+.tabela-processos th {
+  font-weight: 600;
+  color: #555;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: #fafbfc;
+}
+
+.tabela-processos tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela-processos tr:hover td {
+  background: #fafbfc;
+}
+
+.tabela-processos td.vazio {
+  text-align: center;
+  color: #999;
+  padding: 1.5rem 0;
+  font-style: italic;
+}
+
+/* badge urgencia */
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-ok {
+  background: #e6f7ef;
+  color: #0a6;
+}
+
+.badge-alerta {
+  background: #fff5e0;
+  color: #a66100;
+}
+
+.badge-urgente {
+  background: #fdecea;
+  color: #c33;
+}
+
+.badge-neutro {
+  background: #f0f1f4;
+  color: #999;
+}
+
+/* link ficha */
+.link-ficha {
+  color: #0a6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link-ficha:hover {
+  text-decoration: underline;
+}

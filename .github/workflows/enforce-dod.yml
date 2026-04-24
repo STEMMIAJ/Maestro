@@ -1,0 +1,54 @@
+name: enforce-dod
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  dod-check:
+    runs-on: ubuntu-latest
+    env:
+      PR_BODY: ${{ github.event.pull_request.body }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 1. PR fecha alguma issue (Closes #N)
+        run: |
+          if ! printf '%s' "$PR_BODY" | grep -iE '(closes|fixes|resolves) #[0-9]+' > /dev/null; then
+            echo "::error::PR precisa fechar uma issue com 'Closes #N' no corpo."
+            exit 1
+          fi
+
+      - name: 2. CHANGELOG.md foi atualizado
+        run: |
+          git fetch origin main
+          if ! git diff --name-only origin/main...HEAD | grep -q '^CHANGELOG.md$'; then
+            echo "::error::CHANGELOG.md não foi atualizado neste PR."
+            exit 1
+          fi
+
+      - name: 3. PR body contém output de teste em bloco de código
+        run: |
+          if ! printf '%s' "$PR_BODY" | grep -qE '```'; then
+            echo "::error::PR precisa colar output de teste em bloco de código."
+            exit 1
+          fi
+
+      - name: 4. Checklist DOD marcado
+        run: |
+          UNCHECKED=$(printf '%s' "$PR_BODY" | grep -c '\- \[ \]' || true)
+          if [ "$UNCHECKED" -gt 0 ]; then
+            echo "::error::Existem $UNCHECKED itens de Definition of Done não marcados."
+            exit 1
+          fi
+
+      - name: 5. Bash scripts passam em bash -n
+        run: |
+          find . -name "*.sh" -type f -print0 | while IFS= read -r -d '' f; do
+            bash -n "$f" || { echo "::error::Syntax error em $f"; exit 1; }
+          done
+
+      - name: OK
+        run: echo "DOD ✅ todos os 5 criterios atendidos"

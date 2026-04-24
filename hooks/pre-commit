@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Pre-commit: bloqueia commits ruins localmente (antes de push).
+set -euo pipefail
+
+ROOT=$(git rev-parse --show-toplevel)
+cd "$ROOT"
+
+# 1. Proibir commit direto em main
+BRANCH=$(git branch --show-current)
+if [ "$BRANCH" = "main" ]; then
+  echo "✗ Commit direto em main é proibido (RULES R2). Use 'git checkout -b feat/...'" >&2
+  exit 1
+fi
+
+# 2. Syntax check em bash scripts alterados
+ERR=0
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  case "$f" in
+    *.sh)
+      if ! bash -n "$f" 2>/dev/null; then
+        echo "✗ syntax error em $f" >&2
+        bash -n "$f"
+        ERR=1
+      fi
+      ;;
+  esac
+done < <(git diff --cached --name-only --diff-filter=ACM)
+[ "$ERR" -ne 0 ] && exit 1
+
+# 3. Proibir arquivos .env e segredos
+SECRETS=$(git diff --cached --name-only | grep -E '(^|/)\.env$|(^|/)secrets?\.(json|yaml|yml)$|\.pem$|\.key$' || true)
+if [ -n "$SECRETS" ]; then
+  echo "✗ tentativa de commitar segredo:" >&2
+  echo "$SECRETS" >&2
+  echo "Adicione ao .gitignore ou remova do staging." >&2
+  exit 1
+fi
+
+# 4. Mensagem: lembrete
+echo "✓ pre-commit OK"
