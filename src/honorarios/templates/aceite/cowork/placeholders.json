@@ -1,0 +1,9 @@
+{
+  "juizo.numero_vara":       { "tipo": "string", "fonte": "FICHA.json:processo.vara.numero",   "obrigatorio": true, "exemplo": "2" },
+  "juizo.materias":          { "tipo": "string", "fonte": "FICHA.json:processo.vara.materias", "obrigatorio": true, "exemplo": "CÍVEL, CRIMINAL E DA INFÂNCIA E DA JUVENTUDE" },
+  "juizo.comarca":           { "tipo": "string", "fonte": "FICHA.json:processo.comarca",       "obrigatorio": true, "exemplo": "MANTENA" },
+  "juizo.uf":                { "tipo": "string", "fonte": "FICHA.json:processo.uf",            "obrigatorio": true, "exemplo": "MG" },
+  "processo.cnj":            { "tipo": "string", "fonte": "FICHA.json:processo.cnj",           "obrigatorio": true, "exemplo": "0038122-07.2012.8.13.0396" },
+  "atos_anteriores.ids":     { "tipo": "lista",  "fonte": "FICHA.json:atos_pendentes.ids",     "obrigatorio": true, "exemplo": ["10637932621","10639375978"] },
+  "data.por_extenso":        { "tipo": "string", "fonte": "sistema:data_hoje_por_extenso",     "obrigatorio": true, "exemplo": "17 de março de 2026" }
+}

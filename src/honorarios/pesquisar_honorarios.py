@@ -239,7 +239,7 @@ def consultar_tabelas_oficiais(tribunal=None):
     """
     conn = conectar_db()
     try:
-        where = ["vigencia_fim = 'atual' OR vigencia_fim IS NULL OR vigencia_fim >= ?"]
+        where = ["(vigencia_fim = 'atual' OR vigencia_fim IS NULL OR vigencia_fim >= ?)"]
         params = [str(datetime.now().year)]
 
         if tribunal:

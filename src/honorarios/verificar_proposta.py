@@ -464,7 +464,7 @@ def verificar_proposta(texto_proposta: str, texto_processo: str, nome_processo: 
 
     if valor_proposto:
         # Tentar consultar o pesquisador de honorários
-        pesquisador_path = Path.home() / "Desktop" / "PESQUISADOR-HONORARIOS" / "pesquisar_honorarios.py"
+        pesquisador_path = Path(__file__).resolve().parent / "pesquisar_honorarios.py"
         if pesquisador_path.exists():
             try:
                 import importlib.util

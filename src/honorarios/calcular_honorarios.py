@@ -66,7 +66,7 @@ VALOR_HORA_MIN = 150
 VALOR_HORA_MAX = 500
 
 # Caminho do banco SQLite
-DB_PATH = Path.home() / "Desktop" / "PESQUISADOR-HONORARIOS" / "dados" / "honorarios.db"
+DB_PATH = Path(__file__).resolve().parent / "dados" / "honorarios.db"
 
 # Raiz dos processos (tenta ambos os caminhos)
 PROCESSOS_PATHS = [

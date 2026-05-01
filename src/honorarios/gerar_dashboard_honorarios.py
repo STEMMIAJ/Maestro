@@ -18,9 +18,9 @@ from pathlib import Path
 
 
 # === CAMINHOS ===
-BASE_DIR = Path.home() / "Desktop" / "PESQUISADOR-HONORARIOS"
+BASE_DIR = Path(__file__).resolve().parent
 DB_PATH = BASE_DIR / "dados" / "honorarios.db"
-OUTPUT_PATH = BASE_DIR / "MAPA-PESQUISA-HONORARIOS.html"
+OUTPUT_PATH = BASE_DIR / "dashboard" / "MAPA-PESQUISA-HONORARIOS.html"
 
 
 def fmt_brl(valor):

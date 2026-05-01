@@ -1,0 +1,101 @@
+[
+  {
+    "id": 3,
+    "fonte": "CNJ Resolução 232/2016",
+    "tipo": "Pericia Geral",
+    "valor_base": 370.0,
+    "valor_maximo": 1850.0,
+    "vigencia_inicio": "2016",
+    "vigencia_fim": "atual",
+    "normativo": null,
+    "observacoes": "Até 5x se fundamentado"
+  },
+  {
+    "id": 1,
+    "fonte": "TJMG Portaria 7231/2025",
+    "tipo": "Pericia Medica",
+    "valor_base": 585.66,
+    "valor_maximo": 2928.30,
+    "vigencia_inicio": "26/05/2025",
+    "vigencia_fim": "atual",
+    "normativo": null,
+    "observacoes": "Até 5x se complexa (autorização Corregedoria)"
+  },
+  {
+    "id": 2,
+    "fonte": "TJMG Portaria 6607/2024",
+    "tipo": "Pericia Medica",
+    "valor_base": 585.66,
+    "valor_maximo": 2928.30,
+    "vigencia_inicio": "21/06/2024",
+    "vigencia_fim": "25/05/2025",
+    "normativo": null,
+    "observacoes": "REVOGADA"
+  },
+  {
+    "id": 9,
+    "fonte": "TRF/JEF",
+    "tipo": "BPC/LOAS",
+    "valor_base": 362.0,
+    "valor_maximo": 1000.0,
+    "vigencia_inicio": "2024",
+    "vigencia_fim": "",
+    "normativo": null,
+    "observacoes": "Previdenciário"
+  },
+  {
+    "id": 4,
+    "fonte": "TRT3",
+    "tipo": "Simples",
+    "valor_base": 1000.0,
+    "valor_maximo": 2500.0,
+    "vigencia_inicio": "2024",
+    "vigencia_fim": "",
+    "normativo": null,
+    "observacoes": "Quando empresa paga"
+  },
+  {
+    "id": 5,
+    "fonte": "TRT3",
+    "tipo": "Media",
+    "valor_base": 2500.0,
+    "valor_maximo": 3500.0,
+    "vigencia_inicio": "2024",
+    "vigencia_fim": "",
+    "normativo": null,
+    "observacoes": "Múltiplas patologias"
+  },
+  {
+    "id": 6,
+    "fonte": "TRT3",
+    "tipo": "Complexa",
+    "valor_base": 3500.0,
+    "valor_maximo": 5000.0,
+    "vigencia_inicio": "2024",
+    "vigencia_fim": "",
+    "normativo": null,
+    "observacoes": "Nexo causal"
+  },
+  {
+    "id": 7,
+    "fonte": "TRT3",
+    "tipo": "Ação Coletiva",
+    "valor_base": 5000.0,
+    "valor_maximo": 21600.0,
+    "vigencia_inicio": "2024",
+    "vigencia_fim": "",
+    "normativo": null,
+    "observacoes": "Casos excepcionais"
+  },
+  {
+    "id": 8,
+    "fonte": "TRT3",
+    "tipo": "Gratuidade",
+    "valor_base": 1000.0,
+    "valor_maximo": 1000.0,
+    "vigencia_inicio": "2024",
+    "vigencia_fim": "",
+    "normativo": null,
+    "observacoes": "Limite União (Res 247/2019 CSJT)"
+  }
+]

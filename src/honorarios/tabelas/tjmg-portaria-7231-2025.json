@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "fonte": "TJMG Portaria 7231/2025",
+  "tipo": "Pericia Medica",
+  "valor_base": 585.66,
+  "valor_maximo": 2928.30,
+  "vigencia_inicio": "26/05/2025",
+  "vigencia_fim": "atual",
+  "normativo": null,
+  "observacoes": "Até 5x se complexa (autorização Corregedoria)"
+}
