@@ -1,0 +1,11 @@
+{
+  "id": 8,
+  "fonte": "TRT3",
+  "tipo": "Gratuidade",
+  "valor_base": 1000.0,
+  "valor_maximo": 1000.0,
+  "vigencia_inicio": "2024",
+  "vigencia_fim": "",
+  "normativo": null,
+  "observacoes": "Limite União (Res 247/2019 CSJT)"
+}

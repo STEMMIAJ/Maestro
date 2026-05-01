@@ -1,0 +1,11 @@
+{
+  "id": 6,
+  "fonte": "TRT3",
+  "tipo": "Complexa",
+  "valor_base": 3500.0,
+  "valor_maximo": 5000.0,
+  "vigencia_inicio": "2024",
+  "vigencia_fim": "",
+  "normativo": null,
+  "observacoes": "Nexo causal"
+}

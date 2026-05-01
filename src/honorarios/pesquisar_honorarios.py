@@ -239,7 +239,7 @@ def consultar_tabelas_oficiais(tribunal=None):
     """
     conn = conectar_db()
     try:
-        where = ["(vigencia_fim = 'atual' OR vigencia_fim IS NULL OR vigencia_fim >= ?)"]
+        where = ["(vigencia_fim = 'atual' OR vigencia_fim IS NULL OR vigencia_fim = '' OR vigencia_fim >= ?)"]
         params = [str(datetime.now().year)]
 
         if tribunal:
@@ -254,10 +254,27 @@ def consultar_tabelas_oficiais(tribunal=None):
         cursor = conn.execute(sql, params)
         registros = [dict(row) for row in cursor.fetchall()]
 
+        hoje = datetime.now().date()
+        ativos = []
+        for r in registros:
+            vf = (r.get("vigencia_fim") or "").strip()
+            if vf in ("", "atual"):
+                ativos.append(r)
+                continue
+            data_fim = None
+            for fmt in ("%d/%m/%Y", "%Y-%m-%d", "%Y"):
+                try:
+                    data_fim = datetime.strptime(vf, fmt).date()
+                    break
+                except ValueError:
+                    continue
+            if data_fim is None or data_fim >= hoje:
+                ativos.append(r)
+
         return {
             "fonte": "tabelas_oficiais",
-            "registros": registros,
-            "total": len(registros),
+            "registros": ativos,
+            "total": len(ativos),
         }
     finally:
         conn.close()

@@ -1,0 +1,11 @@
+{
+  "id": 4,
+  "fonte": "TRT3",
+  "tipo": "Simples",
+  "valor_base": 1000.0,
+  "valor_maximo": 2500.0,
+  "vigencia_inicio": "2024",
+  "vigencia_fim": "",
+  "normativo": null,
+  "observacoes": "Quando empresa paga"
+}
